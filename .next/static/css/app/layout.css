@@ -799,6 +799,10 @@ video {
     display: flex;
   }
 
+  .md\:hidden {
+    display: none;
+  }
+
   .md\:gap-6 {
     gap: 1.5rem;
   }
