@@ -40,10 +40,10 @@ function Navbar() {
             </Link>
           </div>
           <div className="flex gap-4 text-center">
-            <button className="font-semibold bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
+            <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
               Login
             </button>
-            <button className="font-semibold border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
+            <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
               SignUp
             </button>
           </div>
