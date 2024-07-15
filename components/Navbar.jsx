@@ -42,7 +42,7 @@ function Navbar() {
             <Link href="/" className="text-md font-light hover:font-normal">
               Contact Us
             </Link>
-        <input type="text" placeholder={<AiOutlineSearch/>} />
+            <input type="text" />
           </div>
           <div className="flex gap-4 text-center">
             <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
@@ -54,7 +54,7 @@ function Navbar() {
           </div>
         </div>
         {/* Mobile screen navbar content */}
-        <div className="flex md:hidden justify-between items-center px-3 sm:px-6 py-2">
+        <div className="flex md:hidden justify-between items-center px-3 sm:px-6">
           <Image src={logo} alt="shoesafari logo" className="w-20" />
           {showNav ? (
             <AiOutlineClose className="w-10 h-9 pr-2" onClick={toggleNav} />
@@ -64,49 +64,49 @@ function Navbar() {
         </div>
         {/* Conditional rendering for the mobile menu */}
         {showNav && (
-          <div className="fixed inset-y-0 right-0 w-1/2 h-screen bg-white flex flex-col items-center py-8 z-50 shadow-lg">
+          <div className="fixed inset-y-0 right-0 w-1/2 h-screen bg-white flex flex-col items-center py-6 z-50 shadow-lg">
             <button className="self-end mr-4 mb-4" onClick={toggleNav}>
               <AiOutlineClose className="w-8 h-10" />
             </button>
-            <div className="w-full divide-y-2 divide-dashed divide-red-700">
+            <div className="w-full divide-y-2 divide-dashed divide-red-700 ">
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-center"
+                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Home
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-center"
+                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Shop
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-center"
+                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Collections
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-center"
+                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 About Us
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-center"
+                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Blog
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-center"
+                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Contact Us
