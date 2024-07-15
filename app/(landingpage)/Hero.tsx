@@ -1,3 +1,5 @@
+"use client";
+
 export default function Hero() {
   return (
     <section className="bg-custom-image bg-cover bg-center h-screen text-center">
