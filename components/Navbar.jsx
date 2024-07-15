@@ -9,13 +9,11 @@ import logo from "/public/images/shoelogoo.png";
 function Navbar() {
   const [showNav, setShownav] = useState(false);
 
-  const toggleNav = (): void => {
+  const toggleNav = () => {
     setShownav(!showNav);
   };
 
-  const closeNavOnClick = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ): void => {
+  const closeNavOnClick = () => {
     setShownav(false);
   };
 
