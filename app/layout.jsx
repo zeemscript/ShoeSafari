@@ -1,8 +1,6 @@
 import "/styles/global.css";
-import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Head from "next/head";
 import { Metadata } from "next";
 
 export const metadata = {
