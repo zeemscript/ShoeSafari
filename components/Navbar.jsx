@@ -44,7 +44,7 @@ function Navbar() {
             <Link href="/" className="text-md font-light hover:font-normal">
               Contact Us
             </Link>
-            <AiOutlineSearch />
+        <input type="text" placeholder={<AiOutlineSearch/>} />
           </div>
           <div className="flex gap-4 text-center">
             <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">

@@ -2,14 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FC } from "react";
 import shoeImage1 from "/public/images/shoe1.png";
 import shoeImage2 from "/public/images/shoe2.png";
 import shoeImage3 from "/public/images/shoe3.png";
 import shoeImage4 from "/public/images/shoe4.png";
 import shoeImage5 from "/public/images/shoe5.png";
-
-interface CarouselProps {}
 
 const images = [
   { src: shoeImage1, category: "Sneakers" },
@@ -19,7 +16,7 @@ const images = [
   { src: shoeImage5, category: "Sneakers" },
 ];
 
-const Carousel: FC<CarouselProps> = () => {
+const Carousel = () => {
   return (
     <section className="bg-white py-8">
       <h2 className="text-4xl font-semibold text-center mb-8">Categories</h2>
@@ -38,7 +35,8 @@ const Carousel: FC<CarouselProps> = () => {
                 href={`/products/${item.category
                   .toLowerCase()
                   .replace(" ", "-")}`}
-                className="text-red-500 font-normal hover:underline">
+                className="text-red-500 font-normal hover:underline"
+              >
                 {item.category}
               </Link>
             </div>
