@@ -24,7 +24,10 @@ function Navbar() {
         <div className="px-3 sm:px-6 py-2 hidden md:flex justify-between items-center">
           <Image src={logo} alt="shoesafari logo" className="w-20" />
           <div className="hidden md:flex md:gap-6">
-            <Link href="/" className="text-md font-light hover:font-normal">
+            <Link
+              href="/mainapp"
+              className="text-md font-light hover:font-normal"
+            >
               Home
             </Link>
             <Link href="/" className="text-md font-light hover:font-normal">
@@ -70,7 +73,7 @@ function Navbar() {
             </button>
             <div className="w-full divide-y-2 divide-dashed divide-red-700 ">
               <Link
-                href="/"
+                href="/mainapp"
                 className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
@@ -112,7 +115,7 @@ function Navbar() {
                 Contact Us
               </Link>
             </div>
-            <div className="flex flex-row gap-4 text-center mt-8 mx-4">
+            <div className="flex flex-row  gap-4 text-center mt-8">
               <button className="font-normal bg-red-700 hover:text-white rounded-md px-4 py-2 text-md">
                 Login
               </button>

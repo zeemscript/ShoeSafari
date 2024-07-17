@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  height: 100%;
+}
 .loader {
   border: 4px solid #e5e7eb; /* Tailwind's gray-200 */
   border-top: 4px solid #c53030; /* Custom red color matching your theme */
