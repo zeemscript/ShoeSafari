@@ -30,7 +30,10 @@ function Navbar() {
             >
               Home
             </Link>
-            <Link href="/" className="text-md font-light hover:font-normal">
+            <Link
+              href="/mainapp/shop"
+              className="text-md font-light hover:font-normal"
+            >
               Shop
             </Link>
             <Link href="/" className="text-md font-light hover:font-normal">
@@ -80,7 +83,7 @@ function Navbar() {
                 Home
               </Link>
               <Link
-                href="/"
+                href="/mainapp/shop"
                 className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >

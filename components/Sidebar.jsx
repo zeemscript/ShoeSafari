@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const Sidebar = () => {
   return (
-    <div className="hidden sm:flex h-[72vh] divide-y-8">
-      <aside className="w-64 bg-white  text-red-500 flex-shrink-0">
+    <div className="hidden sm:flex h-[72vh] pr-10">
+      <aside className="w-64 bg-white text-red-500 flex-shrink-0 divide-y  divide-x divide-gray-300">
         <div className="p-4">
           <h1 className="text-2xl font-bold">SHOESAFARI</h1>
         </div>
