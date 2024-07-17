@@ -17,7 +17,7 @@ const Catalogue4 = () => {
             voluptatibus ad perferendis!
           </div>
         </div>
-        <div className="w-full md:w-1/2 flex justify-center md:justify-end mb-8 md:mb-0 md:pr-8">
+        <div className="w-full md:w-1/2 flex justify-center md:justify-end mb-8 md:mb-0 md:pr-8 pt-10 sm:pt-0">
           <Image
             src={shoeImage2}
             alt="World best professional"

@@ -25,12 +25,14 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <link rel="icon" href="/images/shoelogoo.png"/>
+      <link rel="icon" href="/images/shoelogoo.png" />
       <meta property="og:image" content="/images/shoelogoo.png" />{" "}
-      <body>
-        <Navbar />
-        <main className="app">{children}</main>
-        <Footer />
+      <body className="h-full">
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <main className="app flex-grow">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
