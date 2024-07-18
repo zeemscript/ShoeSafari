@@ -4,13 +4,9 @@ import Image from "next/image";
 import { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import logo from "/public/images/shoelogoo.png";
-import LoginModal from "../modals/LoginModal";
-import SignupModal from "../modals/SignupModal";
 
 function Navbar() {
   const [showNav, setShowNav] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   const toggleNav = () => {
     setShowNav(!showNav);
@@ -64,16 +60,10 @@ function Navbar() {
             </Link>
           </div>
           <div className="flex gap-4 text-center">
-            <button
-              onClick={() => setIsLoginOpen(true)}
-              className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
-            >
+            <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
               Login
             </button>
-            <button
-              onClick={() => setIsSignupOpen(true)}
-              className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md"
-            >
+            <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
               SignUp
             </button>
           </div>
@@ -136,27 +126,16 @@ function Navbar() {
               </Link>
             </div>
             <div className="flex flex-row gap-4 text-center mt-8">
-              <button
-                onClick={() => setIsLoginOpen(true)}
-                className="font-normal bg-red-700 hover:text-white rounded-md px-4 py-2 text-md"
-              >
+              <button className="font-normal bg-red-700 hover:text-white rounded-md px-4 py-2 text-md">
                 Login
               </button>
-              <button
-                onClick={() => setIsSignupOpen(true)}
-                className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md"
-              >
+              <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
                 SignUp
               </button>
             </div>
           </div>
         )}
       </nav>
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      <SignupModal
-        isOpen={isSignupOpen}
-        onClose={() => setIsSignupOpen(false)}
-      />
     </>
   );
 }
