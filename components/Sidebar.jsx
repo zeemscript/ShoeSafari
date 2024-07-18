@@ -12,9 +12,7 @@ import { IoMdContact } from "react-icons/io";
 export default function Sidebar() {
   return (
     <aside className="w-64 bg-white text-gray-700 flex-shrink-0 shadow-lg h-[75vh] hidden sm:block ">
-      <div className="p-6">
-        <h1 className="text-3xl font-bold text-red-500">SHOESAFARI</h1>
-      </div>
+     
       <nav className="divide-y divide-gray-200">
         <ul>
           <li>
