@@ -26,28 +26,40 @@ function Navbar() {
         <div className="px-3 sm:px-6 py-2 hidden md:flex justify-between items-center">
           <Image src={logo} alt="shoesafari logo" className="w-20" />
           <div className="hidden md:flex md:gap-6">
-            <Link href="/" className="text-md font-light hover:font-normal">
+            <Link
+              href="/"
+              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+            >
               Home
             </Link>
             <Link
               href="/mainapp"
-              className="text-md font-light hover:font-normal"
+              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
             >
               Shop
             </Link>
             <Link
               href="/mainapp/shop"
-              className="text-md font-light hover:font-normal"
+              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
             >
               Collections
             </Link>
-            <Link href="/" className="text-md font-light hover:font-normal">
+            <Link
+              href="/"
+              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+            >
               About Us
             </Link>
-            <Link href="/" className="text-md font-light hover:font-normal">
+            <Link
+              href="/"
+              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+            >
               Blog
             </Link>
-            <Link href="/" className="text-md font-light hover:font-normal">
+            <Link
+              href="/"
+              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+            >
               Contact Us
             </Link>
           </div>
@@ -82,42 +94,42 @@ function Navbar() {
             <div className="w-full divide-y-2 divide-dashed divide-red-700">
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Home
               </Link>
               <Link
                 href="/mainapp"
-                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Shop
               </Link>
               <Link
                 href="/mainapp/shop"
-                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Collections
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 About Us
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Blog
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Contact Us
