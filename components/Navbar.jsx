@@ -4,9 +4,12 @@ import Image from "next/image";
 import { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import logo from "/public/images/shoelogoo.png";
+import { useAuth } from "../lib/AuthContext";
+import { logout } from "../lib/auth";
 
 function Navbar() {
   const [showNav, setShowNav] = useState(false);
+  const { user } = useAuth();
 
   const toggleNav = () => {
     setShowNav(!showNav);
@@ -14,6 +17,15 @@ function Navbar() {
 
   const closeNavOnClick = () => {
     setShowNav(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      alert("Logged out successfully");
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -24,48 +36,63 @@ function Navbar() {
           <div className="hidden md:flex md:gap-6">
             <Link
               href="/"
-              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+              className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
             >
               Home
             </Link>
             <Link
               href="/mainapp"
-              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+              className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
             >
               Shop
             </Link>
             <Link
               href="/mainapp/shop"
-              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+              className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
             >
               Collections
             </Link>
             <Link
               href="/"
-              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+              className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
             >
               About Us
             </Link>
             <Link
               href="/"
-              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+              className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
             >
               Blog
             </Link>
             <Link
               href="/"
-              className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200"
+              className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
             >
               Contact Us
             </Link>
           </div>
           <div className="flex gap-4 text-center">
-            <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
-              Login
-            </button>
-            <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
-              SignUp
-            </button>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
+              >
+                Logout
+              </button>
+            ) : (
+              <>
+                <Link href="/modals/login">
+                  <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
+                    Login
+                  </button>
+                </Link>
+                <Link href="/modals/signup">
+                  <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
+                    SignUp
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
         <div className="flex md:hidden justify-between items-center px-3 sm:px-6">
@@ -84,54 +111,69 @@ function Navbar() {
             <div className="w-full divide-y-2 divide-dashed divide-red-700">
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Home
               </Link>
               <Link
                 href="/mainapp"
-                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Shop
               </Link>
               <Link
                 href="/mainapp/shop"
-                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Collections
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 About Us
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Blog
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >
                 Contact Us
               </Link>
             </div>
             <div className="flex flex-row gap-4 text-center mt-8">
-              <button className="font-normal bg-red-700 hover:text-white rounded-md px-4 py-2 text-md">
-                Login
-              </button>
-              <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
-                SignUp
-              </button>
+              {user ? (
+                <button
+                  onClick={handleLogout}
+                  className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
+                >
+                  Logout
+                </button>
+              ) : (
+                <>
+                  <Link href="/modals/login">
+                    <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
+                      Login
+                    </button>
+                  </Link>
+                  <Link href="/modals/signup">
+                    <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
+                      SignUp
+                    </button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}

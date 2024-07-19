@@ -20,7 +20,7 @@ export default function Sidebar() {
               href="/"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaHome className="mr-3" /> Home
+              <FaHome className="mr-3" /> Men
             </Link>
           </li>
           <li>
@@ -28,7 +28,7 @@ export default function Sidebar() {
               href="/about"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaInfoCircle className="mr-3" /> About
+              <FaInfoCircle className="mr-3" /> Women
             </Link>
           </li>
           <li>
@@ -36,7 +36,7 @@ export default function Sidebar() {
               href="/contact"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaPhone className="mr-3" /> Contact
+              <FaPhone className="mr-3" /> Kids
             </Link>
           </li>
           <li>
@@ -44,7 +44,7 @@ export default function Sidebar() {
               href="/shop"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaShoppingCart className="mr-3" /> Shop
+              <FaShoppingCart className="mr-3" /> Casual
             </Link>
           </li>
           <li>
@@ -52,7 +52,7 @@ export default function Sidebar() {
               href="/collections"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaShoePrints className="mr-3" /> Collections
+              <FaShoePrints className="mr-3" /> Sport
             </Link>
           </li>
           <li>
