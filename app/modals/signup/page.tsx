@@ -1,6 +1,8 @@
 "use client";
+
 import { useState } from "react";
-import { signup,loginWithGoogle } from "../../../lib/auth";
+import { useRouter } from "next/navigation"; // Updated import
+import { signup, loginWithGoogle } from "../../../lib/auth";
 import { getFirebaseErrorMessage } from "../../../lib/errorMessages";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
@@ -8,12 +10,14 @@ import shoe1 from "../../../public/images/welcomeshoesafari.png";
 
 const Signup = () => {
   const [toast, setToast] = useState({ show: false, message: "" });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter(); // Initialize router within the component function
+
   const showToast = (message) => {
     setToast({ show: true, message });
     setTimeout(() => setToast({ show: false, message: "" }), 5000);
   };
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,19 +26,21 @@ const Signup = () => {
       setEmail("");
       setPassword("");
       showToast("User created successfully");
+      router.push("/mainapp"); // Redirect after successful signup
     } catch (err) {
       showToast(getFirebaseErrorMessage(err.code));
     }
   };
 
-    const handleGoogleLogin = async () => {
-      try {
-        await loginWithGoogle();
-        alert("User logged in with Google successfully");
-      } catch (err) {
-        alert(err.message);
-      }
-    };
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      showToast("User logged in with Google successfully");
+      router.push("/mainapp"); // Redirect after successful Google login
+    } catch (err) {
+      showToast(err.message);
+    }
+  };
 
   return (
     <section className="px-4 md:px-10 bg-white py-12 flex items-center justify-center">

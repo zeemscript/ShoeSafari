@@ -8,13 +8,12 @@ import { useAuth } from "../lib/AuthContext";
 import { logout } from "../lib/auth";
 import Toast from "../components/Toast";
 
-
 function Navbar() {
- const [toast, setToast] = useState({ show: false, message: "" });
- const showToast = (message) => {
-   setToast({ show: true, message });
-   setTimeout(() => setToast({ show: false, message: "" }), 5000);
- };
+  const [toast, setToast] = useState({ show: false, message: "" });
+  const showToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: "" }), 5000);
+  };
 
   const [showNav, setShowNav] = useState(false);
   const { user } = useAuth();
@@ -79,14 +78,28 @@ function Navbar() {
               Contact Us
             </Link>
           </div>
-          <div className="flex gap-4 text-center">
+          <div className="flex gap-4 items-center">
             {user ? (
-              <button
-                onClick={handleLogout}
-                className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
-              >
-                Logout
-              </button>
+              <>
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={user.photoURL}
+                    alt={user.displayName}
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                  <span className="text-md font-light text-black">
+                    {user.displayName}
+                  </span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <>
                 <Link href="/modals/login">
@@ -163,12 +176,26 @@ function Navbar() {
             </div>
             <div className="flex flex-row gap-4 text-center mt-8">
               {user ? (
-                <button
-                  onClick={handleLogout}
-                  className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
-                >
-                  Logout
-                </button>
+                <>
+                  <div className="flex items-center gap-2 mx-2">
+                    <Image
+                      src={user.photoURL}
+                      alt={user.displayName}
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                    <span className="text-sm font-light text-black">
+                      {user.displayName}
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
+                  >
+                    Logout
+                  </button>
+                </>
               ) : (
                 <>
                   <Link href="/modals/login" onClick={closeNavOnClick}>

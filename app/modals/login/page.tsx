@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { login, loginWithGoogle } from "../../../lib/auth";
 import { getFirebaseErrorMessage } from "../../../lib/errorMessages";
 import Toast from "../../../components/Toast";
@@ -8,33 +9,39 @@ import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
 
 const Login = () => {
+  const [user, setUser] = useState(null);
   const [toast, setToast] = useState({ show: false, message: "" });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter(); 
+
   const showToast = (message) => {
     setToast({ show: true, message });
     setTimeout(() => setToast({ show: false, message: "" }), 5000);
   };
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await login(email, password);
-       setEmail("");
-       setPassword("");
+      setEmail("");
+      setPassword("");
       showToast("Logged in successfully");
+      router.push("/mainapp"); // Redirect after successful login
     } catch (err) {
       showToast(getFirebaseErrorMessage(err.code));
     }
   };
-    const handleGoogleLogin = async () => {
-      try {
-        await loginWithGoogle();
-        alert("User logged in with Google successfully");
-      } catch (err) {
+
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      showToast("User logged in with Google successfully");
+      router.push("/"); // Redirect after successful Google login
+    } catch (err) {
       showToast(err.message);
-      }
-    };
+    }
+  };
 
   return (
     <section className="px-4 md:px-10 bg-white py-12 flex items-center justify-center">
