@@ -201,7 +201,10 @@ function Navbar() {
                     </span>
                   </div>
                   <button
-                    onClick={handleLogout}
+                    onClick={(() => {
+                      handleLogout();
+                      closeNavOnClick();
+                    })}
                     className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
                   >
                     Logout

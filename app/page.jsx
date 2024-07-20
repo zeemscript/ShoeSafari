@@ -8,6 +8,7 @@ import Catalogue3 from "./(landingpage)/Catalogue3";
 import Catalogue4 from "./(landingpage)/Catalogue4";
 import Catalogue5 from "./(landingpage)/Catalogue5";
 import Newsletter from "./(landingpage)/newsletter";
+import AboutUs from "./(landingpage)/Aboutus"
 
 export default function FirstPage() {
   return (
@@ -20,7 +21,8 @@ export default function FirstPage() {
       <Catalogue3 />
       <Catalogue4 />
       <Catalogue5 />
-      <Newsletter/>
+      <Newsletter />
+      <AboutUs/>
     </>
   );
 }
