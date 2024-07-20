@@ -32,7 +32,7 @@ const Signup = () => {
         await loginWithGoogle();
         alert("User logged in with Google successfully");
       } catch (err) {
-        setToast(err.message);
+        alert(err.message);
       }
     };
 
