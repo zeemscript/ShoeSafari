@@ -6,11 +6,11 @@ import { login, loginWithGoogle } from "../../../lib/auth";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
+import googleimg from "../../../public/images/google.png";
 import Link from "next/link";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Login = () => {
-  const [user, setUser] = useState(null);
   const [toast, setToast] = useState({ show: false, message: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +32,7 @@ const Login = () => {
       showToast("Logged in successfully");
       router.push("/mainapp");
     } catch (err) {
-      console.error("Login error:", err); // Add this line for debugging
+      console.error("Login error:", err);
       showToast(err.message);
     } finally {
       setIsLoggingIn(false);
@@ -45,7 +45,7 @@ const Login = () => {
       showToast("User logged in with Google successfully");
       router.push("/mainapp");
     } catch (err) {
-      console.error("Google login error:", err); // Add this line for debugging
+      console.error("Google login error:", err);
       showToast(err.message);
     }
   };
@@ -118,15 +118,34 @@ const Login = () => {
                 </button>
               </div>
             </form>
-            <div className="mt-6">
+            <span className="flex justify-center items-center py-2">Or</span>
+            <div className=" flex justify-center items-center">
               <button
                 onClick={handleGoogleLogin}
-                className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                className="w-full flex items-center justify-center
+                 bg-red-600 text-white py-2 px-4 rounded-md shadow-sm
+                  hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2
+                   focus:ring-red-500"
               >
+                <Image
+                  src={googleimg}
+                  alt="Google logo"
+                  width={24}
+                  height={24}
+                  className="pr-2"
+                />
                 Continue with Google
               </button>
             </div>
-            <div className=" text-ellipsis font-serif pt-4 hover:text-red-700 hover:underline"><Link href={"/modals/signup"}>Create an acount</Link></div>
+            <div className="mt-4 text-center text-gray-700">
+              Dont have an account ?<br />
+              <Link
+                href="/modals/signup"
+                className="font-serif hover:text-red-700 hover:underline"
+              >
+                Create an account
+              </Link>
+            </div>
           </div>
         </div>
       </div>
