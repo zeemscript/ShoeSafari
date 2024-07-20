@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { login } from "../../../lib/auth";
+import { login, loginWithGoogle } from "../../../lib/auth";
 import { getFirebaseErrorMessage } from "../../../lib/errorMessages";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
@@ -27,6 +27,14 @@ const Login = () => {
       showToast(getFirebaseErrorMessage(err.code));
     }
   };
+    const handleGoogleLogin = async () => {
+      try {
+        await loginWithGoogle();
+        alert("User logged in with Google successfully");
+      } catch (err) {
+      setToast(err.message);
+      }
+    };
 
   return (
     <section className="px-4 md:px-10 bg-white py-12 flex items-center justify-center">
@@ -88,6 +96,14 @@ const Login = () => {
                 </button>
               </div>
             </form>
+            <div className="mt-6">
+              <button
+                onClick={handleGoogleLogin}
+                className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                Continue with Google
+              </button>
+            </div>
           </div>
         </div>
       </div>
