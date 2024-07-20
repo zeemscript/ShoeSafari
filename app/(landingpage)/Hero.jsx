@@ -11,10 +11,10 @@ export default function Hero() {
           Discover Your Perfect Pair
         </p>
         <div className="flex gap-6  pt-32 sm:pt-4">
-          <button className="bg-red-400 hover:bg-red-600  text-white rounded-md  px-4 py-2 ">
+          <button className="bg-red-700 hover:bg-red-600  text-white rounded-md  px-4 py-2 ">
             Shop Now
           </button>
-          <button className="border border-red-700 hover:bg-red-400 text-white rounded-md px-4 py-2  ">
+          <button className="border border-red-700 hover:bg-red-600 text-white rounded-md px-4 py-2  ">
             Explore Collections
           </button>
         </div>
