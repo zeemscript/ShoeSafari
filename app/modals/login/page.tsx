@@ -3,18 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login, loginWithGoogle } from "../../../lib/auth";
-import { getFirebaseErrorMessage } from "../../../lib/errorMessages";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
-import { AiOutlineLoading3Quarters } from "react-icons/ai"; // Import the spinner icon
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Login = () => {
   const [user, setUser] = useState(null);
   const [toast, setToast] = useState({ show: false, message: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggingIn, setIsLoggingIn] = useState(false); // State to track the login process
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const router = useRouter();
 
   const showToast = (message) => {
@@ -24,17 +23,18 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoggingIn(true); // Set the login process state to true
+    setIsLoggingIn(true);
     try {
       await login(email, password);
       setEmail("");
       setPassword("");
       showToast("Logged in successfully");
-      router.push("/mainapp"); // Redirect after successful login
+      router.push("/mainapp");
     } catch (err) {
-      showToast(getFirebaseErrorMessage(err.code));
+      console.error("Login error:", err); // Add this line for debugging
+      showToast(err.message);
     } finally {
-      setIsLoggingIn(false); // Reset the login process state
+      setIsLoggingIn(false);
     }
   };
 
@@ -42,8 +42,9 @@ const Login = () => {
     try {
       await loginWithGoogle();
       showToast("User logged in with Google successfully");
-      router.push("/"); // Redirect after successful Google login
+      router.push("/mainapp");
     } catch (err) {
+      console.error("Google login error:", err); // Add this line for debugging
       showToast(err.message);
     }
   };
@@ -103,7 +104,7 @@ const Login = () => {
                 <button
                   type="submit"
                   className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 flex items-center justify-center"
-                  disabled={isLoggingIn} // Disable button during login process
+                  disabled={isLoggingIn}
                 >
                   {isLoggingIn ? (
                     <>

@@ -1,20 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Updated import
+import { useRouter } from "next/navigation";
 import { signup, loginWithGoogle } from "../../../lib/auth";
-import { getFirebaseErrorMessage } from "../../../lib/errorMessages";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
-import { AiOutlineLoading3Quarters } from "react-icons/ai"; // Import the spinner icon
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Signup = () => {
   const [toast, setToast] = useState({ show: false, message: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSigningUp, setIsSigningUp] = useState(false); // State to track the signup process
-  const router = useRouter(); // Initialize router within the component function
+  const [isSigningUp, setIsSigningUp] = useState(false);
+  const router = useRouter();
 
   const showToast = (message) => {
     setToast({ show: true, message });
@@ -23,17 +22,18 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSigningUp(true); // Set the signup process state to true
+    setIsSigningUp(true);
     try {
       await signup(email, password);
       setEmail("");
       setPassword("");
       showToast("User created successfully");
-      router.push("/mainapp"); // Redirect after successful signup
+      router.push("/mainapp");
     } catch (err) {
-      showToast(getFirebaseErrorMessage(err.code));
+      console.error("Signup error:", err); // Add this line for debugging
+      showToast(err.message);
     } finally {
-      setIsSigningUp(false); // Reset the signup process state
+      setIsSigningUp(false);
     }
   };
 
@@ -41,8 +41,9 @@ const Signup = () => {
     try {
       await loginWithGoogle();
       showToast("User logged in with Google successfully");
-      router.push("/mainapp"); // Redirect after successful Google login
+      router.push("/mainapp");
     } catch (err) {
+      console.error("Google login error:", err); // Add this line for debugging
       showToast(err.message);
     }
   };
@@ -104,7 +105,7 @@ const Signup = () => {
                 <button
                   type="submit"
                   className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 flex items-center justify-center"
-                  disabled={isSigningUp} // Disable button during signup process
+                  disabled={isSigningUp}
                 >
                   {isSigningUp ? (
                     <>

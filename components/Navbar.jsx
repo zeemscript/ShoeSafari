@@ -85,13 +85,17 @@ function Navbar() {
             {user ? (
               <>
                 <div className="flex items-center gap-2">
-                  <Image
-                    src={user.photoURL}
-                    alt={user.displayName}
-                    width={32}
-                    height={32}
-                    className="rounded-full"
-                  />
+                  {user.photoURL ? (
+                    <Image
+                      src={user.photoURL}
+                      alt={user.displayName}
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-gray-200" />
+                  )}
                   <span className="text-md font-light text-black">
                     {user.displayName}
                   </span>
@@ -181,13 +185,17 @@ function Navbar() {
               {user ? (
                 <>
                   <div className="flex items-center gap-2 mx-2">
-                    <Image
-                      src={user.photoURL}
-                      alt={user.displayName}
-                      width={32}
-                      height={32}
-                      className="rounded-full"
-                    />
+                    {user.photoURL ? (
+                      <Image
+                        src={user.photoURL}
+                        alt={user.displayName}
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gray-200" />
+                    )}
                     <span className="text-sm font-light text-black">
                       {user.displayName}
                     </span>
