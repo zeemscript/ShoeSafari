@@ -57,8 +57,8 @@ const Login = () => {
           <Image
             src={shoe1}
             alt="Shoe Image"
-            width={400}
-            height={350}
+            width={900}
+            height={850}
             className="shadow-lg"
           />
         </div>

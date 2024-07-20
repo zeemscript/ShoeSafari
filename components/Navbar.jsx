@@ -34,7 +34,19 @@ function Navbar() {
       router.push("/");
       showToast("Logged out successfully");
     } catch (error) {
-      alert(error.message);
+      showToast(error.message);
+    }
+  };
+
+  const handleProtectedLinkClick = (e, path) => {
+    if (!user) {
+      e.preventDefault();
+      closeNavOnClick()
+      showToast("Kindly login first");
+      router.push("/modals/login");
+    } else {
+      closeNavOnClick()
+      router.push(path);
     }
   };
 
@@ -50,18 +62,20 @@ function Navbar() {
             >
               Home
             </Link>
-            <Link
-              href="/mainapp"
+            <a
+              href={user ? "/mainapp" : "#"}
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
+              onClick={(e) => handleProtectedLinkClick(e, "/mainapp")}
             >
               Shop
-            </Link>
-            <Link
-              href="/mainapp/shop"
+            </a>
+            <a
+              href={user ? "/mainapp/shop" : "#"}
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
+              onClick={(e) => handleProtectedLinkClick(e, "/mainapp/shop")}
             >
               Collections
-            </Link>
+            </a>
             <Link
               href="/"
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
@@ -146,16 +160,16 @@ function Navbar() {
                 Home
               </Link>
               <Link
-                href="/mainapp"
+                href={user ? "/mainapp" : "#"}
                 className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
-                onClick={closeNavOnClick}
+                onClick={(e) => handleProtectedLinkClick(e, "/mainapp")}
               >
                 Shop
               </Link>
               <Link
-                href="/mainapp/shop"
+                href={user ? "/mainapp/shop" : "#"}
                 className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
-                onClick={closeNavOnClick}
+                onClick={(e) => handleProtectedLinkClick(e, "/mainapp/shop")}
               >
                 Collections
               </Link>
@@ -201,10 +215,10 @@ function Navbar() {
                     </span>
                   </div>
                   <button
-                    onClick={(() => {
+                    onClick={() => {
                       handleLogout();
                       closeNavOnClick();
-                    })}
+                    }}
                     className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
                   >
                     Logout
@@ -218,7 +232,8 @@ function Navbar() {
                     </button>
                   </Link>
                   <Link href="/modals/signup" onClick={closeNavOnClick}>
-                    <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
+                    <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md"
+                    >
                       SignUp
                     </button>
                   </Link>
