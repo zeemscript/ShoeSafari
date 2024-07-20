@@ -7,8 +7,10 @@ import logo from "/public/images/shoelogoo.png";
 import { useAuth } from "../lib/AuthContext";
 import { logout } from "../lib/auth";
 import Toast from "../components/Toast";
+import { useRouter } from "next/navigation";
 
 function Navbar() {
+  const router = useRouter();
   const [toast, setToast] = useState({ show: false, message: "" });
   const showToast = (message) => {
     setToast({ show: true, message });
@@ -29,6 +31,7 @@ function Navbar() {
   const handleLogout = async () => {
     try {
       await logout();
+      router.push("/");
       showToast("Logged out successfully");
     } catch (error) {
       alert(error.message);
@@ -174,7 +177,7 @@ function Navbar() {
                 Contact Us
               </Link>
             </div>
-            <div className="flex flex-row gap-4 text-center mt-8">
+            <div className="flex flex-col gap-4 text-center mt-8">
               {user ? (
                 <>
                   <div className="flex items-center gap-2 mx-2">
