@@ -7,11 +7,13 @@ import { getFirebaseErrorMessage } from "../../../lib/errorMessages";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
+import { AiOutlineLoading3Quarters } from "react-icons/ai"; // Import the spinner icon
 
 const Signup = () => {
   const [toast, setToast] = useState({ show: false, message: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSigningUp, setIsSigningUp] = useState(false); // State to track the signup process
   const router = useRouter(); // Initialize router within the component function
 
   const showToast = (message) => {
@@ -21,6 +23,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSigningUp(true); // Set the signup process state to true
     try {
       await signup(email, password);
       setEmail("");
@@ -29,6 +32,8 @@ const Signup = () => {
       router.push("/mainapp"); // Redirect after successful signup
     } catch (err) {
       showToast(getFirebaseErrorMessage(err.code));
+    } finally {
+      setIsSigningUp(false); // Reset the signup process state
     }
   };
 
@@ -98,9 +103,17 @@ const Signup = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 flex items-center justify-center"
+                  disabled={isSigningUp} // Disable button during signup process
                 >
-                  Signup
+                  {isSigningUp ? (
+                    <>
+                      <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                      Signing up...
+                    </>
+                  ) : (
+                    "Signup"
+                  )}
                 </button>
               </div>
             </form>

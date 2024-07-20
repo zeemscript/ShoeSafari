@@ -7,13 +7,15 @@ import { getFirebaseErrorMessage } from "../../../lib/errorMessages";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
+import { AiOutlineLoading3Quarters } from "react-icons/ai"; // Import the spinner icon
 
 const Login = () => {
   const [user, setUser] = useState(null);
   const [toast, setToast] = useState({ show: false, message: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter(); 
+  const [isLoggingIn, setIsLoggingIn] = useState(false); // State to track the login process
+  const router = useRouter();
 
   const showToast = (message) => {
     setToast({ show: true, message });
@@ -22,6 +24,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoggingIn(true); // Set the login process state to true
     try {
       await login(email, password);
       setEmail("");
@@ -30,6 +33,8 @@ const Login = () => {
       router.push("/mainapp"); // Redirect after successful login
     } catch (err) {
       showToast(getFirebaseErrorMessage(err.code));
+    } finally {
+      setIsLoggingIn(false); // Reset the login process state
     }
   };
 
@@ -97,9 +102,17 @@ const Login = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 flex items-center justify-center"
+                  disabled={isLoggingIn} // Disable button during login process
                 >
-                  Login
+                  {isLoggingIn ? (
+                    <>
+                      <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                      Logging in...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </button>
               </div>
             </form>
