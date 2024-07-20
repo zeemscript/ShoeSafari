@@ -1,6 +1,7 @@
 "use client"
 import "/styles/global.css";
 import Navbar from "../components/Navbar";
+import ScrollToTop from "../components/ScrollToTop"
 import Footer from "../components/Footer";
 import { Metadata } from "next";
 import { AuthProvider } from '../lib/AuthContext';
@@ -33,7 +34,8 @@ const RootLayout = ({ children }) => {
       <body className="h-full ">
         <div className="flex flex-col min-h-screen">
           <Navbar />
-          <main className="app flex-grow">{children}</main>
+            <main className="app flex-grow">{children}</main>
+            <ScrollToTop/>
           <Footer />
         </div>
       </body>
