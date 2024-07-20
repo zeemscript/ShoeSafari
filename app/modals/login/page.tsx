@@ -6,6 +6,7 @@ import { login, loginWithGoogle } from "../../../lib/auth";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
+import Link from "next/link";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Login = () => {
@@ -125,6 +126,7 @@ const Login = () => {
                 Continue with Google
               </button>
             </div>
+            <div className=" text-ellipsis font-serif pt-4 hover:text-red-700 hover:underline"><Link href={"/modals/signup"}>Create an acount</Link></div>
           </div>
         </div>
       </div>
