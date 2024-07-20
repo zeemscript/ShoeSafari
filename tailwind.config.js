@@ -11,6 +11,7 @@ const config: Config = {
       backgroundImage: {
         "custom-image": "url('/images/ShoesafariLandingimage.png')",
         "auth-image": "url('/images/welcomeshoesafari.png')",
+        "error-image": "url('/images/notfoundimage.png')",
         // "shoe1": "url('/images/shoe1.png')",
         // "shoe2": "url('/images/shoe2.png')",
         // "shoe3": "url('/images/shoe3.png')",
