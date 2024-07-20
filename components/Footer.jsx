@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-red-700 py-2">
       <section className="flex flex-col sm:flex-row sm:divide-x-2  divide-black divide justify-between items-center h-28 text-center font-normal  container mx-auto">
-        <span className="flex gap-2 text-sm ">
+        <span className="sm:flex gap-2 text-sm hidden ">
           <Link
             href="/"
             className="hover:underline hover:underline-offset-1 transition ease-out"

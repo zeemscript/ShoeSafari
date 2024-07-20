@@ -28,19 +28,19 @@ import { AuthProvider } from '../lib/AuthContext';
 const RootLayout = ({ children }) => {
   return (
     <AuthProvider>
-    <html lang="en">
-      <link rel="icon" href="/images/shoelogoo.png" />
-      <meta property="og:image" content="/images/shoelogoo.png" />{" "}
-      <body className="h-full ">
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
+      <html lang="en">
+        <link rel="icon" href="/images/shoelogoo.png" />
+        <meta property="og:image" content="/images/shoelogoo.png" />{" "}
+        <body className="h-full ">
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
             <main className="app flex-grow">{children}</main>
-            <ScrollToTop/>
-          <Footer />
-        </div>
-      </body>
+            <ScrollToTop />
+            <Footer />
+          </div>
+        </body>
       </html>
-      </AuthProvider>
+    </AuthProvider>
   );
 };
 

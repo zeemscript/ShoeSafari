@@ -22,7 +22,7 @@ export default function FirstPage() {
       <Catalogue4 />
       <Catalogue5 />
       <Newsletter />
-      <AboutUs/>
+      {/* <AboutUs/> */}
     </>
   );
 }
