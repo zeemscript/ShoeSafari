@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="bg-red-700 py-2">
-      <section className="flex flex-col sm:flex-row justify-between items-center h-28 text-center font-normal  container mx-auto">
+      <section className="flex flex-col sm:flex-row sm:divide-x-2  divide-black divide justify-between items-center h-28 text-center font-normal  container mx-auto">
         <span className="flex gap-2 text-sm ">
           <Link
             href="/"
@@ -31,7 +31,7 @@ export default function Footer() {
             24/7 Customer Service
           </Link>
         </span>
-        <span>&copy; 2024 ShoeSafari All Rights Resevered</span>
+        <span className="sm:pl-10 sm:my-0 my-10">&copy; 2024 ShoeSafari All Rights Resevered</span>
       </section>
     </footer>
   );
