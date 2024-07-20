@@ -75,15 +75,7 @@ export default function Sidebar() {
               Categories
             </Link>
           </li>
-          <li>
-            <Link
-              href="/profile"
-              className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
-            >
-              <FaUser className="mr-3" />
-              Profile
-            </Link>
-          </li>
+         
         </ul>
       </nav>
     </aside>

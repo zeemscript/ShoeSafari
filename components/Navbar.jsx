@@ -43,8 +43,9 @@ function Navbar() {
       e.preventDefault();
       closeNavOnClick()
       showToast("Kindly login first");
-      router.push("/modals/login");
+      router.push("/profile/login");
     } else {
+       e.preventDefault();
       closeNavOnClick()
       router.push(path);
     }
@@ -62,20 +63,20 @@ function Navbar() {
             >
               Home
             </Link>
-            <a
+            <Link
               href={user ? "/mainapp" : "#"}
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
               onClick={(e) => handleProtectedLinkClick(e, "/mainapp")}
             >
               Shop
-            </a>
-            <a
+            </Link>
+            <Link
               href={user ? "/mainapp/shop" : "#"}
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
               onClick={(e) => handleProtectedLinkClick(e, "/mainapp/shop")}
             >
               Collections
-            </a>
+            </Link>
             <Link
               href="/"
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
@@ -123,12 +124,12 @@ function Navbar() {
               </>
             ) : (
               <>
-                <Link href="/modals/login">
+                <Link href="/profile/login">
                   <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
                     Login
                   </button>
                 </Link>
-                <Link href="/modals/signup">
+                <Link href="/profile/signup">
                   <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
                     SignUp
                   </button>
@@ -226,12 +227,12 @@ function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link href="/modals/login" onClick={closeNavOnClick}>
+                  <Link href="/profile/login" onClick={closeNavOnClick}>
                     <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
                       Login
                     </button>
                   </Link>
-                  <Link href="/modals/signup" onClick={closeNavOnClick}>
+                  <Link href="/profile/signup" onClick={closeNavOnClick}>
                     <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md"
                     >
                       SignUp

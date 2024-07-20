@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login, loginWithGoogle } from "../../../lib/auth";
+import { signup, loginWithGoogle } from "../../../lib/auth";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
-import googleimg from "../../../public/images/google.png";
-import Link from "next/link";
+import googleimg from "../../../public/images/google.png"
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Link from "next/link";
 
-const Login = () => {
+const Signup = () => {
   const [toast, setToast] = useState({ show: false, message: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false);
   const router = useRouter();
 
   const showToast = (message) => {
@@ -24,18 +24,18 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoggingIn(true);
+    setIsSigningUp(true);
     try {
-      await login(email, password);
+      await signup(email, password);
       setEmail("");
       setPassword("");
-      showToast("Logged in successfully");
+      showToast("User created successfully");
       router.push("/mainapp");
     } catch (err) {
-      console.error("Login error:", err);
+      console.error("Signup error:", err); // Add this line for debugging
       showToast(err.message);
     } finally {
-      setIsLoggingIn(false);
+      setIsSigningUp(false);
     }
   };
 
@@ -45,7 +45,7 @@ const Login = () => {
       showToast("User logged in with Google successfully");
       router.push("/mainapp");
     } catch (err) {
-      console.error("Google login error:", err);
+      console.error("Google login error:", err); // Add this line for debugging
       showToast(err.message);
     }
   };
@@ -57,14 +57,16 @@ const Login = () => {
           <Image
             src={shoe1}
             alt="Shoe Image"
-            width={900}
-            height={850}
+            width={400}
+            height={350}
             className="shadow-lg"
           />
         </div>
         <div className="w-full md:w-1/2 text-center md:text-left">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto md:mx-0">
-            <h2 className="text-3xl font-bold mb-6 text-gray-800">Login</h2>
+            <h2 className="text-3xl font-bold mb-6 text-gray-800">
+              Create account
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
@@ -105,31 +107,28 @@ const Login = () => {
                 <button
                   type="submit"
                   className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 flex items-center justify-center"
-                  disabled={isLoggingIn}
+                  disabled={isSigningUp}
                 >
-                  {isLoggingIn ? (
+                  {isSigningUp ? (
                     <>
                       <AiOutlineLoading3Quarters className="animate-spin mr-2" />
-                      Logging in...
+                      Signing up...
                     </>
                   ) : (
-                    "Login"
+                    "Signup"
                   )}
                 </button>
               </div>
             </form>
             <span className="flex justify-center items-center py-2">Or</span>
-            <div className=" flex justify-center items-center">
+            <div className="flex justify-center items-center">
               <button
                 onClick={handleGoogleLogin}
-                className="w-full flex items-center justify-center
-                 bg-red-600 text-white py-2 px-4 rounded-md shadow-sm
-                  hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2
-                   focus:ring-red-500"
+                className="w-full bg-red-600 flex justify-center items-center text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
                 <Image
-                  src={googleimg}
                   alt="Google logo"
+                  src={googleimg}
                   width={24}
                   height={24}
                   className="pr-2"
@@ -138,12 +137,12 @@ const Login = () => {
               </button>
             </div>
             <div className="mt-4 text-center text-gray-700">
-              Dont have an account ?<br />
+              Already have an account ?<br />
               <Link
-                href="/modals/signup"
+                href="/profile/login"
                 className="font-serif hover:text-red-700 hover:underline"
               >
-                Create an account
+                Login to your account
               </Link>
             </div>
           </div>
@@ -158,4 +157,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
