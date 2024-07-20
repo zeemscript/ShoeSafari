@@ -1,20 +1,29 @@
 "use client";
 import { useState } from "react";
 import { signup } from "../../../lib/auth";
+import { getFirebaseErrorMessage } from "../../../lib/errorMessages";
+import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
+
 const Signup = () => {
+  const [toast, setToast] = useState({ show: false, message: "" });
+  const showToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: "" }), 5000);
+  };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await signup(email, password);
-      alert("User created successfully");
+      setEmail("");
+      setPassword("");
+      showToast("User created successfully");
     } catch (err) {
-      setError(err.message);
+      showToast(getFirebaseErrorMessage(err.code));
     }
   };
 
@@ -32,8 +41,9 @@ const Signup = () => {
         </div>
         <div className="w-full md:w-1/2 text-center md:text-left">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto md:mx-0">
-            <h2 className="text-3xl font-bold mb-6 text-gray-800">Create account</h2>
-            {error && <p className="mb-4 text-red-500">{error}</p>}
+            <h2 className="text-3xl font-bold mb-6 text-gray-800">
+              Create account
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
@@ -47,7 +57,7 @@ const Signup = () => {
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
                   placeholder="Enter your email"
                   aria-label="Email"
                   required
@@ -75,13 +85,18 @@ const Signup = () => {
                   type="submit"
                   className="w-full bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
-                 Signup
+                  Signup
                 </button>
               </div>
             </form>
           </div>
         </div>
       </div>
+      <Toast
+        message={toast.message}
+        show={toast.show}
+        onClose={() => setToast({ show: false, message: "" })}
+      />
     </section>
   );
 };

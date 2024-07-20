@@ -6,8 +6,16 @@ import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import logo from "/public/images/shoelogoo.png";
 import { useAuth } from "../lib/AuthContext";
 import { logout } from "../lib/auth";
+import Toast from "../components/Toast";
+
 
 function Navbar() {
+ const [toast, setToast] = useState({ show: false, message: "" });
+ const showToast = (message) => {
+   setToast({ show: true, message });
+   setTimeout(() => setToast({ show: false, message: "" }), 5000);
+ };
+
   const [showNav, setShowNav] = useState(false);
   const { user } = useAuth();
 
@@ -22,7 +30,7 @@ function Navbar() {
   const handleLogout = async () => {
     try {
       await logout();
-      alert("Logged out successfully");
+      showToast("Logged out successfully");
     } catch (error) {
       alert(error.message);
     }
@@ -95,6 +103,7 @@ function Navbar() {
             )}
           </div>
         </div>
+        {/* mobile menu */}
         <div className="flex md:hidden justify-between items-center px-3 sm:px-6">
           <Image src={logo} alt="shoesafari logo" className="w-20" />
           {showNav ? (
@@ -162,12 +171,12 @@ function Navbar() {
                 </button>
               ) : (
                 <>
-                  <Link href="/modals/login">
+                  <Link href="/modals/login" onClick={closeNavOnClick}>
                     <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
                       Login
                     </button>
                   </Link>
-                  <Link href="/modals/signup">
+                  <Link href="/modals/signup" onClick={closeNavOnClick}>
                     <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
                       SignUp
                     </button>
@@ -177,6 +186,11 @@ function Navbar() {
             </div>
           </div>
         )}
+        <Toast
+          message={toast.message}
+          show={toast.show}
+          onClose={() => setToast({ show: false, message: "" })}
+        />
       </nav>
     </>
   );

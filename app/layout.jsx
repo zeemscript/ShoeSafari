@@ -30,7 +30,7 @@ const RootLayout = ({ children }) => {
     <html lang="en">
       <link rel="icon" href="/images/shoelogoo.png" />
       <meta property="og:image" content="/images/shoelogoo.png" />{" "}
-      <body className="h-full bg-white">
+      <body className="h-full ">
         <div className="flex flex-col min-h-screen">
           <Navbar />
           <main className="app flex-grow">{children}</main>

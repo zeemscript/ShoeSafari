@@ -1,26 +1,21 @@
 import Link from "next/link";
-import {
-  FaHome,
-  FaInfoCircle,
-  FaPhone,
-  FaShoppingCart,
-  FaShoePrints,
-} from "react-icons/fa";
-import { GiRunningShoe } from "react-icons/gi";
-import { IoMdContact } from "react-icons/io";
 
 export default function Sidebar() {
   return (
     <aside className="w-64 bg-white text-gray-700 flex-shrink-0 shadow-lg h-[75vh] hidden sm:block ">
-     
       <nav className="divide-y divide-gray-200">
-        <ul>
+        <ul className="pl-5">
+          <input
+            type="text"
+            className="bg-red-600 rounded-lg border border-black px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 placeholder-red-100"
+          placeholder="search for your shoes"
+          />
           <li>
             <Link
               href="/"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaHome className="mr-3" /> Men
+              Men
             </Link>
           </li>
           <li>
@@ -28,7 +23,7 @@ export default function Sidebar() {
               href="/about"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaInfoCircle className="mr-3" /> Women
+              Women
             </Link>
           </li>
           <li>
@@ -36,7 +31,7 @@ export default function Sidebar() {
               href="/contact"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaPhone className="mr-3" /> Kids
+              Kids
             </Link>
           </li>
           <li>
@@ -44,7 +39,7 @@ export default function Sidebar() {
               href="/shop"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaShoppingCart className="mr-3" /> Casual
+              Casual
             </Link>
           </li>
           <li>
@@ -52,7 +47,7 @@ export default function Sidebar() {
               href="/collections"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaShoePrints className="mr-3" /> Sport
+              Sport
             </Link>
           </li>
           <li>
@@ -60,7 +55,7 @@ export default function Sidebar() {
               href="/categories"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <GiRunningShoe className="mr-3" /> Categories
+              Categories
             </Link>
           </li>
           <li>
@@ -68,10 +63,9 @@ export default function Sidebar() {
               href="/profile"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <IoMdContact className="mr-3" /> Profile
+              Profile
             </Link>
           </li>
-        
         </ul>
       </nav>
     </aside>
