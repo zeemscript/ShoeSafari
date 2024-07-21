@@ -3,7 +3,6 @@ import "/styles/global.css";
 import Navbar from "../components/Navbar";
 import ScrollToTop from "../components/ScrollToTop"
 import Footer from "../components/Footer";
-import { Metadata } from "next";
 import { AuthProvider } from '../lib/AuthContext';
 
 // export const metadata = {

@@ -23,6 +23,7 @@ yarn-error.log*
 .DS_Store
 
 # Local environment variables
+.env
 .env.local
 .env.development.local
 .env.test.local
