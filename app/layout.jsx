@@ -1,9 +1,10 @@
 "use client"
 import "/styles/global.css";
 import Navbar from "../components/Navbar";
-import ScrollToTop from "../components/ScrollToTop"
+import ScrollToTop from "../components/ScrollToTop";
 import Footer from "../components/Footer";
 import { AuthProvider } from '../lib/AuthContext';
+
 
 // export const metadata = {
 //   title: "SHOESAFARI",
@@ -34,6 +35,7 @@ const RootLayout = ({ children }) => {
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className="app flex-grow">{children}</main>
+     
             <ScrollToTop />
             <Footer />
           </div>
