@@ -84,7 +84,7 @@ function Navbar() {
               About Us
             </Link>
             <Link
-              href="/"
+              href="/blog"
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
             >
               Blog
@@ -183,7 +183,7 @@ function Navbar() {
                 About Us
               </Link>
               <Link
-                href="/"
+                href="/blog"
                 className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
                 onClick={closeNavOnClick}
               >

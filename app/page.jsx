@@ -9,12 +9,13 @@ import Catalogue4 from "./(landingpage)/Catalogue4";
 import Catalogue5 from "./(landingpage)/Catalogue5";
 import Newsletter from "./(landingpage)/newsletter";
 import AboutUs from "./(landingpage)/Aboutus"
+import ContactUs from "./(landingpage)/ContactUs"
 
 export default function FirstPage() {
   return (
     <>
       <Hero />
-      <About />
+      <About/>
       <Catalogue />
       <Carousel />
       <Catalogue2 />
@@ -22,7 +23,8 @@ export default function FirstPage() {
       <Catalogue4 />
       <Catalogue5 />
       <Newsletter />
-      {/* <AboutUs/> */}
+      <AboutUs/>
+      <ContactUs/>
     </>
   );
 }
