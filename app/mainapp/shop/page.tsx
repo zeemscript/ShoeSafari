@@ -95,7 +95,7 @@ export default function Page() {
     },
   ];
   return (
-    <section className="grid grid-cols-5 gap-4 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 ">
+    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500">
       {prods.map((prod) => (
         <div key={prod.id} className="p-4 border rounded-lg shadow">
           <Image

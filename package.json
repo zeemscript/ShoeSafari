@@ -16,6 +16,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
+    "react-transition-group": "^4.4.5",
     "sharp": "^0.33.4"
   },
   "devDependencies": {
