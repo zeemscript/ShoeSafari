@@ -95,23 +95,28 @@ export default function Page() {
     },
   ];
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500">
-      {prods.map((prod) => (
-        <div key={prod.id} className="p-4 border rounded-lg shadow">
-          <Image
-            src={prod.img}
-            alt={prod.name}
-            width={200}
-            height={200}
-            className="mb-2"
-          />
-          <h1 className="text-xl font-bold">{prod.name}</h1>
-          <h2 className="text-lg">${prod.price}</h2>
-          <button className="border border-red-800 rounded-full px-2 py-2 mt-2">
-            <FaShoppingCart />
-          </button>
+    <div className="w-full max-w-screen-xl mx-auto py-8">
+      <section className="h-[70vh] overflow-auto">
+        <span className="text-4xl sm:text-6xl py-4 flex justify-center items-center font-extrabold">Welcome to Our Store Collections !.</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {prods.map((prod) => (
+            <div key={prod.id} className="p-4 border rounded-lg shadow">
+              <Image
+                src={prod.img}
+                alt={prod.name}
+                width={200}
+                height={200}
+                className="mb-2"
+              />
+              <h1 className="text-xl font-bold">{prod.name}</h1>
+              <h2 className="text-lg">${prod.price}</h2>
+              <button className="border border-red-800 rounded-full px-2 py-2 mt-2">
+                <FaShoppingCart />
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
-    </section>
+      </section>
+    </div>
   );
 }
