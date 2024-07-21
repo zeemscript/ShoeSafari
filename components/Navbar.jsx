@@ -8,7 +8,7 @@ import { useAuth } from "../lib/AuthContext";
 import { logout } from "../lib/auth";
 import Toast from "../components/Toast";
 import { useRouter } from "next/navigation";
-
+import { FaShoppingCart } from "react-icons/fa";
 function Navbar() {
   const router = useRouter();
   const [toast, setToast] = useState({ show: false, message: "" });
@@ -95,6 +95,7 @@ function Navbar() {
             >
               Contact Us
             </Link>
+          
           </div>
           <div className="flex gap-4 items-center">
             {user ? (
@@ -233,8 +234,7 @@ function Navbar() {
                     </button>
                   </Link>
                   <Link href="/profile/signup" onClick={closeNavOnClick}>
-                    <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md"
-                    >
+                    <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
                       SignUp
                     </button>
                   </Link>

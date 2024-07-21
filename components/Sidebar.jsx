@@ -11,7 +11,7 @@ import {
 
 export default function Sidebar() {
   return (
-    <aside className="w-64 bg-white text-gray-700 flex-shrink-0 shadow-lg h-[75vh] hidden sm:block">
+    <aside className="w-64 bg-white text-gray-700 flex-shrink-0  hidden sm:block">
       <nav className="divide-y divide-gray-200">
         <ul className="px-5 py-6 space-y-2">
           <li>
