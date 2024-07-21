@@ -26,6 +26,27 @@ const posts = [
       "Tips and tricks for maintaining your shoes to keep them looking new and lasting longer.",
     image: shoe3,
   },
+  {
+    id: 4,
+    title: "How to Care for Your Shoes",
+    excerpt:
+      "Tips and tricks for maintaining your shoes to keep them looking new and lasting longer.",
+    image: shoe1,
+  },
+  {
+    id: 5,
+    title: "How to Care for Your Shoes",
+    excerpt:
+      "Tips and tricks for maintaining your shoes to keep them looking new and lasting longer.",
+    image: shoe2,
+  },
+  {
+    id: 6,
+    title: "How to Care for Your Shoes",
+    excerpt:
+      "Tips and tricks for maintaining your shoes to keep them looking new and lasting longer.",
+    image: shoe3,
+  },
 ];
 
 export default function Blog() {
