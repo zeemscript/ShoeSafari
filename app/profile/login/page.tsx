@@ -9,13 +9,14 @@ import shoe1 from "../../../public/images/welcomeshoesafari.png";
 import Link from "next/link";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
-
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [toast, setToast] = useState({ show: false, message: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const showToast = (message) => {
@@ -49,6 +50,10 @@ const Login = () => {
       console.error("Google login error:", err);
       showToast(err.message);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -85,7 +90,7 @@ const Login = () => {
                   required
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700"
@@ -93,7 +98,7 @@ const Login = () => {
                   Password
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="none"
                   value={password}
@@ -102,6 +107,13 @@ const Login = () => {
                   placeholder="Enter your password"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center pt-6 text-gray-500"
+                >
+                  {showPassword ? <FaRegEyeSlash  size={20}/> : <FaRegEye  size={20}/>}
+                </button>
               </div>
               <div>
                 <button
@@ -134,7 +146,7 @@ const Login = () => {
             </div>
 
             <div className="mt-4 text-center text-gray-700">
-              Dont have an account ?<br />
+              Don't have an account ?<br />
               <Link
                 href="/profile/signup"
                 className="font-serif hover:text-red-700 hover:underline"
