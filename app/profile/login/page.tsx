@@ -6,9 +6,10 @@ import { login, loginWithGoogle } from "../../../lib/auth";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
-import googleimg from "../../../public/images/google.png";
 import Link from "next/link";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { FcGoogle } from "react-icons/fc";
+
 
 const Login = () => {
   const [toast, setToast] = useState({ show: false, message: "" });
@@ -94,6 +95,7 @@ const Login = () => {
                 <input
                   type="password"
                   id="password"
+                  autoComplete="none"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
@@ -119,24 +121,18 @@ const Login = () => {
               </div>
             </form>
             <span className="flex justify-center items-center py-2">Or</span>
-            <div className=" flex justify-center items-center">
+            <div className="flex justify-center items-center">
               <button
                 onClick={handleGoogleLogin}
-                className="w-full flex items-center justify-center
-                 bg-red-600 text-white py-2 px-4 rounded-md shadow-sm
-                  hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2
-                   focus:ring-red-500"
+                className="w-full flex items-center bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
-                <Image
-                  src={googleimg}
-                  alt="Google logo"
-                  width={24}
-                  height={24}
-                  className="pr-2"
-                />
-                Continue with Google
+                <FcGoogle size={28} />
+                <span className="flex-grow text-center">
+                  Continue with Google
+                </span>
               </button>
             </div>
+
             <div className="mt-4 text-center text-gray-700">
               Dont have an account ?<br />
               <Link

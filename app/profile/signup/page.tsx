@@ -6,7 +6,8 @@ import { signup, loginWithGoogle } from "../../../lib/auth";
 import Toast from "../../../components/Toast";
 import Image from "next/image";
 import shoe1 from "../../../public/images/welcomeshoesafari.png";
-import googleimg from "../../../public/images/google.png"
+
+import { FcGoogle } from "react-icons/fc";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Link from "next/link";
 
@@ -124,18 +125,15 @@ const Signup = () => {
             <div className="flex justify-center items-center">
               <button
                 onClick={handleGoogleLogin}
-                className="w-full bg-red-600 flex justify-center items-center text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                className="w-full flex items-center bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
-                <Image
-                  alt="Google logo"
-                  src={googleimg}
-                  width={24}
-                  height={24}
-                  className="pr-2"
-                />
-                Continue with Google
+                <FcGoogle size={28} />
+                <span className="flex-grow text-center">
+                  Continue with Google
+                </span>
               </button>
             </div>
+
             <div className="mt-4 text-center text-gray-700">
               Already have an account ?<br />
               <Link
