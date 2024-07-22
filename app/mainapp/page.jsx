@@ -7,10 +7,13 @@ import shoeImage3 from "/public/images/shoe3.png";
 import shoeImage4 from "/public/images/shoe4.png";
 import shoeImage5 from "/public/images/shoe5.png";
 import { FaShoppingCart } from "react-icons/fa";
+import Cart from "../../components/Cart";
+import Modal from "../../components/Modal";
 
 export default function Products() {
   const [itemCount, setItemCount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const storedItemCount = localStorage.getItem("itemCount");
@@ -23,16 +26,26 @@ export default function Products() {
     }
   }, []);
 
- const handleAdd = (item) => {
-   const newItemCount = itemCount + 1;
-   const updatedCartItems = [...cartItems, item];
-   console.log("Adding item to cart:", item);
-   localStorage.setItem("itemCount", newItemCount.toString()); // Convert number to string
-   localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-   setItemCount(newItemCount);
-   setCartItems(updatedCartItems);
- };
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
 
+  const handleAddToCart = (item) => {
+    const newItemCount = itemCount + 1;
+    const updatedCartItems = [...cartItems, item];
+    localStorage.setItem("itemCount", newItemCount.toString());
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    setItemCount(newItemCount);
+    setCartItems(updatedCartItems);
+  };
+
+  const handleRemoveFromCart = (index) => {
+    const updatedCartItems = cartItems.filter((_, i) => i !== index);
+    const newItemCount = updatedCartItems.length;
+    localStorage.setItem("itemCount", newItemCount.toString());
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    setItemCount(newItemCount);
+    setCartItems(updatedCartItems);
+  };
 
   const prods = [
     { id: 1, name: "Produto 1", price: 10, img: shoeImage1 },
@@ -52,33 +65,65 @@ export default function Products() {
   ];
 
   return (
-    <div className="w-full max-w-screen-xl mx-auto py-8">
-      <section className="h-[70vh] overflow-auto">
-        <span className="text-4xl sm:text-6xl py-4 flex justify-center items-center font-extrabold">
-          Welcome to Our Store Collections!
-        </span>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {prods.map((prod) => (
-            <div key={prod.id} className="p-4 border rounded-lg shadow">
-              <Image
-                src={prod.img}
-                alt={prod.name}
-                width={200}
-                height={200}
-                className="mb-2"
-              />
-              <h1 className="text-xl font-bold">{prod.name}</h1>
-              <h2 className="text-lg">${prod.price}</h2>
-              <button
-                className="border border-red-800 rounded-full px-2 py-2 mt-2"
-                onClick={() => handleAdd(prod)}
-              >
-                <FaShoppingCart />
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
+    <>
+      <div className="w-full max-w-screen-xl mx-auto py-8">
+        <Cart itemCount={itemCount} onClick={openModal} />
+        <section className="h-[70vh] overflow-auto">
+          <span className="text-4xl sm:text-6xl py-4 flex justify-center items-center font-extrabold">
+            Welcome to Our Store!
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {prods.map((prod) => (
+              <div key={prod.id} className="p-4 border rounded-lg shadow">
+                <Image
+                  src={prod.img}
+                  alt={prod.name}
+                  width={200}
+                  height={200}
+                  className="mb-2"
+                />
+                <h1 className="text-xl font-bold">{prod.name}</h1>
+                <h2 className="text-lg">${prod.price}</h2>
+                <button
+                  className="border border-red-800 rounded-full px-2 py-2 mt-2"
+                  onClick={() => handleAddToCart(prod)}
+                >
+                  <FaShoppingCart />
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+      <Modal show={showModal} onClose={closeModal}>
+        <h2 className="text-2xl mb-4">Cart Items</h2>
+        {cartItems.length > 0 ? (
+          <ul>
+            {cartItems.map((item, index) => (
+              <li key={index} className="mb-2">
+                <div className="flex justify-between items-center">
+                  <span>{item.name}</span>
+                  <span>${item.price}</span>
+                  <button
+                    onClick={() => handleRemoveFromCart(index)}
+                    className="bg-red-500 text-white px-2 py-1 rounded ml-4"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Your cart is empty.</p>
+        )}
+        <button
+          onClick={closeModal}
+          className="bg-red-500 text-white px-4 py-2 rounded mt-4"
+        >
+          Close
+        </button>
+      </Modal>
+    </>
   );
 }

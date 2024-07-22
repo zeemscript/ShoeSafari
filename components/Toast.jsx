@@ -10,7 +10,7 @@ const Toast = ({ message, show, onClose }) => {
         setVisible(false);
         const exitTimer = setTimeout(() => {
           onClose();
-        }, 300); // Wait for the exit transition to complete
+        }, 300); 
         return () => clearTimeout(exitTimer);
       }, 5000);
       return () => clearTimeout(timer);

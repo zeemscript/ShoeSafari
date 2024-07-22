@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "firebase": "^10.12.4",
     "fs": "^0.0.1-security",
     "next": "14.2.5",

@@ -1,6 +1,6 @@
 "use client";
 import Hero from "./(landingpage)/Hero";
-import Carousel from "./(landingpage)/carousel";
+import Carousel from "./(landingpage)/Categories";
 import About from "./(landingpage)/About";
 import Catalogue from "./(landingpage)/Catalogue";
 import Catalogue2 from "./(landingpage)/Catalogue2";
