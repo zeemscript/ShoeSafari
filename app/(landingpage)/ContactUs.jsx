@@ -1,24 +1,40 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
 
-export default function ContactUs() {
+const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
   const [toast, setToast] = useState({ show: false, message: "" });
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const form = useRef();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    showToast("Thank you for your message!");
-    setFormData({ name: "", email: "", message: "" });
+    setIsLoading(true);
+    try {
+      await emailjs.sendForm(
+        "service_k4ccfbp",
+        "template_gxfpa56",
+        form.current,
+        "pfpa-BHAVDMTtEYcc"
+      );
+      showToast("Message sent successfully!");
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
+      setError("Failed to send message.");
+    }
+    setIsLoading(false);
   };
 
   const showToast = (message) => {
@@ -27,7 +43,7 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-red-400 via-red-500 to-red-600  flex flex-col items-center py-12 px-4">
+    <div className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 flex flex-col items-center py-12 px-4">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
         <h2 className="text-3xl font-bold text-center mb-6 text-red-700">
           Contact Us
@@ -36,7 +52,7 @@ export default function ContactUs() {
           We would love to hear from you! Please fill out the form below and we
           will get back to you as soon as possible.
         </p>
-        <form onSubmit={handleSubmit}>
+        <form ref={form} onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-4 mb-4">
             <input
               type="text"
@@ -68,9 +84,36 @@ export default function ContactUs() {
           </div>
           <button
             type="submit"
-            className="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out"
+            className="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out flex items-center justify-center"
+            disabled={isLoading}
           >
-            Send Message
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 mr-3 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  ></path>
+                </svg>
+                Sending...
+              </>
+            ) : (
+              "Send Message"
+            )}
           </button>
         </form>
       </div>
@@ -88,4 +131,6 @@ export default function ContactUs() {
       )}
     </div>
   );
-}
+};
+
+export default ContactUs;

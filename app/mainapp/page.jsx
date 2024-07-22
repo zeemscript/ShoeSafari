@@ -9,12 +9,17 @@ import shoeImage5 from "/public/images/shoe5.png";
 import { FaShoppingCart } from "react-icons/fa";
 import Cart from "../../components/Cart";
 import Modal from "../../components/Modal";
+import Toast from "../../components/Toast";
 
 export default function Products() {
   const [itemCount, setItemCount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
+  const [toast, setToast] = useState({ show: false, message: "" });
+  const showToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: "" }), 5000);
+  };
   useEffect(() => {
     const storedItemCount = localStorage.getItem("itemCount");
     const storedCartItems = localStorage.getItem("cartItems");
@@ -31,6 +36,7 @@ export default function Products() {
 
   const handleAddToCart = (item) => {
     const newItemCount = itemCount + 1;
+    showToast("Item added to cart");
     const updatedCartItems = [...cartItems, item];
     localStorage.setItem("itemCount", newItemCount.toString());
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
@@ -40,6 +46,7 @@ export default function Products() {
 
   const handleRemoveFromCart = (index) => {
     const updatedCartItems = cartItems.filter((_, i) => i !== index);
+    showToast("Item removed to cart");
     const newItemCount = updatedCartItems.length;
     localStorage.setItem("itemCount", newItemCount.toString());
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
@@ -95,6 +102,11 @@ export default function Products() {
           </div>
         </section>
       </div>
+      <Toast
+        message={toast.message}
+        show={toast.show}
+        onClose={() => setToast({ show: false, message: "" })}
+      />
       <Modal show={showModal} onClose={closeModal}>
         <h2 className="text-2xl mb-4">Cart Items</h2>
         {cartItems.length > 0 ? (
