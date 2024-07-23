@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Toast from "../../components/Toast";
 import {
   FaCcVisa,
   FaCcMastercard,
@@ -15,6 +16,8 @@ import { BsBank, BsCalendarDate } from "react-icons/bs";
 import { SiKlarna } from "react-icons/si";
 
 const Checkout = () => {
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [toast, setToast] = useState({ show: false, message: "" });
   const [stage, setStage] = useState(1);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -26,6 +29,11 @@ const Checkout = () => {
     cvv: "",
   });
 
+  const showToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: "" }), 5000);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -34,14 +42,29 @@ const Checkout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setStage(2);
-    console.log("Form submitted", formData);
+    showToast("Form submitted successfully");
   };
 
   const handleEmailConfirmationSubmit = (e) => {
     e.preventDefault();
     setStage(3);
-    console.log("Email confirmed");
+    showToast("Otp confirmed successfully");
   };
+
+  useEffect(() => {
+    const storedTotalPrice = localStorage.getItem("totalPrice");
+    if (storedTotalPrice) {
+      setTotalPrice(parseFloat(storedTotalPrice));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (stage === 3) {
+      localStorage.removeItem("totalPrice");
+      localStorage.removeItem("itemCount");
+      localStorage.removeItem("cartItems");
+    }
+  }, [stage]);
 
   return (
     <>
@@ -159,21 +182,30 @@ const Checkout = () => {
                       className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
                     />
                   </div>
-                  <div className="mb-4 ">
+                  <div className="mb-4">
                     <label className="block text-gray-700">Expiry Date</label>
                     <div className="relative flex justify-center items-center">
                       <input
                         type="text"
                         name="expiryDate"
                         value={formData.expiryDate}
-                        onChange={handleChange}
-                        placeholder="DD/MM/YY"
+                        onChange={(e) => {
+                          let { value } = e.target;
+                          value = value.replace(/[^0-9]/g, "");
+                          if (value.length > 2) {
+                            value = value.slice(0, 2) + "/" + value.slice(2, 4);
+                          }
+                          setFormData({ ...formData, expiryDate: value });
+                        }}
+                        placeholder="MM/YY"
+                        maxLength={5}
                         className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
                         required
                       />
                       <BsCalendarDate className="absolute top-1/2 right-8 transform -translate-y-1/2 text-gray-500" />
                     </div>
                   </div>
+
                   <div className="mb-4">
                     <label className="block text-gray-700">CVV</label>
                     <input
@@ -182,6 +214,8 @@ const Checkout = () => {
                       value={formData.cvv}
                       onChange={handleChange}
                       required
+                      pattern="\d{3}"
+                      maxLength={3}
                       className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
                     />
                   </div>
@@ -208,7 +242,6 @@ const Checkout = () => {
                   <input
                     type="number"
                     name="emailConfirmation"
-                    // value={formData.email}
                     onChange={handleChange}
                     required
                     placeholder="otp"
@@ -229,11 +262,23 @@ const Checkout = () => {
                 <p className="text-center">
                   Your order has been placed successfully.
                 </p>
+                <span className="text-center text-3xl py-2">
+                  ${totalPrice} would be deducted from your account.
+                </span>
+                <span className="text-center">
+                  {" "}
+                  Thanks for Shopping with us 🥰🥰🥰
+                </span>
               </div>
             )}
           </div>
         </div>
       </div>
+      <Toast
+        message={toast.message}
+        show={toast.show}
+        onClose={() => setToast({ show: false, message: "" })}
+      />
     </>
   );
 };
