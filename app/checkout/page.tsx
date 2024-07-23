@@ -12,6 +12,7 @@ import {
   FaCcDiscover,
   FaGooglePay,
   FaCcAmazonPay,
+  FaCreditCard
 } from "react-icons/fa";
 import { BsBank, BsCalendarDate } from "react-icons/bs";
 import { SiKlarna } from "react-icons/si";
@@ -174,14 +175,18 @@ const Checkout = () => {
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700">Card Number</label>
-                    <input
-                      type="number"
-                      name="cardNumber"
-                      value={formData.cardNumber}
-                      onChange={handleChange}
-                      required
-                      className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
-                    />
+                    <div className="relative flex justify-center items-center">
+                      <input
+                        type="number"
+                        name="cardNumber"
+                        value={formData.cardNumber}
+                        onChange={handleChange}
+                        required
+                        max={16}
+                        className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
+                      />
+                      <FaCreditCard className="absolute top-1/2 right-8 transform -translate-y-1/2 text-gray-500" />
+                    </div>
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700">Expiry Date</label>
@@ -215,8 +220,7 @@ const Checkout = () => {
                       value={formData.cvv}
                       onChange={handleChange}
                       required
-                      pattern="\d{3}"
-                      maxLength={3}
+                    max={3}
                       className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
                     />
                   </div>
@@ -270,7 +274,12 @@ const Checkout = () => {
                   {" "}
                   Thanks for Shopping with us 🥰🥰🥰
                 </span>
-                <Link href="/mainapp" className="text-center mt-8 py-2 bg-red-700 hover:bg-red-500 rounded-md px-2">Back to Shop</Link>
+                <Link
+                  href="/mainapp"
+                  className="text-center mt-8 py-2 bg-red-700 hover:bg-red-500 rounded-md px-2"
+                >
+                  Back to Shop
+                </Link>
               </div>
             )}
           </div>

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
-import emailjs from "@emailjs/browser";
+import sendMail from "../../lib/sendmail"; // Import the updated sendMail function
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -22,12 +22,8 @@ const ContactUs = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await emailjs.sendForm(
-        "service_k4ccfbp",
-        "template_gxfpa56",
-        form.current,
-        "pfpa-BHAVDMTtEYcc"
-      );
+      // Pass formData directly to sendMail
+      await sendMail(formData);
       showToast("Message sent successfully!");
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
@@ -52,7 +48,7 @@ const ContactUs = () => {
           We would love to hear from you! Please fill out the form below and we
           will get back to you as soon as possible.
         </p>
-        <form ref={form} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-4 mb-4">
             <input
               type="text"

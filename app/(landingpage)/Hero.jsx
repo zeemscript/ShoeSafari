@@ -7,6 +7,7 @@ import Link from "next/link";
 import { analytics, logEvent } from "../../lib/firebaseConfig";
 
 
+
 export default function Hero() {
     useEffect(() => {
       if (analytics) {
