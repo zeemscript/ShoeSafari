@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -129,23 +129,25 @@ export default function Products() {
       <Modal show={showModal} onClose={closeModal}>
         <h2 className="text-2xl mb-4">Cart Items</h2>
         {cartItems.length > 0 ? (
-          <ul>
-            {cartItems.map((item, index) => (
-              <li key={index} className="mb-2">
-                <div className="flex justify-between items-center">
-                  <Image src={item.img} width={30} height={30} alt="image" />
-                  <span>{item.name}</span>
-                  <span>${item.price}</span>
-                  <button
-                    onClick={() => handleRemoveFromCart(index)}
-                    className="bg-red-500 text-white px-2 py-1 rounded ml-4"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div className="max-h-80 overflow-y-auto">
+            <ul>
+              {cartItems.map((item, index) => (
+                <li key={index} className="mb-2">
+                  <div className="flex justify-between items-center">
+                    <Image src={item.img} width={30} height={30} alt="image" />
+                    <span>{item.name}</span>
+                    <span>${item.price}</span>
+                    <button
+                      onClick={() => handleRemoveFromCart(index)}
+                      className="bg-red-500 text-white px-2 py-1 rounded ml-4"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : (
           <p>Your cart is empty.</p>
         )}
