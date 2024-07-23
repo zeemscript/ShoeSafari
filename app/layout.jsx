@@ -8,7 +8,7 @@ import Head from "next/head";
 
 export const metadata = {
   title: "SHOESAFARI",
-  description: "YOUR OUTFIT",
+  description: "YOUR OUTFIT & FOOTWEARS",
   openGraph: {
     type: "website",
     url: "https://shoesafari.vercel.app/",

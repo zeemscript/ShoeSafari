@@ -20,12 +20,13 @@ import { SiKlarna } from "react-icons/si";
 import sendMail from "../../lib/sendmail";
 
 const Checkout = () => {
-  const otp = Math.floor(Math.random() * 1000000) + 1;
+  const [otp, setOtp] = useState(Math.floor(Math.random() * 1000000) + 1);
   const [totalPrice, setTotalPrice] = useState(0);
   const [toast, setToast] = useState({ show: false, message: "" });
   const [stage, setStage] = useState(1);
   const [isOtpSending, setIsOtpSending] = useState(false);
   const [isSubmiting, setIsSubmitting] = useState(false);
+  const [enteredOtp, setEnteredOtp] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -45,6 +46,10 @@ const Checkout = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleOtpChange = (e) => {
+    setEnteredOtp(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -72,8 +77,13 @@ const Checkout = () => {
   const handleEmailConfirmationSubmit = (e) => {
     e.preventDefault();
     setIsOtpSending(!isOtpSending);
-    setStage(3);
-    showToast("Otp confirmed successfully");
+    if (parseInt(enteredOtp) === otp) {
+      setStage(3);
+      showToast("Otp confirmed successfully");
+    } else {
+      setIsOtpSending(false);
+      showToast("Incorrect OTP. Please try again.");
+    }
   };
 
   useEffect(() => {
@@ -284,12 +294,13 @@ const Checkout = () => {
                 <span className="text-md">An OTP was sent to your email</span>
                 <div className="mb-4">
                   <label className="block text-gray-700">
-                    Please confirm Otp
+                    Please confirm OTP
                   </label>
                   <input
                     type="text"
-                    name="emailConfirmation"
-                    onChange={handleChange}
+                    name="otpConfirmation"
+                    value={enteredOtp}
+                    onChange={handleOtpChange}
                     required
                     placeholder="OTP"
                     className="w-64 px-3 py-2 border rounded"
@@ -305,7 +316,7 @@ const Checkout = () => {
                       Confirming...
                     </>
                   ) : (
-                    " Confirm"
+                    "Confirm"
                   )}
                 </button>
               </form>
