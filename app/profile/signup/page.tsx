@@ -1,4 +1,5 @@
 "use client";
+import { Inter, Lora, Source_Sans_3 } from "next/font/google";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
