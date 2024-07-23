@@ -34,7 +34,6 @@ const Login = () => {
       showToast("Logged in successfully");
       router.push("/mainapp");
     } catch (err) {
-      console.error("Login error:", err);
       showToast(err.message);
     } finally {
       setIsLoggingIn(false);

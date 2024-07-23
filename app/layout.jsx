@@ -2,6 +2,7 @@
 import "/styles/global.css";
 import Navbar from "../components/Navbar";
 import ScrollToTop from "../components/ScrollToTop";
+import Whatsapp from "../components/Whatsapp"
 import Footer from "../components/Footer";
 import { AuthProvider } from '../lib/AuthContext';
 
@@ -35,6 +36,7 @@ const RootLayout = ({ children }) => {
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className="app flex-grow">{children}</main>
+            <Whatsapp/>
             <ScrollToTop />
             <Footer />
           </div>

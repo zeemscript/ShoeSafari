@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Toast from "../../components/Toast";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Link from "next/link";
 import {
   FaCcVisa,
@@ -23,6 +24,8 @@ const Checkout = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [toast, setToast] = useState({ show: false, message: "" });
   const [stage, setStage] = useState(1);
+  const [isOtpSending, setIsOtpSending] = useState(false);
+  const [isSubmiting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -46,6 +49,7 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(!isSubmiting);
     try {
       await sendMail({
         name: `${formData.firstName} ${formData.lastName}`,
@@ -60,13 +64,14 @@ const Checkout = () => {
         "Form submitted successfully. OTP has been sent to your email."
       );
     } catch (error) {
+      setIsSubmitting(false);
       showToast("Failed to send OTP. Please try again.");
-      console.error("Error sending email:", error);
     }
   };
 
   const handleEmailConfirmationSubmit = (e) => {
     e.preventDefault();
+    setIsOtpSending(!isOtpSending);
     setStage(3);
     showToast("Otp confirmed successfully");
   };
@@ -195,10 +200,17 @@ const Checkout = () => {
                     <label className="block text-gray-700">Card Number</label>
                     <div className="relative flex justify-center items-center">
                       <input
-                        type="number"
+                        type="text"
                         name="cardNumber"
                         value={formData.cardNumber}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          let { value } = e.target;
+                          if (value.length > 16) {
+                            value = value.slice(0, 16);
+                          }
+                          setFormData({ ...formData, cardNumber: value });
+                        }}
+                        maxLength={16}
                         required
                         className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
                       />
@@ -215,13 +227,13 @@ const Checkout = () => {
                         onChange={(e) => {
                           let { value } = e.target;
                           value = value.replace(/[^0-9]/g, "");
-                          if (value.length > 2) {
-                            value = value.slice(0, 2) + "/" + value.slice(2, 4);
+                          if (value.length > 6) {
+                            value = value.slice(0, 6);
                           }
                           setFormData({ ...formData, expiryDate: value });
                         }}
-                        placeholder="MM/YY"
-                        maxLength={5}
+                        placeholder="DD/MM/YY"
+                        maxLength={6}
                         className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
                         required
                       />
@@ -232,10 +244,17 @@ const Checkout = () => {
                   <div className="mb-4">
                     <label className="block text-gray-700">CVV</label>
                     <input
-                      type="number"
+                      type="text"
                       name="cvv"
                       value={formData.cvv}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        let { value } = e.target;
+                        if (value.length > 3) {
+                          value = value.slice(0, 3);
+                        }
+                        setFormData({ ...formData, cvv: value });
+                      }}
+                      maxLength={3}
                       required
                       className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
                     />
@@ -243,9 +262,16 @@ const Checkout = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-700 transition-colors"
+                  className="w-full flex justify-center items-center bg-red-500 text-white py-2 rounded hover:bg-red-700 transition-colors"
                 >
-                  Submit
+                  {isSubmiting ? (
+                    <>
+                      <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
               </form>
             )}
@@ -271,9 +297,16 @@ const Checkout = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-700 transition-colors"
+                  className="w-full bg-red-500 text-white flex justify-center items-center py-2 rounded hover:bg-red-700 transition-colors"
                 >
-                  Confirm
+                  {isOtpSending ? (
+                    <>
+                      <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                      Confirming...
+                    </>
+                  ) : (
+                    " Confirm"
+                  )}
                 </button>
               </form>
             )}
@@ -287,7 +320,6 @@ const Checkout = () => {
                   ${totalPrice} would be deducted from your account.
                 </span>
                 <span className="text-center">
-                  {" "}
                   Thanks for Shopping with us 🥰🥰🥰
                 </span>
                 <Link
@@ -305,6 +337,7 @@ const Checkout = () => {
         message={toast.message}
         show={toast.show}
         onClose={() => setToast({ show: false, message: "" })}
+        time={4000}
       />
     </>
   );
