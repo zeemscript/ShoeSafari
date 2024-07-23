@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { analytics, logEvent } from "../lib/firebaseConfig";
 
 const Toast = ({ message, show, onClose }) => {
   const [visible, setVisible] = useState(false);
@@ -6,13 +7,16 @@ const Toast = ({ message, show, onClose }) => {
   useEffect(() => {
     if (show) {
       setVisible(true);
+      if (analytics) {
+        logEvent(analytics, "toast_shown", { message });
+      }
       const timer = setTimeout(() => {
         setVisible(false);
         const exitTimer = setTimeout(() => {
           onClose();
-        }, 300); 
+        }, 300);
         return () => clearTimeout(exitTimer);
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timer);
     } else {
       setVisible(false);

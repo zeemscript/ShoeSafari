@@ -4,15 +4,15 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../lib/AuthContext";
 import Toast from "../../components/Toast";
 import Link from "next/link";
-import { analytics } from "../../lib/firebaseConfig";
+import { analytics, logEvent } from "../../lib/firebaseConfig";
 
 
 export default function Hero() {
-   useEffect(() => {
-     if (analytics) {
-       analytics.logEvent("page_view", { page_title: "Home Page" });
-     }
-   }, []);
+    useEffect(() => {
+      if (analytics) {
+        logEvent(analytics, "page_view", { page_title: "Home Page" });
+      }
+    }, []);
   const { user } = useAuth();
   const router = useRouter();
   const [toast, setToast] = useState({ show: false, message: "" });

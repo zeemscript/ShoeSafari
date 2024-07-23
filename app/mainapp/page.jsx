@@ -21,7 +21,7 @@ export default function Products() {
 
   const showToast = (message) => {
     setToast({ show: true, message });
-    setTimeout(() => setToast({ show: false, message: "" }), 5000);
+    setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
   useEffect(() => {
