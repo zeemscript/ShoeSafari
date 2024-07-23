@@ -12,12 +12,14 @@ import {
   FaCcDiscover,
   FaGooglePay,
   FaCcAmazonPay,
-  FaCreditCard
+  FaCreditCard,
 } from "react-icons/fa";
 import { BsBank, BsCalendarDate } from "react-icons/bs";
 import { SiKlarna } from "react-icons/si";
+import sendMail from "../../lib/sendmail";
 
 const Checkout = () => {
+  const otp = Math.floor(Math.random() * 1000000) + 1;
   const [totalPrice, setTotalPrice] = useState(0);
   const [toast, setToast] = useState({ show: false, message: "" });
   const [stage, setStage] = useState(1);
@@ -29,6 +31,7 @@ const Checkout = () => {
     cardNumber: "",
     expiryDate: "",
     cvv: "",
+    subject: "YOUR ORDER CONFIRMATION",
   });
 
   const showToast = (message) => {
@@ -41,10 +44,25 @@ const Checkout = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setStage(2);
-    showToast("Form submitted successfully");
+    try {
+      await sendMail({
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        message: `You are about to checkout your cart on ShoeSafari, Your OTP is: ${otp}`,
+        recipientEmail: formData.email,
+        subject: formData.subject,
+      });
+
+      setStage(2);
+      showToast(
+        "Form submitted successfully. OTP has been sent to your email."
+      );
+    } catch (error) {
+      showToast("Failed to send OTP. Please try again.");
+      console.error("Error sending email:", error);
+    }
   };
 
   const handleEmailConfirmationSubmit = (e) => {
@@ -182,7 +200,6 @@ const Checkout = () => {
                         value={formData.cardNumber}
                         onChange={handleChange}
                         required
-                        max={16}
                         className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
                       />
                       <FaCreditCard className="absolute top-1/2 right-8 transform -translate-y-1/2 text-gray-500" />
@@ -220,7 +237,6 @@ const Checkout = () => {
                       value={formData.cvv}
                       onChange={handleChange}
                       required
-                    max={3}
                       className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
                     />
                   </div>
