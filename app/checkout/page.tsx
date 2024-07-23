@@ -287,11 +287,11 @@ const Checkout = () => {
                     Please confirm Otp
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     name="emailConfirmation"
                     onChange={handleChange}
                     required
-                    placeholder="otp"
+                    placeholder="OTP"
                     className="w-64 px-3 py-2 border rounded"
                   />
                 </div>
