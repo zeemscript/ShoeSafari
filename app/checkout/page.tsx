@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Toast from "../../components/Toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { MdArrowBack } from "react-icons/md";
 import Link from "next/link";
 import {
   FaCcVisa,
@@ -25,7 +26,7 @@ const Checkout = () => {
   const [toast, setToast] = useState({ show: false, message: "" });
   const [stage, setStage] = useState(1);
   const [isOtpSending, setIsOtpSending] = useState(false);
-  const [isSubmiting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [enteredOtp, setEnteredOtp] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -45,7 +46,7 @@ const Checkout = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleOtpChange = (e) => {
@@ -54,12 +55,12 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(!isSubmiting);
+    setIsSubmitting(true);
     try {
       await sendMail({
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
-        message: `You are about to checkout your cart on ShoeSafari, Your OTP is: ${otp}`,
+        message: `You are about to checkout your cart on ShoeSafari. Your OTP is: ${otp}`,
         recipientEmail: formData.email,
         subject: formData.subject,
       });
@@ -76,13 +77,19 @@ const Checkout = () => {
 
   const handleEmailConfirmationSubmit = (e) => {
     e.preventDefault();
-    setIsOtpSending(!isOtpSending);
+    setIsOtpSending(true);
     if (parseInt(enteredOtp) === otp) {
       setStage(3);
-      showToast("Otp confirmed successfully");
+      showToast("OTP confirmed successfully.");
     } else {
       setIsOtpSending(false);
       showToast("Incorrect OTP. Please try again.");
+    }
+  };
+
+  const handleGoBack = () => {
+    if (stage > 1) {
+      setStage(stage - 1);
     }
   };
 
@@ -103,7 +110,6 @@ const Checkout = () => {
 
   return (
     <>
-      {/* Form percentage checker */}
       <div className="flex justify-center items-center space-x-2 my-4 mx-4 sm:mx-0">
         <span
           className={`flex justify-center items-center w-8 h-8 sm:w-10 sm:h-10 border border-red-700 rounded-full ${
@@ -138,7 +144,6 @@ const Checkout = () => {
         </span>
       </div>
 
-      {/* Form */}
       <div className="container mx-auto px-4 py-4 my-10 w-full bg-red-400 rounded-md border-2 border-red-700">
         <div className="flex flex-wrap -mx-4">
           <div className="w-full md:w-1/2 px-4 mb-4 md:mb-0 p-4 rounded-md grid grid-cols-3 justify-center items-center">
@@ -218,7 +223,10 @@ const Checkout = () => {
                           if (value.length > 16) {
                             value = value.slice(0, 16);
                           }
-                          setFormData({ ...formData, cardNumber: value });
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            cardNumber: value,
+                          }));
                         }}
                         maxLength={16}
                         required
@@ -240,7 +248,10 @@ const Checkout = () => {
                           if (value.length > 6) {
                             value = value.slice(0, 6);
                           }
-                          setFormData({ ...formData, expiryDate: value });
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            expiryDate: value,
+                          }));
                         }}
                         placeholder="DD/MM/YY"
                         maxLength={6}
@@ -250,7 +261,6 @@ const Checkout = () => {
                       <BsCalendarDate className="absolute top-1/2 right-8 transform -translate-y-1/2 text-gray-500" />
                     </div>
                   </div>
-
                   <div className="mb-4">
                     <label className="block text-gray-700">CVV</label>
                     <input
@@ -262,7 +272,10 @@ const Checkout = () => {
                         if (value.length > 3) {
                           value = value.slice(0, 3);
                         }
-                        setFormData({ ...formData, cvv: value });
+                        setFormData((prevData) => ({
+                          ...prevData,
+                          cvv: value,
+                        }));
                       }}
                       maxLength={3}
                       required
@@ -274,7 +287,7 @@ const Checkout = () => {
                   type="submit"
                   className="w-full flex justify-center items-center bg-red-500 text-white py-2 rounded hover:bg-red-700 transition-colors"
                 >
-                  {isSubmiting ? (
+                  {isSubmitting ? (
                     <>
                       <AiOutlineLoading3Quarters className="animate-spin mr-2" />
                       Submitting...
@@ -283,6 +296,7 @@ const Checkout = () => {
                     "Submit"
                   )}
                 </button>
+               
               </form>
             )}
             {stage === 2 && (
@@ -318,6 +332,14 @@ const Checkout = () => {
                   ) : (
                     "Confirm"
                   )}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleGoBack}
+                  className="w-full flex justify-center items-center bg-gray-300 text-black py-2 rounded mt-4 hover:bg-gray-500 transition-colors"
+                >
+                  <MdArrowBack className="mr-2" />
+                  Go Back
                 </button>
               </form>
             )}
