@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Toast from "../../components/Toast";
+import Link from "next/link";
 import {
   FaCcVisa,
   FaCcMastercard,
@@ -269,6 +270,7 @@ const Checkout = () => {
                   {" "}
                   Thanks for Shopping with us 🥰🥰🥰
                 </span>
+                <Link href="/mainapp" className="text-center mt-8 py-2 bg-red-700 hover:bg-red-500 rounded-md px-2">Back to Shop</Link>
               </div>
             )}
           </div>
