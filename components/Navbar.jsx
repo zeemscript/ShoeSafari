@@ -31,6 +31,7 @@ function Navbar() {
   const handleLogout = async () => {
     try {
       await logout();
+      localStorage.clear();
       router.push("/");
       showToast("Logged out successfully");
     } catch (error) {

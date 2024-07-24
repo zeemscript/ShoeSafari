@@ -83,6 +83,7 @@ const Checkout = () => {
     setIsOtpSending(true);
     if (parseInt(enteredOtp) === otp) {
       setStage(3);
+      localStorage.clear();
       showToast("OTP confirmed successfully.");
     } else {
       setIsOtpSending(false);
