@@ -1,5 +1,6 @@
-"use client"
-import { useState, useEffect } from "react";
+// app/mainapp/page.jsx
+"use client";
+import { useCart } from "../../context/CartContext";
 import Image from "next/image";
 import Link from "next/link";
 import shoeImage1 from "/public/images/shoe4.png";
@@ -11,12 +12,12 @@ import { FaShoppingCart } from "react-icons/fa";
 import Cart from "../../components/Cart";
 import Modal from "../../components/Modal";
 import Toast from "../../components/Toast";
+import { useState } from "react";
 
 export default function Products() {
-  const [itemCount, setItemCount] = useState(0);
-  const [cartItems, setCartItems] = useState([]);
+  const { itemCount, cartItems, addToCart, removeFromCart, totalPrice } =
+    useCart();
   const [showModal, setShowModal] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [toast, setToast] = useState({ show: false, message: "" });
 
   const showToast = (message) => {
@@ -24,54 +25,16 @@ export default function Products() {
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
-  useEffect(() => {
-    const storedItemCount = localStorage.getItem("itemCount");
-    const storedCartItems = localStorage.getItem("cartItems");
-    const storedTotalPrice = localStorage.getItem("totalPrice");
-    if (storedItemCount) {
-      setItemCount(parseInt(storedItemCount, 10));
+  const handleCheckout = () => {
+    if (cartItems.length > 0) {
+      window.location.href = "/checkout";
+    } else {
+      showToast("There is nothing in your cart");
     }
-    if (storedCartItems) {
-      setCartItems(JSON.parse(storedCartItems));
-    }
-    if (storedTotalPrice) {
-      setTotalPrice(parseFloat(storedTotalPrice));
-    }
-  }, []);
+  };
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
-
-  const handleAddToCart = (item) => {
-    const newItemCount = itemCount + 1;
-    const updatedCartItems = [...cartItems, item];
-    const newTotalPrice = totalPrice + item.price;
-
-    showToast("Item added to cart");
-    localStorage.setItem("itemCount", newItemCount.toString());
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-    localStorage.setItem("totalPrice", newTotalPrice.toString());
-
-    setItemCount(newItemCount);
-    setCartItems(updatedCartItems);
-    setTotalPrice(newTotalPrice);
-  };
-
-  const handleRemoveFromCart = (index) => {
-    const removedItem = cartItems[index];
-    const updatedCartItems = cartItems.filter((_, i) => i !== index);
-    const newItemCount = updatedCartItems.length;
-    const newTotalPrice = totalPrice - removedItem.price;
-
-    showToast("Item removed from cart");
-    localStorage.setItem("itemCount", newItemCount.toString());
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-    localStorage.setItem("totalPrice", newTotalPrice.toString());
-
-    setItemCount(newItemCount);
-    setCartItems(updatedCartItems);
-    setTotalPrice(newTotalPrice);
-  };
 
   const prods = [
     { id: 1, name: "Air Max Fusion", price: 10, img: shoeImage1 },
@@ -101,18 +64,23 @@ export default function Products() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {prods.map((prod) => (
               <div key={prod.id} className="p-4 border rounded-lg shadow">
-                <Image
-                  src={prod.img}
-                  alt={prod.name}
-                  width={200}
-                  height={200}
-                  className="mb-2"
-                />
-                <h1 className="text-xl font-bold">{prod.name}</h1>
-                <h2 className="text-lg">${prod.price}</h2>
+                <Link href={`/mainapp/${prod.id}`}>
+                  <Image
+                    src={prod.img}
+                    alt={prod.name}
+                    width={200}
+                    height={200}
+                    className="mb-2"
+                  />
+                  <h1 className="text-xl font-bold">{prod.name}</h1>
+                  <h2 className="text-lg">${prod.price}</h2>
+                </Link>
                 <button
                   className="border border-red-800 rounded-full px-2 py-2 mt-2"
-                  onClick={() => handleAddToCart(prod)}
+                  onClick={() => {
+                    addToCart(prod);
+                    showToast("Item added to cart");
+                  }}
                 >
                   <FaShoppingCart />
                 </button>
@@ -128,48 +96,53 @@ export default function Products() {
       />
       <Modal show={showModal} onClose={closeModal}>
         <h2 className="text-2xl mb-4">Cart Items</h2>
-        {cartItems.length > 0 ? (
-          <div className="max-h-80 overflow-y-auto">
-            <ul>
-              {cartItems.map((item, index) => (
-                <li key={index} className="mb-2">
-                  <div className="flex justify-between items-center">
-                    <Image src={item.img} width={30} height={30} alt="image" />
-                    <span>{item.name}</span>
-                    <span>${item.price}</span>
-                    <button
-                      onClick={() => handleRemoveFromCart(index)}
-                      className="bg-red-500 text-white px-2 py-1 rounded ml-4"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
+        {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>
+        ) : (
+          <div>
+            {cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="flex justify-between items-center mb-2"
+              >
+                <div className="w-16 h-16 flex-shrink-0">
+                  <Image
+                    src={item.img}
+                    width={64}
+                    height={64}
+                    alt={`${item.name} image`}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <span className="ml-4">{item.name}</span>
+                <span className="ml-4">${item.price}</span>
+                <button
+                  className="ml-4 bg-red-500 text-white px-2 py-1 rounded"
+                  onClick={() => removeFromCart(item)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
         )}
-        <div className="flex justify-between">
-          <button
-            onClick={closeModal}
-            className="bg-red-500 text-white px-2 py-1 sm:px-4 sm:py-2 rounded mt-4"
-          >
-            Close
-          </button>
-          <div className="mt-4">
-            {cartItems.length > 0 ? (
-              <span className="text-xl">
-                Total Price: ${totalPrice.toFixed(2)}
-              </span>
+        <div className="flex justify-between items-center mt-4 mx-5 sm:mx-10">
+          <div>
+            {cartItems.length > 0 && <strong>Total:</strong>}
+            {totalPrice ? (
+              <span className="ml-2 font-bold ">${totalPrice.toFixed(2)}</span>
             ) : (
               ""
             )}
           </div>
-          <button className="bg-red-500 text-white px-4 py-2 rounded mt-4">
-            <Link href="/checkout">Checkout</Link>
-          </button>
+          {cartItems.length > 0 && (
+            <button
+              onClick={handleCheckout}
+              className="bg-red-500 text-white px-4 py-1 rounded mt-4"
+            >
+              Checkout
+            </button>
+          )}
         </div>
       </Modal>
     </>

@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { AiOutlineArrowUp } from "react-icons/ai";
-
+import { FaAngleDoubleUp } from "react-icons/fa";
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -32,7 +31,7 @@ const ScrollToTop = () => {
           onClick={scrollToTop}
           className="p-2 rounded-full bg-red-600 text-white shadow-md hover:bg-red-700  transition-all duration-300"
         >
-          <AiOutlineArrowUp size={24} />
+          <FaAngleDoubleUp  size={24} className="hover:animate-bounce"/>
         </button>
       )}
     </div>

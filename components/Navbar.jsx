@@ -8,7 +8,7 @@ import { useAuth } from "../lib/AuthContext";
 import { logout } from "../lib/auth";
 import Toast from "../components/Toast";
 import { useRouter } from "next/navigation";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaAngleRight } from "react-icons/fa6";
 function Navbar() {
   const router = useRouter();
   const [toast, setToast] = useState({ show: false, message: "" });
@@ -95,7 +95,6 @@ function Navbar() {
             >
               Contact Us
             </Link>
-          
           </div>
           <div className="flex gap-4 items-center">
             {user ? (
@@ -156,45 +155,51 @@ function Navbar() {
             <div className="w-full divide-y-2 divide-dashed divide-red-700">
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md  font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={closeNavOnClick}
               >
-                Home
+                <span className="pl-2">Home</span>
+                <FaAngleRight size={20} />
               </Link>
               <Link
                 href={user ? "/mainapp" : "#"}
-                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={(e) => handleProtectedLinkClick(e, "/mainapp")}
               >
-                Shop
+                <span className="pl-2">Shop</span>
+                <FaAngleRight size={20} />
               </Link>
               <Link
                 href={user ? "/mainapp/shop" : "#"}
-                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={(e) => handleProtectedLinkClick(e, "/mainapp/shop")}
               >
-                Collections
+                <span className="pl-2">Collections</span>
+                <FaAngleRight size={20} />
               </Link>
               <Link
                 href="/ejejhbhj"
-                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={closeNavOnClick}
               >
-                About Us
+                <span className="pl-2">About Us</span>
+                <FaAngleRight size={20} />
               </Link>
               <Link
                 href="/blog"
-                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={closeNavOnClick}
               >
-                Blog
+                <span className="pl-2">Blog</span>
+                <FaAngleRight size={20} />
               </Link>
               <Link
                 href="/"
-                className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200 py-2 block w-full text-right pr-4"
+                className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={closeNavOnClick}
               >
-                Contact Us
+                <span className="pl-2">Contact Us</span>
+                <FaAngleRight size={20} />
               </Link>
             </div>
             <div className="flex flex-col gap-4 text-center mt-8">
@@ -243,6 +248,7 @@ function Navbar() {
             </div>
           </div>
         )}
+
         <Toast
           message={toast.message}
           show={toast.show}

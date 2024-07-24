@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useCart } from "../../context/CartContext";
+
 import Toast from "../../components/Toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { MdArrowBack } from "react-icons/md";
@@ -21,6 +23,7 @@ import { SiKlarna } from "react-icons/si";
 import sendMail from "../../lib/sendmail";
 
 const Checkout = () => {
+
   const [otp, setOtp] = useState(Math.floor(Math.random() * 1000000) + 1);
   const [totalPrice, setTotalPrice] = useState(0);
   const [toast, setToast] = useState({ show: false, message: "" });
@@ -261,26 +264,30 @@ const Checkout = () => {
                       <BsCalendarDate className="absolute top-1/2 right-8 transform -translate-y-1/2 text-gray-500" />
                     </div>
                   </div>
+
                   <div className="mb-4">
-                    <label className="block text-gray-700">CVV</label>
-                    <input
-                      type="text"
-                      name="cvv"
-                      value={formData.cvv}
-                      onChange={(e) => {
-                        let { value } = e.target;
-                        if (value.length > 3) {
-                          value = value.slice(0, 3);
-                        }
-                        setFormData((prevData) => ({
-                          ...prevData,
-                          cvv: value,
-                        }));
-                      }}
-                      maxLength={3}
-                      required
-                      className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
-                    />
+                    <label className="block text-gray-700">Cvv</label>
+                    <div className="relative flex justify-center items-center">
+                      <input
+                        type="text"
+                        name="cardNumber"
+                        value={formData.cvv}
+                        onChange={(e) => {
+                          let { value } = e.target;
+                          if (value.length > 3) {
+                            value = value.slice(0, 3);
+                          }
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            cvv: value,
+                          }));
+                        }}
+                        maxLength={3}
+                        required
+                        className="w-full sm:w-64 lg:w-full px-3 py-2 border rounded"
+                      />
+                      <FaCreditCard className="absolute top-1/2 right-8 transform -translate-y-1/2 text-gray-500" />
+                    </div>
                   </div>
                 </div>
                 <button
@@ -296,7 +303,6 @@ const Checkout = () => {
                     "Submit"
                   )}
                 </button>
-               
               </form>
             )}
             {stage === 2 && (
@@ -345,13 +351,10 @@ const Checkout = () => {
             )}
             {stage === 3 && (
               <div className="bg-white p-4 rounded shadow-md h-full flex flex-col justify-center items-center">
-                <h2 className="text-2xl mb-4 text-center">Thank You!</h2>
+                <h2 className="text-6xl mb-4 text-center">Order Completed.</h2>
                 <p className="text-center">
                   Your order has been placed successfully.
                 </p>
-                <span className="text-center text-3xl py-2">
-                  ${totalPrice} would be deducted from your account.
-                </span>
                 <span className="text-center">
                   Thanks for Shopping with us 🥰🥰🥰
                 </span>
