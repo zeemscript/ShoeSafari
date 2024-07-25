@@ -8,8 +8,7 @@ import { useAuth } from "../lib/AuthContext";
 import { logout } from "../lib/auth";
 import Toast from "../components/Toast";
 import { useRouter } from "next/navigation";
-import { FaAngleRight } from "react-icons/fa6";
-function Navbar() {
+import { TfiAngleRight } from "react-icons/tfi";function Navbar() {
   const router = useRouter();
   const [toast, setToast] = useState({ show: false, message: "" });
   const showToast = (message) => {
@@ -159,8 +158,9 @@ function Navbar() {
                 className="text-md  font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={closeNavOnClick}
               >
+                
                 <span className="pl-2">Home</span>
-                <FaAngleRight size={20} />
+                <TfiAngleRight size={20}/>
               </Link>
               <Link
                 href={user ? "/mainapp" : "#"}
@@ -168,7 +168,7 @@ function Navbar() {
                 onClick={(e) => handleProtectedLinkClick(e, "/mainapp")}
               >
                 <span className="pl-2">Shop</span>
-                <FaAngleRight size={20} />
+                <TfiAngleRight size={20} />
               </Link>
               <Link
                 href={user ? "/mainapp/shop" : "#"}
@@ -176,7 +176,7 @@ function Navbar() {
                 onClick={(e) => handleProtectedLinkClick(e, "/mainapp/shop")}
               >
                 <span className="pl-2">Collections</span>
-                <FaAngleRight size={20} />
+                <TfiAngleRight size={20} className="font-thin" />
               </Link>
               <Link
                 href="/ejejhbhj"
@@ -184,7 +184,7 @@ function Navbar() {
                 onClick={closeNavOnClick}
               >
                 <span className="pl-2">About Us</span>
-                <FaAngleRight size={20} />
+                <TfiAngleRight size={20} />
               </Link>
               <Link
                 href="/blog"
@@ -192,7 +192,7 @@ function Navbar() {
                 onClick={closeNavOnClick}
               >
                 <span className="pl-2">Blog</span>
-                <FaAngleRight size={20} />
+                <TfiAngleRight size={20} />
               </Link>
               <Link
                 href="/"
@@ -200,7 +200,7 @@ function Navbar() {
                 onClick={closeNavOnClick}
               >
                 <span className="pl-2">Contact Us</span>
-                <FaAngleRight size={20} />
+                <TfiAngleRight size={20} />
               </Link>
             </div>
             <div className="flex flex-col gap-4 text-center mt-8">
