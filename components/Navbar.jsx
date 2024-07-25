@@ -158,9 +158,8 @@ import { TfiAngleRight } from "react-icons/tfi";function Navbar() {
                 className="text-md  font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={closeNavOnClick}
               >
-                
                 <span className="pl-2">Home</span>
-                <TfiAngleRight size={20}/>
+                <TfiAngleRight size={20} />
               </Link>
               <Link
                 href={user ? "/mainapp" : "#"}
@@ -234,16 +233,18 @@ import { TfiAngleRight } from "react-icons/tfi";function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link href="/profile/login" onClick={closeNavOnClick}>
-                    <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
-                      Login
-                    </button>
-                  </Link>
-                  <Link href="/profile/signup" onClick={closeNavOnClick}>
-                    <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
-                      SignUp
-                    </button>
-                  </Link>
+                  <div className="flex space-x-2">
+                    <Link href="/profile/login" onClick={closeNavOnClick}>
+                      <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
+                        Login
+                      </button>
+                    </Link>
+                    <Link href="/profile/signup" onClick={closeNavOnClick}>
+                      <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
+                        SignUp
+                      </button>
+                    </Link>
+                  </div>
                 </>
               )}
             </div>
