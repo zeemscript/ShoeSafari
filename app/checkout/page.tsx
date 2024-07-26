@@ -94,6 +94,7 @@ const Checkout = () => {
   const handleGoBack = () => {
     if (stage > 1) {
       setStage(stage - 1);
+      setIsSubmitting(false)
     }
   };
 
