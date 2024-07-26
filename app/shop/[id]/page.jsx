@@ -66,7 +66,7 @@ const ProductPage = ({ params }) => {
         <div className="flex space-x-4 items-center my-4">
           <h2 className="text-4xl">${product.price}</h2>
           <button
-            className=" flex border border-red-800 rounded-md px-4 py-2 justify-between items-center hover:bg-red-600"
+            className=" flex border border-red-800 rounded-md px-4 py-2 justify-between items-center hover:bg-red-700"
             onClick={() => {
               addToCart(product);
               showToast("Item added to cart");

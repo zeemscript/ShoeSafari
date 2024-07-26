@@ -75,7 +75,7 @@ export default function Products() {
                   <h2 className="text-lg">${prod.price}</h2>
                 </Link>
                 <button
-                  className="border border-red-800 rounded-full px-2 py-2 mt-2 hover:bg-red-500"
+                  className="border border-red-800 rounded-full px-2 py-2 mt-2 hover:bg-red-700"
                   onClick={() => {
                     addToCart(prod);
                     showToast("Item added to cart");
