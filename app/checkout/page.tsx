@@ -360,7 +360,7 @@ const Checkout = () => {
                   Thanks for Shopping with us 🥰🥰🥰
                 </span>
                 <Link
-                  href="/mainapp"
+                  href="/shop"
                   className="text-center mt-8 py-2 bg-red-700 hover:bg-red-500 rounded-md px-2"
                 >
                   Back to Shop

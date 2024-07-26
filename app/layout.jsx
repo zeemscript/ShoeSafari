@@ -5,6 +5,7 @@ import Whatsapp from "../components/Whatsapp";
 import Footer from "../components/Footer";
 import { AuthProvider } from "../lib/AuthContext";
 import Head from "next/head";
+import logo from "../public/images/favicon.ico"
 
 export const metadata = {
   title: "SHOESAFARI",
@@ -30,6 +31,7 @@ const RootLayout = ({ children }) => {
     <html lang="en">
       <Head>
         <title>{metadata.title}</title>
+        <link rel="icon" href={logo} type="image/x-icon" />
         <meta name="description" content={metadata.description} />
         <meta property="og:type" content={metadata.openGraph.type} />
         <meta property="og:url" content={metadata.openGraph.url} />
@@ -51,7 +53,6 @@ const RootLayout = ({ children }) => {
           property="og:image:alt"
           content={metadata.openGraph.images[0].alt}
         />
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
       <body className="h-full">
         <AuthProvider>

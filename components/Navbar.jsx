@@ -64,16 +64,16 @@ import { TfiAngleRight } from "react-icons/tfi";function Navbar() {
               Home
             </Link>
             <Link
-              href={user ? "/mainapp" : "#"}
+              href={user ? "/shop" : "#"}
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
-              onClick={(e) => handleProtectedLinkClick(e, "/mainapp")}
+              onClick={(e) => handleProtectedLinkClick(e, "/shop")}
             >
               Shop
             </Link>
             <Link
-              href={user ? "/mainapp/shop" : "#"}
+              href={user ? "/collections" : "#"}
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
-              onClick={(e) => handleProtectedLinkClick(e, "/mainapp/shop")}
+              onClick={(e) => handleProtectedLinkClick(e, "/collections")}
             >
               Collections
             </Link>
@@ -162,17 +162,17 @@ import { TfiAngleRight } from "react-icons/tfi";function Navbar() {
                 <TfiAngleRight size={20} />
               </Link>
               <Link
-                href={user ? "/mainapp" : "#"}
+                href={user ? "/shop" : "#"}
                 className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
-                onClick={(e) => handleProtectedLinkClick(e, "/mainapp")}
+                onClick={(e) => handleProtectedLinkClick(e, "/shop")}
               >
                 <span className="pl-2">Shop</span>
                 <TfiAngleRight size={20} />
               </Link>
               <Link
-                href={user ? "/mainapp/shop" : "#"}
+                href={user ? "/collections" : "#"}
                 className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
-                onClick={(e) => handleProtectedLinkClick(e, "/mainapp/shop")}
+                onClick={(e) => handleProtectedLinkClick(e, "/collections")}
               >
                 <span className="pl-2">Collections</span>
                 <TfiAngleRight size={20} className="font-thin" />

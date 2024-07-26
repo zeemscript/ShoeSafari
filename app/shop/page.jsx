@@ -1,4 +1,3 @@
-// app/mainapp/page.jsx
 "use client";
 import { useCart } from "../../context/CartContext";
 import Image from "next/image";
@@ -13,6 +12,23 @@ import Cart from "../../components/Cart";
 import Modal from "../../components/Modal";
 import Toast from "../../components/Toast";
 import { useState } from "react";
+
+const prods = [
+  { id: 1, name: "Air Max Fusion", price: 10, img: shoeImage1 },
+  { id: 2, name: "UltraBoost Runner", price: 20, img: shoeImage2 },
+  { id: 3, name: "Classic Chuck Taylor", price: 30, img: shoeImage3 },
+  { id: 4, name: "Timberland Adventure", price: 40, img: shoeImage4 },
+  { id: 5, name: "Nike React Infinity", price: 50, img: shoeImage5 },
+  { id: 6, name: "Adidas Superstar", price: 20, img: shoeImage3 },
+  { id: 7, name: "Vans Old Skool", price: 20, img: shoeImage4 },
+  { id: 8, name: "Puma RS-X", price: 20, img: shoeImage5 },
+  { id: 9, name: "New Balance 990", price: 20, img: shoeImage3 },
+  { id: 10, name: "Saucony Kinvara", price: 20, img: shoeImage4 },
+  { id: 11, name: "Brooks Ghost", price: 60, img: shoeImage3 },
+  { id: 12, name: "Keds Champion", price: 20, img: shoeImage4 },
+  { id: 13, name: "Converse One Star", price: 20, img: shoeImage5 },
+  { id: 14, name: "Asics Gel-Kayano", price: 50, img: shoeImage3 },
+];
 
 export default function Products() {
   const { itemCount, cartItems, addToCart, removeFromCart, totalPrice } =
@@ -36,23 +52,6 @@ export default function Products() {
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
-  const prods = [
-    { id: 1, name: "Air Max Fusion", price: 10, img: shoeImage1 },
-    { id: 2, name: "UltraBoost Runner", price: 20, img: shoeImage2 },
-    { id: 3, name: "Classic Chuck Taylor", price: 30, img: shoeImage3 },
-    { id: 4, name: "Timberland Adventure", price: 40, img: shoeImage4 },
-    { id: 5, name: "Nike React Infinity", price: 50, img: shoeImage5 },
-    { id: 6, name: "Adidas Superstar", price: 20, img: shoeImage3 },
-    { id: 7, name: "Vans Old Skool", price: 20, img: shoeImage4 },
-    { id: 8, name: "Puma RS-X", price: 20, img: shoeImage5 },
-    { id: 9, name: "New Balance 990", price: 20, img: shoeImage3 },
-    { id: 10, name: "Saucony Kinvara", price: 20, img: shoeImage4 },
-    { id: 11, name: "Brooks Ghost", price: 60, img: shoeImage3 },
-    { id: 12, name: "Keds Champion", price: 20, img: shoeImage4 },
-    { id: 13, name: "Converse One Star", price: 20, img: shoeImage5 },
-    { id: 14, name: "Asics Gel-Kayano", price: 50, img: shoeImage3 },
-  ];
-
   return (
     <>
       <div className="w-full max-w-screen-xl mx-auto py-8">
@@ -64,7 +63,7 @@ export default function Products() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {prods.map((prod) => (
               <div key={prod.id} className="p-4 border rounded-lg shadow">
-                <Link href={`/mainapp/${prod.id}`}>
+                <Link href={`/shop/${prod.id}`}>
                   <Image
                     src={prod.img}
                     alt={prod.name}
@@ -76,7 +75,7 @@ export default function Products() {
                   <h2 className="text-lg">${prod.price}</h2>
                 </Link>
                 <button
-                  className="border border-red-800 rounded-full px-2 py-2 mt-2"
+                  className="border border-red-800 rounded-full px-2 py-2 mt-2 hover:bg-red-500"
                   onClick={() => {
                     addToCart(prod);
                     showToast("Item added to cart");

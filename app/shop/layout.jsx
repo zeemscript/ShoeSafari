@@ -1,6 +1,5 @@
 "use client";
 import "/styles/global.css";
-import { useState, useEffect } from "react";
 import Sidebar from "/components/Sidebar";
 import { CartProvider } from "../../context/CartContext";
 const Layout = ({ children }) => {

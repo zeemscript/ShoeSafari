@@ -47,15 +47,15 @@ export default function Hero() {
           <div className="flex gap-6 pt-32 sm:pt-4">
             <Link
               className="bg-red-700 hover:bg-red-600 text-white rounded-md px-4 py-2"
-              href={user ? "/mainapp" : "#"}
-              onClick={(e) => handleProtectedLinkClick(e, "/mainapp")}
+              href={user ? "/shop" : "#"}
+              onClick={(e) => handleProtectedLinkClick(e, "/shop")}
             >
               Shop Now
             </Link>
             <Link
-              href={user ? "/mainapp/shop" : "#"}
+              href={user ? "/collections" : "#"}
               className="border border-red-700 hover:bg-red-600 text-white rounded-md px-4 py-2"
-              onClick={(e) => handleProtectedLinkClick(e, "/mainapp/shop")}
+              onClick={(e) => handleProtectedLinkClick(e, "/collections")}
             >
               Explore Collections
             </Link>

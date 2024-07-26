@@ -32,7 +32,7 @@ const Login = () => {
       setEmail("");
       setPassword("");
       showToast("Logged in successfully");
-      router.push("/mainapp");
+      router.push("/shop");
     } catch (err) {
       showToast(err.message);
     } finally {
@@ -44,7 +44,7 @@ const Login = () => {
     try {
       await loginWithGoogle();
       showToast("User logged in with Google successfully");
-      router.push("/mainapp");
+      router.push("/shop");
     } catch (err) {
       console.error("Google login error:", err);
       showToast(err.message);

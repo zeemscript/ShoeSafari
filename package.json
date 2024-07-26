@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@vercel/og": "^0.6.2",
     "firebase": "^10.12.4",
     "fs": "^0.0.1-security",
     "next": "14.2.5",
