@@ -8,14 +8,16 @@ import Catalogue3 from "./(landingpage)/Catalogue3";
 import Catalogue4 from "./(landingpage)/Catalogue4";
 import Catalogue5 from "./(landingpage)/Catalogue5";
 import Newsletter from "./(landingpage)/newsletter";
-import AboutUs from "./(landingpage)/Aboutus"
-import ContactUs from "./(landingpage)/ContactUs"
+import AboutUs from "./(landingpage)/Aboutus";
+import ContactUs from "./(landingpage)/ContactUs";
+import Slider from "./(landingpage)/Slider";
 
 export default function FirstPage() {
   return (
     <>
       <Hero />
-      <About/>
+      <About />
+      <Slider/>
       <Catalogue />
       <Carousel />
       <Catalogue2 />
