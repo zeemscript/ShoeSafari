@@ -5,7 +5,7 @@ import { useAuth } from "../../lib/AuthContext";
 import Toast from "../../components/Toast";
 import Link from "next/link";
 import { analytics, logEvent } from "../../lib/firebaseConfig";
-
+import COnnectToDb from "../../lib/firestore"
 
 
 export default function Hero() {

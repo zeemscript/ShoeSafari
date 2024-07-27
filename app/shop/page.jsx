@@ -12,7 +12,8 @@ import Cart from "../../components/Cart";
 import Modal from "../../components/Modal";
 import Toast from "../../components/Toast";
 import { useState } from "react";
-
+import ConnectToDb from "../../lib/mongoose";
+ConnectToDb();
 const prods = [
   { id: 1, name: "Air Max Fusion", price: 10, img: shoeImage1 },
   { id: 2, name: "UltraBoost Runner", price: 20, img: shoeImage2 },
@@ -41,7 +42,8 @@ export default function Products() {
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = (e) => {
+    e.preventDefault();
     if (cartItems.length > 0) {
       window.location.href = "/checkout";
     } else {
@@ -79,6 +81,7 @@ export default function Products() {
                   onClick={() => {
                     addToCart(prod);
                     showToast("Item added to cart");
+                    ConnectToDb();
                   }}
                 >
                   <FaShoppingCart />

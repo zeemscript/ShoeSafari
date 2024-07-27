@@ -7,6 +7,8 @@ import {
   FaRunning,
   FaList
 } from "react-icons/fa";
+import { FaShoePrints } from "react-icons/fa6";
+import { FcSportsMode } from "react-icons/fc";
 
 export default function Sidebar() {
   return (
@@ -61,7 +63,8 @@ export default function Sidebar() {
               href="/collections"
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
-              <FaRunning className="mr-3" />
+              <FcSportsMode className="mr-3" />
+           
               Sport
             </Link>
           </li>
@@ -74,7 +77,6 @@ export default function Sidebar() {
               Categories
             </Link>
           </li>
-         
         </ul>
       </nav>
     </aside>

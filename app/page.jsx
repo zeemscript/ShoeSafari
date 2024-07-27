@@ -11,7 +11,6 @@ import Newsletter from "./(landingpage)/newsletter";
 import AboutUs from "./(landingpage)/Aboutus";
 import ContactUs from "./(landingpage)/ContactUs";
 import Slider from "./(landingpage)/Slider";
-
 export default function FirstPage() {
   return (
     <>
