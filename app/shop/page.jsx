@@ -12,8 +12,7 @@ import Cart from "../../components/Cart";
 import Modal from "../../components/Modal";
 import Toast from "../../components/Toast";
 import { useState } from "react";
-import ConnectToDb from "../../lib/mongoose";
-ConnectToDb();
+
 const prods = [
   { id: 1, name: "Air Max Fusion", price: 10, img: shoeImage1 },
   { id: 2, name: "UltraBoost Runner", price: 20, img: shoeImage2 },
