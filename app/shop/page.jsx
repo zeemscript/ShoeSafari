@@ -80,7 +80,7 @@ export default function Products() {
                   onClick={() => {
                     addToCart(prod);
                     showToast("Item added to cart");
-                    ConnectToDb();
+                   
                   }}
                 >
                   <FaShoppingCart />
