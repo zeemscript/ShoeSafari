@@ -53,7 +53,7 @@ import { TfiAngleRight } from "react-icons/tfi";function Navbar() {
 
   return (
     <>
-      <nav className="bg-white h-fit">
+      <nav className="bg-white h-fit fixed w-full">
         <div className="px-3 sm:px-6 py-2 hidden md:flex justify-between items-center">
           <Image src={logo} alt="shoesafari logo" className="w-20" />
           <div className="hidden md:flex md:gap-6">
