@@ -30,7 +30,7 @@ const RootLayout = ({ children }) => {
   return (
     <html lang="en">
       <Head>
-        <title>{metadata.title}</title>
+        {/* <title>{metadata.title}</title> */}
         <link rel="icon" href={logo} type="image/x-icon" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link
@@ -45,7 +45,7 @@ const RootLayout = ({ children }) => {
           type="image/<generated>"
           sizes="<generated>"
         />
-        <meta name="description" content={metadata.description} />
+        {/* <meta name="description" content={metadata.description} />
         <meta property="og:type" content={metadata.openGraph.type} />
         <meta property="og:url" content={metadata.openGraph.url} />
         <meta property="og:title" content={metadata.openGraph.title} />
@@ -65,7 +65,7 @@ const RootLayout = ({ children }) => {
         <meta
           property="og:image:alt"
           content={metadata.openGraph.images[0].alt}
-        />
+        /> */}
       </Head>
       <body className="h-full">
         <AuthProvider>
