@@ -32,6 +32,19 @@ const RootLayout = ({ children }) => {
       <Head>
         <title>{metadata.title}</title>
         <link rel="icon" href={logo} type="image/x-icon" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link
+          rel="icon"
+          href="/icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
+        <link
+          rel="apple-touch-icon"
+          href="/apple-icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
         <meta name="description" content={metadata.description} />
         <meta property="og:type" content={metadata.openGraph.type} />
         <meta property="og:url" content={metadata.openGraph.url} />
