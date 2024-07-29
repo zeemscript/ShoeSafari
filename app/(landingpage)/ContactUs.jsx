@@ -39,7 +39,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 flex flex-col items-center py-12 px-4">
+    <div id="contact" className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 flex flex-col items-center py-12 px-4">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
         <h2 className="text-3xl font-bold text-center mb-6 text-red-700">
           Contact Us

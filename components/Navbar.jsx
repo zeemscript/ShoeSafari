@@ -1,14 +1,37 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import logo from "/public/images/shoelogoo.png";
 import { useAuth } from "../lib/AuthContext";
 import { logout } from "../lib/auth";
 import Toast from "../components/Toast";
 import { useRouter } from "next/navigation";
-import { TfiAngleRight } from "react-icons/tfi";function Navbar() {
+import { TfiAngleRight } from "react-icons/tfi";
+
+function Navbar() {
+ useEffect(() => {
+   const handleLinkClick = (event) => {
+     event.preventDefault();
+     const href = event.currentTarget.getAttribute("href");
+     const targetId = href.substring(1);
+     const targetElement = document.getElementById(targetId);
+     if (targetElement) {
+       targetElement.scrollIntoView({ behavior: "smooth" });
+     }
+   };
+
+   const links = document.querySelectorAll('a[href^="#"]');
+   links.forEach((link) => link.addEventListener("click", handleLinkClick));
+
+   return () => {
+     links.forEach((link) =>
+       link.removeEventListener("click", handleLinkClick)
+     );
+   };
+ }, []);
+
   const router = useRouter();
   const [toast, setToast] = useState({ show: false, message: "" });
   const showToast = (message) => {
@@ -78,7 +101,7 @@ import { TfiAngleRight } from "react-icons/tfi";function Navbar() {
               Collections
             </Link>
             <Link
-              href="/fjnjhbshb"
+              href="#aboutus"
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
             >
               About Us
@@ -90,7 +113,7 @@ import { TfiAngleRight } from "react-icons/tfi";function Navbar() {
               Blog
             </Link>
             <Link
-              href="/"
+              href="#contact"
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
             >
               Contact Us

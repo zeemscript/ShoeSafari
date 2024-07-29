@@ -3,7 +3,7 @@ import team from "../../public/images/ourteam.png";
 
 export default function AboutUs() {
   return (
-    <section className="flex flex-col items-center justify-center min-h-screen px-6 py-12 bg-red-700 text-white">
+    <section id="aboutus" className="flex flex-col items-center justify-center min-h-screen px-6 py-12 bg-red-700 text-white">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">About Us</h1>
         <p className="text-lg md:text-xl leading-relaxed max-w-3xl mx-auto">

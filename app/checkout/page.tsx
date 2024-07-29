@@ -115,7 +115,7 @@ const Checkout = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center space-x-2 my-4 mx-4 sm:mx-0">
+      <div className="flex justify-center items-center space-x-2 my-4 sm:mx-0 mx-4 mt-16">
         <span
           className={`flex justify-center items-center w-8 h-8 sm:w-10 sm:h-10 border border-red-700 rounded-full ${
             stage >= 1 ? "bg-red-700 text-white" : "bg-white"
