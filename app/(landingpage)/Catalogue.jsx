@@ -15,15 +15,16 @@ const Catalogue = () => {
           />
         </div>
         <div className="w-full md:w-1/2 text-center md:text-left">
-          <div className="flex justify-center md:justify-start">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt
-            explicabo inventore cumque voluptatem laudantium magnam error,
-            tempore labore eum reiciendis architecto perspiciatis commodi! Animi
-            hic ipsum illum omnis atque praesentium. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Optio similique vitae cupiditate
-            voluptatem a neque animi vel voluptatibus quidem velit libero
-            laboriosam, soluta, asperiores aliquam. Praesentium eaque
-            voluptatibus ad perferendis!
+          <div className="flex flex-col justify-center md:justify-start">
+            <span className="text-3xl my-2"> Our Values </span>
+            Integrity is a cornerstone of our business. We believe in being
+            honest and transparent with our customers, suppliers, and employees.
+            Innovation drives us to constantly seek new ways to improve our
+            products and services, embracing creativity and forward-thinking.
+            Customer satisfaction is our priority, and we go the extra mile to
+            ensure you are delighted with your purchase. We are proud to be part
+            of a global community of shoe lovers and work to give back through
+            various social and environmental initiatives.
           </div>
         </div>
       </div>

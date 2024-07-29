@@ -9,15 +9,22 @@ const About = () => {
           <h2 className="text-xl sm:text-2xl font-light text-black pb-4">
             Why ShoeSafari
           </h2>
-          <div className="flex justify-center md:justify-start">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt
-            explicabo inventore cumque voluptatem laudantium magnam error,
-            tempore labore eum reiciendis architecto perspiciatis commodi! Animi
-            hic ipsum illum omnis atque praesentium. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Optio similique vitae cupiditate
-            voluptatem a neque animi vel voluptatibus quidem velit libero
-            laboriosam, soluta, asperiores aliquam. Praesentium eaque
-            voluptatibus ad perferendis!
+          <div className="flex flex-col gap-4 justify-center md:justify-start">
+            Quality craftsmanship is at the core of everything we do. We partner
+            with the finest manufacturers and artisans to bring you shoes that
+            are made to last. Our rigorous quality control process ensures that
+            every pair meets our high standards. We offer a diverse selection
+            that caters to every taste and occasion, from trendy sneakers and
+            stylish boots to elegant heels and comfortable flats.
+            <div>
+              Our customer-centric approach means that our customers are at the
+              heart of everything we do. We are dedicated to providing an
+              exceptional shopping experience, from easy navigation on our
+              website to hassle-free returns and exchanges. Additionally, we are
+              committed to sustainability and strive to minimize our
+              environmental footprint by choosing eco-friendly materials and
+              ethical manufacturing processes.
+            </div>
           </div>
         </div>
         <div className="w-full md:w-1/2 flex justify-center md:justify-end">

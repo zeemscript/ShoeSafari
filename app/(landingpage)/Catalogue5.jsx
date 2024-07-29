@@ -15,15 +15,16 @@ const Catalogue5 = () => {
           />
         </div>
         <div className="w-full md:w-1/2 text-center md:text-left">
-          <div className="flex justify-center md:justify-start">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt
-            explicabo inventore cumque voluptatem laudantium magnam error,
-            tempore labore eum reiciendis architecto perspiciatis commodi! Animi
-            hic ipsum illum omnis atque praesentium. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Optio similique vitae cupiditate
-            voluptatem a neque animi vel voluptatibus quidem velit libero
-            laboriosam, soluta, asperiores aliquam. Praesentium eaque
-            voluptatibus ad perferendis!
+          <div className="flex flex-col justify-center md:justify-start">
+            <span className="text-2xl my-2"> Commitment to Sustainability </span>At ShoeSafari, we are
+            committed to sustainability and ethical practices. We strive to
+            minimize our environmental footprint by choosing eco-friendly
+            materials and sustainable manufacturing processes. We believe in
+            creating shoes that are not only good for your feet but also good
+            for the planet. Our efforts include using recycled materials,
+            reducing waste, and supporting fair labor practices. We are
+            constantly exploring new ways to enhance our sustainability efforts
+            and contribute to a greener future.
           </div>
         </div>
       </div>

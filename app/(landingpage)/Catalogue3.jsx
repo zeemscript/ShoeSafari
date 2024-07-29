@@ -15,15 +15,13 @@ const Catalogue3 = () => {
           />
         </div>
         <div className="w-full md:w-1/2 text-center md:text-left">
-          <div className="flex justify-center md:justify-start">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt
-            explicabo inventore cumque voluptatem laudantium magnam error,
-            tempore labore eum reiciendis architecto perspiciatis commodi! Animi
-            hic ipsum illum omnis atque praesentium. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Optio similique vitae cupiditate
-            voluptatem a neque animi vel voluptatibus quidem velit libero
-            laboriosam, soluta, asperiores aliquam. Praesentium eaque
-            voluptatibus ad perferendis!
+          <div className="flex flex-col justify-center md:justify-start">
+            <span className="text-2xl my-2"> Our Story</span>
+            ShoeSafari was founded with a simple vision: to create a haven for
+            shoe enthusiasts where they can find a diverse collection of
+            footwear that meets their needs and exceeds their expectations.
+            Since our inception, we have been committed to offering shoes that
+            combine craftsmanship, innovation, and elegance.
           </div>
         </div>
       </div>
