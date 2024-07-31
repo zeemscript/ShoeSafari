@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
-import sendMail from "../../lib/sendmail"; // Import the updated sendMail function
+import sendMail from "../../lib/sendmail";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -22,13 +22,12 @@ const ContactUs = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      // Pass formData directly to sendMail
       await sendMail(formData);
-      showToast("Message sent successfully!");
+      showToast("Message sent successfully 😎😎😎!");
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      console.error("Error in handleSubmit:", error);
       setError("Failed to send message.");
+      showToast("Unable to send message, please try agin later 😢😢😢");
     }
     setIsLoading(false);
   };
@@ -39,7 +38,10 @@ const ContactUs = () => {
   };
 
   return (
-    <div id="contact" className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 flex flex-col items-center py-12 px-4">
+    <div
+      id="contact"
+      className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 flex flex-col items-center py-12 px-4"
+    >
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
         <h2 className="text-3xl font-bold text-center mb-6 text-red-700">
           Contact Us

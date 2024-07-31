@@ -9,31 +9,31 @@ const shoes = [
   {
     id: 1,
     name: "Men Shoes",
-    price: "$99.99",
+    price: 99.99,
     imageUrl: shoeImage4,
   },
   {
     id: 2,
     name: "Kids Shoes",
-    price: "$129.99",
+    price: 129.99,
     imageUrl: shoeImage2,
   },
   {
     id: 3,
     name: "Casual Sneakers",
-    price: "$79.99",
+    price: 79.99,
     imageUrl: shoeImage1,
   },
   {
     id: 4,
     name: "Women Shoes",
-    price: "$149.99",
+    price: 149.99,
     imageUrl: shoeImage5,
   },
   {
     id: 4,
     name: "Formal Shoes",
-    price: "$149.99",
+    price: 149.99,
     imageUrl: shoeImage1,
   },
 ];
@@ -59,7 +59,7 @@ export default function ShoesCollection() {
             </div>
             <div className="p-4">
               <h2 className="text-xl font-semibold mb-2">{shoe.name}</h2>
-              <p className="text-gray-600">Starting from {shoe.price}</p>
+              <p className="text-gray-700">Starting from {`$${shoe.price}`} <span className="line-through text-gray-500 decoration-gray-50">{`$${shoe.price + 30}`}</span></p>
             </div>
           </div>
         ))}

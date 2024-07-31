@@ -11,28 +11,33 @@ import { useRouter } from "next/navigation";
 import { TfiAngleRight } from "react-icons/tfi";
 
 function Navbar() {
- useEffect(() => {
-   const handleLinkClick = (event) => {
-     event.preventDefault();
-     const href = event.currentTarget.getAttribute("href");
-     const targetId = href.substring(1);
-     const targetElement = document.getElementById(targetId);
-     if (targetElement) {
-       targetElement.scrollIntoView({ behavior: "smooth" });
-     }
-   };
+  // scroll animation
 
-   const links = document.querySelectorAll('a[href^="#"]');
-   links.forEach((link) => link.addEventListener("click", handleLinkClick));
+  useEffect(() => {
+    const handleLinkClick = (event) => {
+      event.preventDefault();
+      const href = event.currentTarget.getAttribute("href");
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      }
+    };
 
-   return () => {
-     links.forEach((link) =>
-       link.removeEventListener("click", handleLinkClick)
-     );
-   };
- }, []);
+    const links = document.querySelectorAll('a[href^="#"]');
+    links.forEach((link) => link.addEventListener("click", handleLinkClick));
+
+    return () => {
+      links.forEach((link) =>
+        link.removeEventListener("click", handleLinkClick)
+      );
+    };
+  }, []);
 
   const router = useRouter();
+
+  // toast
+
   const [toast, setToast] = useState({ show: false, message: "" });
   const showToast = (message) => {
     setToast({ show: true, message });
@@ -61,15 +66,17 @@ function Navbar() {
     }
   };
 
+  // link protection for if user is loggedin
+
   const handleProtectedLinkClick = (e, path) => {
     if (!user) {
       e.preventDefault();
-      closeNavOnClick()
+      closeNavOnClick();
       showToast("Kindly login first");
       router.push("/profile/login");
     } else {
-       e.preventDefault();
-      closeNavOnClick()
+      e.preventDefault();
+      closeNavOnClick();
       router.push(path);
     }
   };
@@ -152,7 +159,7 @@ function Navbar() {
                     Login
                   </button>
                 </Link>
-                <Link href="/profile/signup">
+                <Link href="/profile/login">
                   <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
                     SignUp
                   </button>
@@ -201,7 +208,7 @@ function Navbar() {
                 <TfiAngleRight size={20} className="font-thin" />
               </Link>
               <Link
-                href="/ejejhbhj"
+                href="#aboutus"
                 className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={closeNavOnClick}
               >
@@ -217,7 +224,7 @@ function Navbar() {
                 <TfiAngleRight size={20} />
               </Link>
               <Link
-                href="/"
+                href="#contact"
                 className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={closeNavOnClick}
               >
@@ -262,7 +269,7 @@ function Navbar() {
                         Login
                       </button>
                     </Link>
-                    <Link href="/profile/signup" onClick={closeNavOnClick}>
+                    <Link href="/profile/login" onClick={closeNavOnClick}>
                       <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
                         SignUp
                       </button>

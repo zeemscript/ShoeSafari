@@ -13,6 +13,7 @@
     "@vercel/og": "^0.6.2",
     "firebase": "^10.12.4",
     "fs": "^0.0.1-security",
+    "mongodb": "^6.8.0",
     "mongoose": "^8.5.1",
     "next": "14.2.5",
     "next-auth": "^4.24.7",

@@ -52,7 +52,7 @@ const posts = [
 export default function Blog() {
   return (
     <div className="bg-gray-100 ">
-      <header className="bg-red-700 text-white py-6 px-4 text-center">
+      <header className="bg-red-700 text-white py-6 px-4 text-center mt-16">
         <h1 className="text-3xl font-bold">ShoeSafari Blog</h1>
         <p className="mt-2 text-lg">Insights and Tips for Shoe Enthusiasts</p>
       </header>
