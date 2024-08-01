@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import shoe1 from "../../../public/images/welcomeshoesafari.png";
 import { login, loginWithGoogle, signup } from "../../../lib/auth";
 import Toast from "../../../components/Toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -82,16 +80,20 @@ const AuthPage = () => {
   };
 
   return (
-    <section className="px-4 md:px-10 bg-white py-12 flex items-center justify-center">
+    <section className="px-4 md:px-10 bg-white py-12 flex items-center justify-center min-h-screen">
       <div className="flex flex-wrap justify-center md:justify-between items-center w-full max-w-4xl">
         <div className="w-full md:w-1/2 flex justify-center md:justify-start mb-8 md:mb-0 md:pr-8">
-          <Image
-            src={shoe1}
-            alt="Shoe Image"
-            width={900}
-            height={850}
-            className="shadow-lg"
-          />
+          <video
+            className="rounded-lg shadow-lg"
+            width="600"
+            autoPlay
+            muted
+            loop
+            preload="auto"
+          >
+            <source src="/assets/welcomvid.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
         <div className="w-full md:w-1/2 text-center md:text-left">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto md:mx-0">
@@ -201,7 +203,7 @@ const AuthPage = () => {
             <div className="flex justify-center items-center">
               <button
                 onClick={handleGoogleLogin}
-                className="w-full flex items-center bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                className="w-full flex items-center bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 <FcGoogle size={28} />
                 <span className="flex-grow text-center">
@@ -209,7 +211,6 @@ const AuthPage = () => {
                 </span>
               </button>
             </div>
-
             <div className="mt-4 text-center text-gray-700">
               {isLoginMode ? (
                 <>
