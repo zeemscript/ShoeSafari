@@ -203,7 +203,7 @@ const AuthPage = () => {
             <div className="flex justify-center items-center">
               <button
                 onClick={handleGoogleLogin}
-                className="w-full flex items-center bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="w-full flex items-center bg-red-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-700 focus:outline-none "
               >
                 <FcGoogle size={28} />
                 <span className="flex-grow text-center">
@@ -218,7 +218,7 @@ const AuthPage = () => {
                   <br />
                   <button
                     onClick={() => setIsLoginMode(false)}
-                    className="font-serif hover:text-red-700 hover:underline"
+                    className="font-serif hover:text-red-700 hover:underline focus:outline-none"
                   >
                     Create an account
                   </button>
@@ -229,7 +229,7 @@ const AuthPage = () => {
                   <br />
                   <button
                     onClick={() => setIsLoginMode(true)}
-                    className="font-serif hover:text-red-700 hover:underline"
+                    className="font-serif hover:text-red-700 hover:underline ring-0 focus:outline-none"
                   >
                     Login to your account
                   </button>

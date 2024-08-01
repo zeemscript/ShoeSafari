@@ -155,12 +155,12 @@ function Navbar() {
             ) : (
               <>
                 <Link href="/profile/login">
-                  <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
+                  <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md focus:outline-none">
                     Login
                   </button>
                 </Link>
                 <Link href="/profile/login">
-                  <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
+                  <button className="font-normal border focus:outline-none border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
                     SignUp
                   </button>
                 </Link>
@@ -256,7 +256,7 @@ function Navbar() {
                       handleLogout();
                       closeNavOnClick();
                     }}
-                    className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
+                    className="font-normal focus:outline-none bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md"
                   >
                     Logout
                   </button>
@@ -265,12 +265,12 @@ function Navbar() {
                 <>
                   <div className="flex space-x-2">
                     <Link href="/profile/login" onClick={closeNavOnClick}>
-                      <button className="font-normal bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
+                      <button className="font-normal focus:outline-none bg-red-700 hover:bg-red-500 rounded-md px-4 py-2 text-md">
                         Login
                       </button>
                     </Link>
                     <Link href="/profile/login" onClick={closeNavOnClick}>
-                      <button className="font-normal border border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
+                      <button className="font-normal border focus:outline-none border-red-500 hover:bg-red-700 transition ease-out delay-75 rounded-md px-4 py-2 text-md">
                         SignUp
                       </button>
                     </Link>

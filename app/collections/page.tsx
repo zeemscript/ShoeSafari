@@ -33,7 +33,7 @@ const shoes = [
 
 export default function ShoesCollection() {
   return (
-    <div className="p-4 md:p-8 lg:p-12">
+    <div className="p-4 md:p-8 lg:p-12 mt-6 sm:mt-4">
       <h1 className="text-3xl font-bold mb-6 text-center">Shoes Collection</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {shoes.map((shoe) => (
