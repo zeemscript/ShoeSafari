@@ -89,6 +89,7 @@ const AuthPage = () => {
             autoPlay
             muted
             loop
+            playsInline
             preload="auto"
           >
             <source src="/assets/welcomvid.mp4" type="video/mp4" />
