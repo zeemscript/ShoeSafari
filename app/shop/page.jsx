@@ -35,13 +35,14 @@ export default function Products() {
     useCart();
   const [showModal, setShowModal] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "" });
-
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const showToast = (message) => {
     setToast({ show: true, message });
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
   const handleCheckout = (e) => {
+    setIsCheckingOut(true);
     e.preventDefault();
     if (cartItems.length > 0) {
       window.location.href = "/checkout";
@@ -141,7 +142,7 @@ export default function Products() {
               onClick={handleCheckout}
               className="bg-red-500 text-white px-4 py-1 rounded mt-4"
             >
-              Checkout
+              {isCheckingOut ? "CheckingOut..." : "CheckOut"}
             </button>
           )}
         </div>

@@ -1,4 +1,6 @@
 import "../styles/global.css";
+import NextTopLoader from "nextjs-toploader";
+
 import Navbar from "../components/Navbar";
 import ScrollToTop from "../components/ScrollToTop";
 import Whatsapp from "../components/Whatsapp";
@@ -68,6 +70,8 @@ const RootLayout = ({ children }) => {
         /> */}
       </Head>
       <body className="h-full">
+        <NextTopLoader color="#ff0000" showSpinner={false} />
+
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <Navbar />
