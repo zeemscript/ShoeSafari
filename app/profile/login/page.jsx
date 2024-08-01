@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { login, loginWithGoogle, signup } from "../../../lib/auth";
 import Toast from "../../../components/Toast";
@@ -17,6 +17,18 @@ const AuthPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const [showControls, setShowControls] = useState(false);
+ useEffect(() => {
+   const mediaQuery = window.matchMedia("(max-width: 768px)");
+   setShowControls(mediaQuery.matches);
+   const handleMediaQueryChange = (event) => {
+     setShowControls(event.matches);
+   };
+   mediaQuery.addEventListener("change", handleMediaQueryChange);
+   return () => {
+     mediaQuery.removeEventListener("change", handleMediaQueryChange);
+   };
+ }, []);
   const router = useRouter();
 
   const showToast = (message) => {
@@ -91,6 +103,7 @@ const AuthPage = () => {
             loop
             playsInline
             preload="auto"
+            controls={showControls}
           >
             <source src="/assets/welcomvid.mp4" type="video/mp4" />
             Your browser does not support the video tag.
