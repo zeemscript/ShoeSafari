@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { login, loginWithGoogle, signup } from "../../../lib/auth";
 import Toast from "../../../components/Toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-
+import img from "../../../public/images/welcomeshoesafari.png"
 const AuthPage = () => {
   const [toast, setToast] = useState({ show: false, message: "" });
   const [email, setEmail] = useState("");
@@ -18,23 +19,6 @@ const AuthPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [showControls, setShowControls] = useState(false);
- useEffect(() => {
-   const mediaQuery = window.matchMedia("(max-width: 768px)");
-   setShowControls(mediaQuery.matches);
-   const handleMediaQueryChange = (event) => {
-     setShowControls(event.matches);
-   };
-   mediaQuery.addEventListener("change", handleMediaQueryChange);
-   return () => {
-     mediaQuery.removeEventListener("change", handleMediaQueryChange);
-   };
- }, []);
-  const router = useRouter();
-
-  const showToast = (message) => {
-    setToast({ show: true, message });
-    setTimeout(() => setToast({ show: false, message: "" }), 5000);
-  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -95,19 +79,7 @@ const AuthPage = () => {
     <section className="px-4 md:px-10 bg-white py-12 flex items-center justify-center min-h-screen">
       <div className="flex flex-wrap justify-center md:justify-between items-center w-full max-w-4xl">
         <div className="w-full md:w-1/2 flex justify-center md:justify-start mb-8 md:mb-0 md:pr-8">
-          <video
-            className="rounded-lg shadow-lg"
-            width="600"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            controls={showControls}
-          >
-            <source src="/assets/welcomvid.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+        <Image src={img} alt="img"/>
         </div>
         <div className="w-full md:w-1/2 text-center md:text-left">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto md:mx-0">
