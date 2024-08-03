@@ -18,8 +18,12 @@ const AuthPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [showControls, setShowControls] = useState(false);
+    const showToast = (message) => {
+      setToast({ show: true, message });
+      setTimeout(() => setToast({ show: false, message: "" }), 3000);
+    };
 
+  const router = useRouter();
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoggingIn(true);
