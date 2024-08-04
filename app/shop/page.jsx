@@ -1,34 +1,14 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useCart } from "../../context/CartContext";
 import Image from "next/image";
 import Link from "next/link";
-import shoeImage1 from "/public/images/shoe4.png";
-import shoeImage2 from "/public/images/shoe3.png";
-import shoeImage3 from "/public/images/shoe3.png";
-import shoeImage4 from "/public/images/shoe4.png";
-import shoeImage5 from "/public/images/shoe5.png";
 import { FaShoppingCart } from "react-icons/fa";
 import Cart from "../../components/Cart";
 import Modal from "../../components/Modal";
 import Toast from "../../components/Toast";
-import { useState } from "react";
-
-const prods = [
-  { id: 1, name: "Air Max Fusion", price: 10, img: shoeImage1 },
-  { id: 2, name: "UltraBoost Runner", price: 20, img: shoeImage2 },
-  { id: 3, name: "Classic Chuck Taylor", price: 30, img: shoeImage3 },
-  { id: 4, name: "Timberland Adventure", price: 40, img: shoeImage4 },
-  { id: 5, name: "Nike React Infinity", price: 50, img: shoeImage5 },
-  { id: 6, name: "Adidas Superstar", price: 20, img: shoeImage3 },
-  { id: 7, name: "Vans Old Skool", price: 20, img: shoeImage4 },
-  { id: 8, name: "Puma RS-X", price: 20, img: shoeImage5 },
-  { id: 9, name: "New Balance 990", price: 20, img: shoeImage3 },
-  { id: 10, name: "Saucony Kinvara", price: 20, img: shoeImage4 },
-  { id: 11, name: "Brooks Ghost", price: 60, img: shoeImage3 },
-  { id: 12, name: "Keds Champion", price: 20, img: shoeImage4 },
-  { id: 13, name: "Converse One Star", price: 20, img: shoeImage5 },
-  { id: 14, name: "Asics Gel-Kayano", price: 50, img: shoeImage3 },
-];
+import { db } from "../../lib/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
 
 export default function Products() {
   const { itemCount, cartItems, addToCart, removeFromCart, totalPrice } =
@@ -36,6 +16,27 @@ export default function Products() {
   const [showModal, setShowModal] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "" });
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(
+          collection(db, "ShoeSafariProducts")
+        );
+        const dataArray = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProducts(dataArray);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const showToast = (message) => {
     setToast({ show: true, message });
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
@@ -62,8 +63,9 @@ export default function Products() {
           <span className="text-4xl sm:text-6xl py-4 flex justify-center items-center font-extrabold">
             Welcome to Our Store!
           </span>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {prods.map((prod) => (
+            {products.map((prod) => (
               <div key={prod.id} className="p-4 border rounded-lg shadow">
                 <Link href={`/shop/${prod.id}`}>
                   <Image
@@ -81,7 +83,6 @@ export default function Products() {
                   onClick={() => {
                     addToCart(prod);
                     showToast("Item added to cart");
-                   
                   }}
                 >
                   <FaShoppingCart />
@@ -91,6 +92,7 @@ export default function Products() {
           </div>
         </section>
       </div>
+
       <Toast
         message={toast.message}
         show={toast.show}

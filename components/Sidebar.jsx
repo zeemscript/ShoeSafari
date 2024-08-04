@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   FaHome,
@@ -9,8 +10,11 @@ import {
 } from "react-icons/fa";
 import { FaShoePrints } from "react-icons/fa6";
 import { FcSportsMode } from "react-icons/fc";
+import { useAuth } from "../lib/AuthContext";
 
 export default function Sidebar() {
+    const { user } = useAuth();
+
   return (
     <aside className="w-64 bg-white text-gray-700 flex-shrink-0  hidden sm:block pt-10">
       <nav className="divide-y divide-gray-200">
@@ -64,9 +68,21 @@ export default function Sidebar() {
               className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
             >
               <FcSportsMode className="mr-3" />
-           
               Sport
             </Link>
+          </li>
+          <li>
+            {user?.uid === "SvGyqjTVt4XgGLsGSzC0amUzC0M2" ? (
+              <Link
+                href="/admin"
+                className="flex items-center p-4 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
+              >
+                <FaInfoCircle className="mr-3" />
+                Admin
+              </Link>
+            ) : (
+              ""
+            )}
           </li>
           <li>
             <Link
@@ -82,3 +98,5 @@ export default function Sidebar() {
     </aside>
   );
 }
+
+

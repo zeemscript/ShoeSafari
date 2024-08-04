@@ -1,44 +1,53 @@
-"use client"
+"use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../../../context/CartContext";
-import shoeImage1 from "/public/images/shoe4.png";
-import shoeImage2 from "/public/images/shoe3.png";
-import shoeImage3 from "/public/images/shoe3.png";
-import shoeImage4 from "/public/images/shoe4.png";
-import shoeImage5 from "/public/images/shoe5.png";
 import Modal from "../../../components/Modal";
 import Toast from "../../../components/Toast";
 import Cart from "../../../components/Cart";
-import { useState, useEffect } from "react";
-
-
-const products = [
-  { id: 1, name: "Air Max Fusion", price: 10, img: shoeImage1 },
-  { id: 2, name: "UltraBoost Runner", price: 20, img: shoeImage2 },
-  { id: 3, name: "Classic Chuck Taylor", price: 30, img: shoeImage3 },
-  { id: 4, name: "Timberland Adventure", price: 40, img: shoeImage4 },
-  { id: 5, name: "Nike React Infinity", price: 50, img: shoeImage5 },
-  { id: 6, name: "Adidas Superstar", price: 20, img: shoeImage3 },
-  { id: 7, name: "Vans Old Skool", price: 20, img: shoeImage4 },
-  { id: 8, name: "Puma RS-X", price: 20, img: shoeImage5 },
-  { id: 9, name: "New Balance 990", price: 20, img: shoeImage3 },
-  { id: 10, name: "Saucony Kinvara", price: 20, img: shoeImage4 },
-  { id: 11, name: "Brooks Ghost", price: 60, img: shoeImage3 },
-  { id: 12, name: "Keds Champion", price: 20, img: shoeImage4 },
-  { id: 13, name: "Converse One Star", price: 20, img: shoeImage5 },
-  { id: 14, name: "Asics Gel-Kayano", price: 50, img: shoeImage3 },
-];
+import { db } from "../../../lib/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const ProductPage = ({ params }) => {
-   const [showModal, setShowModal] = useState(false);
-   const [toast, setToast] = useState({ show: false, message: "" });
+  const { itemCount, cartItems, addToCart, removeFromCart, totalPrice } =
+    useCart();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: "" });
+  const { id } = params;
 
-   const showToast = (message) => {
-     setToast({ show: true, message });
-     setTimeout(() => setToast({ show: false, message: "" }), 3000);
-   };
-  
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const docRef = doc(db, "ShoeSafariProducts", id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setProduct({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          setError("Product not found");
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProduct();
+    }
+  }, [id]);
+
+  const showToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: "" }), 3000);
+  };
+
   const handleCheckout = () => {
     if (cartItems.length > 0) {
       window.location.href = "/checkout";
@@ -46,36 +55,46 @@ const ProductPage = ({ params }) => {
       showToast("There is nothing in your cart");
     }
   };
-  const { itemCount, cartItems, addToCart, removeFromCart, totalPrice } =
-    useCart();  const product = products.find((prod) => prod.id === parseInt(params.id));
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
-  if (!product) return (
-    <div className="flex flex-col items-center justify-center my-32">
-      <h1 className="text-2xl font-bold text-red-700">Product not found</h1>
-    </div>
-    );
 
   return (
     <>
-      <div className="container after:w-full max-w-screen-xl mx-auto py-8">
-        <Cart itemCount={itemCount} onClick={openModal} />;
-        <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-        <Image src={product.img} alt={product.name} width={400} height={400} />
-        <div className="flex space-x-4 items-center my-4">
-          <h2 className="text-4xl">${product.price}</h2>
-          <button
-            className=" flex border border-red-800 rounded-md px-4 py-2 justify-between items-center hover:bg-red-700"
-            onClick={() => {
-              addToCart(product);
-              showToast("Item added to cart");
-            }}
-          >
-            <FaShoppingCart /> <span className="px-2">Add to Cart</span>
-          </button>
-        </div>
+      <div className="container max-w-screen-xl mx-auto py-8 mt-10">
+        <Cart itemCount={itemCount} onClick={openModal} />
+
+        {loading && <LoadingSpinner />}
+        {error && (
+          <div className="flex flex-col items-center justify-center my-32">
+            <h1 className="text-2xl font-bold text-red-700">Error: {error}</h1>
+          </div>
+        )}
+        {!loading && !error && product && (
+          <>
+            <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
+            <Image
+              src={product.img}
+              alt={product.name}
+              width={400}
+              height={400}
+            />
+            <div className="flex space-x-4 items-center my-4">
+              <h2 className="text-4xl">${product.price}</h2>
+              <button
+                className="flex border border-red-800 rounded-md px-4 py-2 justify-between items-center hover:bg-red-700"
+                onClick={() => {
+                  addToCart(product);
+                  showToast("Item added to cart");
+                }}
+              >
+                <FaShoppingCart /> <span className="px-2">Add to Cart</span>
+              </button>
+            </div>
+          </>
+        )}
       </div>
+
       <Toast
         message={toast.message}
         show={toast.show}
@@ -137,4 +156,3 @@ const ProductPage = ({ params }) => {
 };
 
 export default ProductPage;
-

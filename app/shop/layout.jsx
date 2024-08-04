@@ -3,7 +3,7 @@ import "/styles/global.css";
 import Sidebar from "/components/Sidebar";
 import { CartProvider } from "../../context/CartContext";
 const Layout = ({ children }) => {
- 
+  
   return (
     <div className="flex">
       <Sidebar />
