@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function Newsletter() {
   const [toast, setToast] = useState({ show: false, message: "" });
-
+  const [email, setEmail] = useState("");
   const showToast = (message) => {
     setToast({ show: true, message });
     setTimeout(() => setToast({ show: false, message: "" }), 5000);
@@ -11,7 +11,11 @@ export default function Newsletter() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    showToast("Thank you for subscribing");
+    if (email.length !== 0) {
+      showToast("Thank you for subscribing");
+    } else {
+      showToast("Please enter your email !!!");
+    }
     e.target.reset();
   };
 
@@ -23,7 +27,11 @@ export default function Newsletter() {
       <p className="text-lg sm:text-xl text-gray-600 mb-6 text-center">
         Get the latest updates and offers.
       </p>
-      <form className="w-full max-w-md" onSubmit={handleSubmit}>
+      <form
+        className="w-full max-w-md"
+        onSubmit={handleSubmit}
+        noValidate={true}
+      >
         <div className="flex items-center border-b border-red-700 py-2">
           <input
             type="email"
@@ -31,6 +39,9 @@ export default function Newsletter() {
             className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
             placeholder="Enter your email"
             aria-label="Email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             required
           />
           <button

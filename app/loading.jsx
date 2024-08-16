@@ -1,5 +1,4 @@
 import React from "react";
-// import LoadingSpinner from "../../components/LoadingSpinner";
 const loading = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">

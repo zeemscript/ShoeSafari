@@ -94,14 +94,14 @@ function Navbar() {
               Home
             </Link>
             <Link
-              href={user ? "/shop" : "#"}
+              href={user ? "/shop" : "/profile/login"}
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
               onClick={(e) => handleProtectedLinkClick(e, "/shop")}
             >
               Shop
             </Link>
             <Link
-              href={user ? "/collections" : "#"}
+              href={user ? "/collections" : "/profile/login"}
               className="text-md font-light hover:font-normal text-black hover:text-red-500 transition-colors duration-200"
               onClick={(e) => handleProtectedLinkClick(e, "/collections")}
             >
@@ -192,7 +192,7 @@ function Navbar() {
                 <TfiAngleRight size={20} />
               </Link>
               <Link
-                href={user ? "/shop" : "#"}
+                href={user ? "/shop" : "/profile/login"}
                 className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={(e) => handleProtectedLinkClick(e, "/shop")}
               >
@@ -200,7 +200,7 @@ function Navbar() {
                 <TfiAngleRight size={20} />
               </Link>
               <Link
-                href={user ? "/collections" : "#"}
+                href={user ? "/collections" : "/profile/login"}
                 className="text-md font-light hover:font-normal flex justify-between items-center text-black hover:text-red-500 transition-colors duration-200 py-2 w-full pr-4"
                 onClick={(e) => handleProtectedLinkClick(e, "/collections")}
               >
