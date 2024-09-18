@@ -3,37 +3,51 @@ import React, { useState } from "react";
 import { db, storage } from "../../lib/firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Toast from "../../components/Toast";
 
 const AddProductForm = ({ onProductAdded }) => {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productImage, setProductImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+
+  const [toast, setToast] = useState({ show: false, message: "" });
+  const showToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: "" }), 3000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      // Ensure a file is selected
+      if (!productImage) {
+        showToast("Please select an image file");
+        setLoading(false);
+        return;
+      }
+
+      // Upload the image to Firebase Storage
       const imageRef = ref(storage, `products/${productImage.name}`);
       const snapshot = await uploadBytes(imageRef, productImage);
       const imageUrl = await getDownloadURL(snapshot.ref);
 
+      // Add product details to Firestore
       await addDoc(collection(db, "ShoeSafariProducts"), {
         name: productName,
         price: parseFloat(productPrice),
-        img: imageUrl,
+        img: imageUrl, // Save image URL to Firestore
       });
 
-      setSuccessMessage("Product added successfully!");
+      showToast("Product added successfully!");
       setProductName("");
       setProductPrice("");
       setProductImage(null);
       onProductAdded();
     } catch (error) {
-      setErrorMessage("Error adding product: " + error.message);
+      showToast("Error adding product: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -45,16 +59,6 @@ const AddProductForm = ({ onProductAdded }) => {
         Add New Product
       </h1>
       <form onSubmit={handleSubmit}>
-        {successMessage && (
-          <div className="mb-4 p-4 text-white bg-green-500 rounded-md">
-            {successMessage}
-          </div>
-        )}
-        {errorMessage && (
-          <div className="mb-4 p-4 text-white bg-red-500 rounded-md">
-            {errorMessage}
-          </div>
-        )}
         <div className="mb-6">
           <label className="block text-gray-700 text-lg font-semibold">
             Product Name
@@ -100,6 +104,11 @@ const AddProductForm = ({ onProductAdded }) => {
           {loading ? "Adding Product..." : "Add Product"}
         </button>
       </form>
+      <Toast
+        message={toast.message}
+        show={toast.show}
+        onClose={() => setToast({ show: false, message: "" })}
+      />
     </div>
   );
 };

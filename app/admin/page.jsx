@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { db } from "../../lib/firebaseConfig";
+import { db, storage } from "../../lib/firebaseConfig";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
 import AddProductForm from "./AddProductForm";
 import EditProductForm from "./EditProductForm";
 
@@ -10,23 +11,29 @@ const ProductsAdmin = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const querySnapshot = await getDocs(
-          collection(db, "ShoeSafariProducts")
-        );
-        const dataArray = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setProducts(dataArray);
-      } catch (error) {
-        console.error("Error fetching products: ", error);
-      }
-    };
-
     fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "ShoeSafariProducts"));
+      const dataArray = await Promise.all(
+        querySnapshot.docs.map(async (doc) => {
+          const data = doc.data();
+          const imgRef = ref(storage, data.img); // Assuming data.img contains the full path
+          const imgUrl = await getDownloadURL(imgRef);
+          return {
+            id: doc.id,
+            ...data,
+            img: imgUrl,
+          };
+        })
+      );
+      setProducts(dataArray);
+    } catch (error) {
+      console.error("Error fetching products: ", error);
+    }
+  };
 
   const handleProductAdded = () => {
     setSelectedProductId(null);
@@ -47,11 +54,11 @@ const ProductsAdmin = () => {
     }
   };
 
- 
-
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-3xl font-bold my-6 text-center">Products Admin</h1>
+    <div className="container mx-auto px-4 py-8 mt-10">
+      <h1 className="text-4xl font-extrabold mb-8 text-center text-red-600">
+        Products Admin
+      </h1>
       <AddProductForm onProductAdded={handleProductAdded} />
       {selectedProductId && (
         <EditProductForm
@@ -59,41 +66,41 @@ const ProductsAdmin = () => {
           onProductUpdated={handleProductUpdated}
         />
       )}
-      <div className="mt-10">
-        <h2 className="text-2xl font-bold mb-4">Product List</h2>
+      <div className="mt-12">
+        <h2 className="text-3xl font-bold mb-6">Product List</h2>
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200">
-            <thead>
+          <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+            <thead className="bg-red-600 text-white">
               <tr>
-                <th className="py-2 px-4 border-b">Name</th>
-                <th className="py-2 px-4 border-b">Price</th>
-                <th className="py-2 px-4 border-b">Image</th>
-                <th className="py-2 px-4 border-b">Actions</th>
+                <th className="py-3 px-6 border-b text-left">Name</th>
+                <th className="py-3 px-6 border-b text-left">Price</th>
+                <th className="py-3 px-6 border-b text-left">Image</th>
+                <th className="py-3 px-6 border-b text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr key={product.id}>
-                  <td className="py-2 px-4 border-b">{product.name}</td>
-                  <td className="py-2 px-4 border-b">
+                <tr key={product.id} className="border-b hover:bg-gray-50">
+                  <td className="py-4 px-6 text-gray-800">{product.name}</td>
+                  <td className="py-4 px-6 text-gray-800">
                     ${product.price.toFixed(2)}
                   </td>
-                  <td className="py-2 px-4 border-b">
+                  <td className="py-4 px-6">
                     <img
                       src={product.img}
                       alt={product.name}
-                      className="h-16 w-16 object-cover"
+                      className="h-20 w-20 object-cover rounded-lg border border-gray-300"
                     />
                   </td>
-                  <td className="py-2 px-4 border-b">
+                  <td className="py-4 px-6">
                     <button
-                      className="text-blue-500 hover:text-blue-700 mr-2"
+                      className="text-blue-600 hover:text-blue-800 font-semibold mr-4"
                       onClick={() => setSelectedProductId(product.id)}
                     >
                       Edit
                     </button>
                     <button
-                      className="text-red-500 hover:text-red-700"
+                      className="text-red-600 hover:text-red-800 font-semibold"
                       onClick={() => handleDelete(product.id)}
                     >
                       Delete

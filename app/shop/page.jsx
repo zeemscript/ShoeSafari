@@ -7,8 +7,8 @@ import { FaShoppingCart } from "react-icons/fa";
 import Cart from "../../components/Cart";
 import Modal from "../../components/Modal";
 import Toast from "../../components/Toast";
-import { db } from "../../lib/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { storage } from "../../lib/firebaseConfig";
+import { ref, listAll, getDownloadURL } from "firebase/storage";
 
 export default function Products() {
   const { itemCount, cartItems, addToCart, removeFromCart, totalPrice } =
@@ -17,18 +17,24 @@ export default function Products() {
   const [toast, setToast] = useState({ show: false, message: "" });
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [products, setProducts] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const querySnapshot = await getDocs(
-          collection(db, "ShoeSafariProducts")
-        );
-        const dataArray = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setProducts(dataArray);
+        const productsRef = ref(storage, "/"); // Fetch from the root directory
+        const productList = await listAll(productsRef);
+        const productPromises = productList.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return {
+            id: itemRef.name,
+            img: url,
+            name: itemRef.name.split(".")[0], // Assuming the name is the file name without extension
+            price: Math.floor(Math.random() * 100) + 1, // Random price for demo purposes
+          };
+        });
+        const productsArray = await Promise.all(productPromises);
+        setProducts(productsArray);
       } catch (err) {
         setError(err.message);
       }
@@ -64,12 +70,14 @@ export default function Products() {
             Welcome to Our Store!
           </span>
 
+          {error && <p className="text-red-500 text-center">{error}</p>}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {products.map((prod) => (
               <div key={prod.id} className="p-4 border rounded-lg shadow">
                 <Link href={`/shop/${prod.id}`}>
                   <Image
-                    src={prod.img}
+                    src={prod.img} // Ensure this URL is correct
                     alt={prod.name}
                     width={200}
                     height={200}
@@ -111,7 +119,7 @@ export default function Products() {
               >
                 <div className="w-16 h-16 flex-shrink-0">
                   <Image
-                    src={item.img}
+                    src={item.img} // Ensure this URL is correct
                     width={64}
                     height={64}
                     alt={`${item.name} image`}

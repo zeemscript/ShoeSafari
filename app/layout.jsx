@@ -31,7 +31,7 @@ const RootLayout = ({ children }) => {
   return (
     <html lang="en">
       <Head>
-        <link rel="icon" href={logo} type="image/x-icon" />
+        <link rel="icon" href={logo} width="300px" type="image/x-icon" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link
           rel="icon"
