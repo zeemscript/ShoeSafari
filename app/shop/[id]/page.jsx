@@ -11,8 +11,14 @@ import { doc, getDoc } from "firebase/firestore";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const ProductPage = ({ params }) => {
-  const { itemCount, cartItems, addToCart, removeFromCart, totalPrice } =
-    useCart();
+  const {
+    itemCount,
+    cartItems,
+    addToCart,
+    removeFromCart,
+    totalPrice,
+    cartRecoveryMessage,
+  } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -107,6 +113,11 @@ const ProductPage = ({ params }) => {
       />
       <Modal show={showModal} onClose={closeModal} ariaLabel="Shopping cart">
         <h2 className="text-2xl mb-4">Cart Items</h2>
+        {cartRecoveryMessage && (
+          <p role="status" className="mb-3 text-amber-800">
+            {cartRecoveryMessage}
+          </p>
+        )}
         {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (

@@ -11,7 +11,14 @@ import { db } from "../../lib/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 
 export default function Products() {
-  const { itemCount, cartItems, addToCart, removeFromCart, totalPrice } = useCart();
+  const {
+    itemCount,
+    cartItems,
+    addToCart,
+    removeFromCart,
+    totalPrice,
+    cartRecoveryMessage,
+  } = useCart();
   const [showModal, setShowModal] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "" });
   const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -143,6 +150,11 @@ export default function Products() {
       />
       <Modal show={showModal} onClose={closeModal} ariaLabel="Shopping cart">
         <h2 className="text-2xl mb-4">Cart Items</h2>
+        {cartRecoveryMessage && (
+          <p role="status" className="mb-3 text-amber-800">
+            {cartRecoveryMessage}
+          </p>
+        )}
         {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
