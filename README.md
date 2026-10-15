@@ -85,6 +85,7 @@ timestamp, status }` and transitions `Pending → Paid → Shipped/Refunded`.
 - [Security Notes](#security-notes)
 - [Stellar integration API reference](docs/STELLAR_API.md)
 - [Firestore deployment notes](docs/FIRESTORE.md)
+- [Merchant dispatch and refund runbook](docs/ADMIN_ORDERS.md)
 - [Drips Wave issue backlog](docs/WAVE_ISSUES.md)
 - [Contributing](#contributing)
 - [License](#license)
