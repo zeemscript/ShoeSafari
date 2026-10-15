@@ -9,6 +9,7 @@ import Modal from "../../components/Modal";
 import Toast from "../../components/Toast";
 import { db } from "../../lib/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import { searchProducts } from "../../lib/productSearch";
 import { ProductGridSkeleton } from "../../components/Skeleton";
 
 export default function Products() {
@@ -24,6 +25,7 @@ export default function Products() {
   const [toast, setToast] = useState({ show: false, message: "" });
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -84,6 +86,7 @@ export default function Products() {
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+  const filteredProducts = searchProducts(products, searchTerm);
 
   return (
     <>
@@ -93,6 +96,27 @@ export default function Products() {
           <span className="text-4xl sm:text-6xl py-4 flex justify-center items-center font-extrabold">
             Welcome to Our Store!
           </span>
+
+          <div className="mx-auto mb-6 flex max-w-xl gap-2 px-4">
+            <label htmlFor="product-search" className="sr-only">Search products</label>
+            <input
+              id="product-search"
+              type="search"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Search products"
+              className="min-w-0 flex-1 rounded border border-gray-400 px-3 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-700"
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm("")}
+                className="rounded border border-gray-400 px-3 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-700"
+              >
+                Clear search
+              </button>
+            )}
+          </div>
 
           {isLoading && (
             <div aria-busy="true">
@@ -107,9 +131,15 @@ export default function Products() {
             </p>
           )}
 
-          {!isLoading && !error && products.length > 0 && (
+          {!isLoading && !error && products.length > 0 && filteredProducts.length === 0 && (
+            <p className="text-gray-600 text-center py-8" role="status">
+              No products match “{searchTerm.trim()}”. Clear your search to see all products.
+            </p>
+          )}
+
+          {!isLoading && !error && filteredProducts.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {products.map((prod) => (
+              {filteredProducts.map((prod) => (
                 <div key={prod.id} className="p-4 border rounded-lg shadow">
                   <Link href={`/shop/${prod.id}`}>
                     <Image
