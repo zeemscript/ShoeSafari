@@ -23,6 +23,11 @@ We take security seriously at ShoeSafari. If you discover a security vulnerabili
 - Regular updates on our progress
 - Credit in the security advisory (if desired)
 
+Maintainers responding to production credential exposure or provider compromise
+should follow the [production credential rotation and incident response
+runbook](docs/SECURITY_OPERATIONS.md). Keep incident details and credentials in
+private systems; do not post them in a public issue or pull request.
+
 ## Security Best Practices
 
 ### Environment Variables
