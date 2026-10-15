@@ -66,6 +66,7 @@ timestamp, status }` and transitions `Pending → Paid → Shipped/Refunded`.
 - [Tech Stack](#tech-stack)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
+  - [Five-minute local setup](docs/LOCAL_SETUP.md)
   - [1. Clone the repository](#1-clone-the-repository)
   - [2. Install dependencies](#2-install-dependencies)
   - [3. Configure environment variables](#3-configure-environment-variables)
