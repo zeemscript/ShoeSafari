@@ -29,6 +29,8 @@ and signing keys server-side without the `NEXT_PUBLIC_` prefix.
 | `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | Yes | Firebase Storage bucket. |
 | `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | No | Firebase Messaging sender ID. |
 | `NEXT_PUBLIC_FIREBASE_APP_ID` | Yes | Firebase client app ID. |
+| `NEXT_PUBLIC_FIREBASE_APPCHECK_SITE_KEY` | Before App Check enforcement | Public reCAPTCHA Enterprise site key; App Check stays off when unset. |
+| `NEXT_PUBLIC_FIREBASE_APPCHECK_DEBUG` | No | Set to `true` only for local development to enable Firebase's debug provider. Never enable in production. |
 | `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` | No | Firebase Analytics measurement ID. |
 | `FIREBASE_SERVICE_ACCOUNT_JSON` | No | Server-only Firebase Admin service-account JSON, used for trusted catalog reads. Never expose this value to the browser. |
 | `CHECKOUT_QUOTE_SECRET` | Yes for trusted checkout quotes | Server-only random HMAC key of at least 32 characters. Keep it in the deployment secret manager. |
