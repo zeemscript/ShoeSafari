@@ -20,6 +20,22 @@ export default function Products() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (
+      process.env.NODE_ENV !== "production" &&
+      window.localStorage.getItem("__shoesafari_e2e") === "1"
+    ) {
+      setProducts([
+        {
+          id: "e2e-trail-runner",
+          name: "E2E Trail Runner",
+          price: 79.99,
+          img: "/images/shoe1.png",
+        },
+      ]);
+      setIsLoading(false);
+      return;
+    }
+
     const fetchProducts = async () => {
       try {
         if (!db) {

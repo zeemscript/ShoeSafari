@@ -48,6 +48,9 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
   }, []);
 
   const handlePay = async () => {
+    const e2eMode =
+      process.env.NODE_ENV !== "production" &&
+      window.localStorage.getItem("__shoesafari_e2e") === "1";
     setError("");
     setTransactionHash("");
     setResult(null);
@@ -57,7 +60,7 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
     let key = publicKey;
     if (!key) {
       try {
-        key = await connectWallet();
+        key = e2eMode ? "G" + "A".repeat(55) : await connectWallet();
         setPublicKey(key);
       } catch (e) {
         setBusy(false);
@@ -80,6 +83,27 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
       const quote = quoteBody.quote;
       if (quote.expiresAt <= Date.now()) {
         throw new Error("This checkout quote has expired. Return to your cart and try again.");
+      }
+
+      if (e2eMode) {
+        const amountRaw = BigInt(Math.round(Number(quote.totalUsd) * 10 ** 7));
+        const mockResult = {
+          hash: "a".repeat(64),
+          status: "SUCCESS",
+          receipt: {
+            ledger: 123456,
+            buyer: key,
+            token: "e2e-mock-token",
+            orderId: "e2e-mock-order-hash",
+            amount: amountRaw.toString(),
+          },
+          amountRaw,
+          amountUsd: Number(quote.totalUsd),
+        };
+        setResult(mockResult);
+        setMessage("");
+        if (onSuccess) onSuccess({ ...mockResult, orderId: quote.orderId, items: quote.items });
+        return;
       }
 
       const res = await payWithStellar({
