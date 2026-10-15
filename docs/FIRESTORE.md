@@ -15,6 +15,7 @@ forms create and update these fields:
 | `name` | string | Yes | Product display name. |
 | `price` | number | Yes | Product price in USD, in major units (for example, `79.99`). It is a catalog value, not a trusted checkout total. |
 | `img` | string | Yes | Firebase Storage download URL used for the product image. |
+| `available` | boolean, optional | No | Whether customers can buy the product. Only `false` means unavailable; legacy records without this field remain available. New products default to `true`. |
 
 The product document ID is used as the catalog product ID and in the checkout
 quote. Do not put customer, payment, or order data in product documents. The

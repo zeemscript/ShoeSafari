@@ -1,5 +1,6 @@
 "use client"
 import { createContext, useContext, useEffect, useState } from "react";
+import { isProductAvailable } from "../lib/productAvailability";
 
 const CartContext = createContext();
 
@@ -11,17 +12,31 @@ export const CartProvider = ({ children }) => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const storedItemCount = parseInt(localStorage.getItem("itemCount")) || 0;
+    const savedItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+    const originalItems = Array.isArray(savedItems) ? savedItems : [];
+    const storedCartItems = originalItems.filter(isProductAvailable);
     const storedTotalPrice =
       parseFloat(localStorage.getItem("totalPrice")) || 0;
 
     setCartItems(storedCartItems);
-    setItemCount(storedItemCount);
-    setTotalPrice(storedTotalPrice);
+    setItemCount(storedCartItems.length);
+    setTotalPrice(
+      storedCartItems.length === originalItems.length
+        ? storedTotalPrice
+        : storedCartItems.reduce((total, item) => total + (Number(item.price) || 0), 0)
+    );
+    if (storedCartItems.length !== originalItems.length || !Array.isArray(savedItems)) {
+      localStorage.setItem("cartItems", JSON.stringify(storedCartItems));
+      localStorage.setItem("itemCount", storedCartItems.length.toString());
+      localStorage.setItem(
+        "totalPrice",
+        storedCartItems.reduce((total, item) => total + (Number(item.price) || 0), 0).toString()
+      );
+    }
   }, []);
 
   const addToCart = (product) => {
+    if (!isProductAvailable(product)) return false;
     setCartItems((prevCartItems) => {
       const updatedCartItems = [...prevCartItems, product];
       localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
@@ -37,6 +52,7 @@ export const CartProvider = ({ children }) => {
       localStorage.setItem("totalPrice", newTotalPrice.toString());
       return newTotalPrice;
     });
+    return true;
   };
 
   const removeFromCart = (product) => {

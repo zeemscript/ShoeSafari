@@ -51,6 +51,7 @@ const AddProductForm = ({ onProductAdded }) => {
         name: productName,
         price: parseFloat(productPrice),
         img: imageUrl, // Save image URL to Firestore
+        available: true,
       });
 
       showToast("Product added successfully!");

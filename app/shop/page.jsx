@@ -112,14 +112,19 @@ export default function Products() {
                     />
                     <h1 className="text-xl font-bold">{prod.name}</h1>
                     <h2 className="text-lg">${prod.price}</h2>
+                    <p className="text-sm" aria-label="Product availability">
+                      {prod.available === false ? "Unavailable" : "Available"}
+                    </p>
                   </Link>
                   <button
                     type="button"
                     aria-label={`Add ${prod.name} to cart`}
-                    className="border-red-800 rounded-full px-2 py-2 mt-2 border-2 hover:border-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800"
+                    disabled={prod.available === false}
+                    className="border-red-800 rounded-full px-2 py-2 mt-2 border-2 hover:border-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800 disabled:cursor-not-allowed disabled:opacity-50"
                     onClick={() => {
-                      addToCart(prod);
-                      showToast("Item added to cart");
+                      showToast(
+                        addToCart(prod) ? "Item added to cart" : "This product is unavailable"
+                      );
                     }}
                   >
                     <FaShoppingCart aria-hidden="true" />
@@ -155,6 +160,9 @@ export default function Products() {
                 </div>
                 <span className="ml-4">{item.name}</span>
                 <span className="ml-4">${item.price}</span>
+                <span className="ml-4 text-sm" aria-label="Cart item availability">
+                  {item.available === false ? "Unavailable" : "Available"}
+                </span>
                 <button
                   className="ml-4 bg-red-500 text-white px-2 py-1 rounded"
                   onClick={() => removeFromCart(item)}

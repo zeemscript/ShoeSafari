@@ -44,6 +44,22 @@ describe("trusted checkout quotes", () => {
     expect(quote.expiresAt).toBe(1000 + CHECKOUT_QUOTE_TTL_MS);
   });
 
+  it("keeps legacy products without availability purchasable", () => {
+    expect(
+      createCheckoutQuote([{ productId: "boot", quantity: 1 }], products, "SS-legacy")
+        .items[0].productId
+    ).toBe("boot");
+  });
+
+  it("allows explicitly available products", () => {
+    const quote = createCheckoutQuote(
+      [{ productId: "boot", quantity: 1 }],
+      { boot: { name: "Boot", price: 20, available: true } },
+      "SS-available"
+    );
+    expect(quote.totalUsd).toBe(20);
+  });
+
   it.each([
     [[{ productId: "missing", quantity: 1 }], {}],
     [[{ productId: "boot", quantity: 1 }], { boot: { name: "Boot", price: 20, available: false } }],

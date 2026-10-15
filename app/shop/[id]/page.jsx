@@ -81,11 +81,16 @@ const ProductPage = ({ params }) => {
             />
             <div className="flex space-x-4 items-center my-4">
               <h2 className="text-4xl">${product.price}</h2>
+              <p aria-label="Product availability">
+                {product.available === false ? "Unavailable" : "Available"}
+              </p>
               <button
-                className="flex border border-red-800 rounded-md px-4 py-2 justify-between items-center hover:bg-red-700"
+                disabled={product.available === false}
+                className="flex border border-red-800 rounded-md px-4 py-2 justify-between items-center hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                 onClick={() => {
-                  addToCart(product);
-                  showToast("Item added to cart");
+                  showToast(
+                    addToCart(product) ? "Item added to cart" : "This product is unavailable"
+                  );
                 }}
               >
                 <FaShoppingCart /> <span className="px-2">Add to Cart</span>
@@ -122,6 +127,9 @@ const ProductPage = ({ params }) => {
                 </div>
                 <span className="ml-4">{item.name}</span>
                 <span className="ml-4">${item.price}</span>
+                <span className="ml-4 text-sm" aria-label="Cart item availability">
+                  {item.available === false ? "Unavailable" : "Available"}
+                </span>
                 <button
                   className="ml-4 bg-red-500 text-white px-2 py-1 rounded"
                   onClick={() => removeFromCart(item)}
