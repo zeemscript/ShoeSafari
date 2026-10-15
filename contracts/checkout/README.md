@@ -9,6 +9,50 @@ until the merchant dispatches the order — or refunded on-chain back to the buy
 
 ## Interface
 
+This is the contract-facing interface used by the storefront. `amount` values
+passed to Soroban are **raw token units**; the storefront's cart prices are
+display values in USD. For a supported 7-decimal token, `12.34` token units is
+`123_400_000` raw units. Do not pass a formatted string such as `"12.34 USDC"`
+to the contract.
+
+| Call | Signature | Authorization and effect |
+| --- | --- | --- |
+| `create_order` | `create_order(buyer: Address, order_id: BytesN<32>, token: Address, amount: i128) -> Result<(), Error>` | Buyer authorizes; records a `Pending` order without moving funds. |
+| `pay` | `pay(token: Address, buyer: Address, order_id: BytesN<32>, amount: i128) -> Result<(), Error>` | Buyer authorizes; transfers the exact raw-unit amount into escrow and marks the order `Paid`. |
+| `dispatch` | `dispatch(order_id: BytesN<32>) -> Result<(), Error>` | Merchant authorizes; releases escrow to the merchant. |
+| `refund` | `refund(order_id: BytesN<32>) -> Result<(), Error>` | Merchant authorizes; returns escrow to the buyer. |
+| `order` | `order(order_id: BytesN<32>) -> Option<Order>` | Reads buyer, raw `amount`, token contract, timestamp, and status. |
+| `status` | `status(order_id: BytesN<32>) -> Option<Status>` | Reads the order lifecycle state. |
+| `is_paid` | `is_paid(order_id: BytesN<32>) -> bool` | True for `Paid` or `Shipped` orders. |
+
+For the storefront client, use [`payWithStellar`](../../lib/stellar/checkout.ts),
+which accepts a USD display amount, a signed quote, a wallet public key, and an
+optional configured `TokenConfig`. The client builds the contract's raw-unit
+`i128`; its token configuration and formatter are in
+[`lib/stellar/config.ts`](../../lib/stellar/config.ts). See the
+[Stellar API reference](../../docs/STELLAR_API.md) for helper signatures and
+the [network configuration matrix](../../docs/NETWORK_CONFIGURATION.md) for
+the token IDs and decimals configured by network.
+
+```ts
+import { payWithStellar } from "../../lib/stellar/checkout";
+import { defaultToken } from "../../lib/stellar/config";
+
+const receipt = await payWithStellar({
+  amountUsd: 12.34, // storefront display amount; the client converts it
+  orderId: "order-123",
+  quoteToken, // server-signed quote returned by the checkout API
+  publicKey, // connected Freighter public address
+  token: defaultToken(), // configured default token; omit to use the default
+});
+```
+
+The Soroban `pay` call receives an `i128` raw amount, not `amountUsd` or a
+formatted UI value. For example, the client currently converts `$12.34` to
+`123_400_000` raw units for its 7-decimal supported tokens. Use
+`formatTokenAmount` from `lib/stellar/config.ts` when displaying an on-chain
+raw amount; never infer display decimals from the amount itself.
+
 | Function         | Params                                                                     | Returns                | Description                                                        |
 | ---------------- | -------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------ |
 | `initialize`     | `merchant: Address`                                                        | `Result<(), Error>`    | Set the merchant wallet (one-time, deployer signs)                 |
