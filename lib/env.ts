@@ -45,6 +45,7 @@ export interface EnvConfig {
 // DEFAULTS
 // =============================================================================
 
+// Keep docs/NETWORK_CONFIGURATION.md in sync with these server-side defaults.
 const STELLAR_DEFAULTS = {
   testnet: {
     rpcUrl: "https://soroban-testnet.stellar.org",

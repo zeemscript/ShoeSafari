@@ -2,6 +2,7 @@ import { Networks } from "@stellar/stellar-sdk";
 
 // ---------------------------------------------------------------------------
 // Network + contract configuration.
+// Keep docs/NETWORK_CONFIGURATION.md in sync with these defaults.
 //
 // Set these in `.env.local` (see `.env.local.example`):
 //   NEXT_PUBLIC_STELLAR_NETWORK        = "testnet" | "mainnet"

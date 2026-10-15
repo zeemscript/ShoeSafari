@@ -81,6 +81,7 @@ timestamp, status }` and transitions `Pending → Paid → Shipped/Refunded`.
 - [Paying with Stellar (testnet)](#paying-with-stellar-testnet)
 - [Testnet checkout validation](docs/TESTNET_CHECKOUT.md)
 - [Environment Variables Reference](#environment-variables-reference)
+- [Stellar network configuration matrix](docs/NETWORK_CONFIGURATION.md)
 - [Security Notes](#security-notes)
 - [Stellar integration API reference](docs/STELLAR_API.md)
 - [Firestore deployment notes](docs/FIRESTORE.md)
