@@ -177,18 +177,21 @@ real Stellar Asset Contract for native XLM
 (`env.register_stellar_asset_contract_v2`), so nothing needs to be deployed.
 They also verify pending order terms cannot be changed when the payment is made.
 
-## Order storage lifetime
+## Persistent storage lifetime
 
-Orders use persistent storage. When an order's remaining TTL is below the
-1,000-ledger threshold, `storage::set_order` and `storage::get_order` request a
-renewal to 10,000 ledgers. Reads and lifecycle transitions that load or update
-an order renew its ledger entry. An absent order is not renewed.
+Contract records use Soroban persistent storage. The implementation sets
+`LEDGER_THRESHOLD` to 1,000 ledgers and `LEDGER_TO_EXTEND_TO` to 10,000 ledgers.
+`storage::extend_ttl` requests renewal to that target only when an entry's
+remaining lifetime is below the threshold. It is called when the admin is read
+or set, an order is read or set, and an approval policy is read or set. Missing
+orders and approval policies are not renewed. Token allowlist entries are set
+or removed without an explicit renewal call.
 
-This is a rolling renewal policy, not permanent storage: an order that is not
-read or written before its TTL expires can be archived and may require a
-separate restore operation before it can be accessed. The 10,000-ledger target
-is subject to the network's maximum persistent-entry TTL and archival rules;
-it does not override network limits or guarantee a fixed wall-clock lifetime.
+This is a rolling renewal policy, not permanent storage. An entry that is not
+renewed before its TTL expires can be archived and may require a separate
+restore operation before it can be accessed. The 10,000-ledger target is
+subject to the network's maximum persistent-entry TTL and archival rules; it
+does not override network limits or guarantee a fixed wall-clock lifetime.
 
 ## Deploy (testnet)
 
