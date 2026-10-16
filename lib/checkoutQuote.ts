@@ -24,6 +24,15 @@ export interface CheckoutQuote {
   items: QuotedItem[];
   totalUsd: number;
   expiresAt: number;
+  payment?: {
+    asset: "USDC" | "XLM";
+    tokenContractId: string;
+    amountRaw: string;
+    /** CoinGecko spot price used for XLM, in USD per XLM. */
+    xlmUsdPrice?: number;
+    /** Source update time in Unix milliseconds. */
+    priceUpdatedAt?: number;
+  };
 }
 
 export function createCheckoutQuote(

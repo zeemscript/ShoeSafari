@@ -10,7 +10,8 @@ import {
   eventToOrder,
   OrderStatus,
 } from "../../../lib/stellar/orders";
-import { NETWORK, CHECKOUT_CONTRACT_ID } from "../../../lib/stellar/config";
+import { CHECKOUT_CONTRACT_ID } from "../../../lib/stellar/config";
+import { transactionExplorerUrl } from "../../../lib/stellar/explorer";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import {
   MdRefresh,
@@ -24,8 +25,13 @@ import { SiStellar } from "react-icons/si";
 import Link from "next/link";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../lib/firebaseConfig";
-import { updateStellarOrderStatus } from "../../../lib/orderStore";
+import {
+  anonymizeStellarOrderPersonalData,
+  updateStellarOrderStatus,
+} from "../../../lib/orderStore";
+import { isOrderRetentionDue } from "../../../lib/orderRetention";
 import { logClientError } from "../../../lib/safeLogging";
+import { formatShippingAddress } from "../../../lib/shippingAddress";
 
 // Status badge component
 const StatusBadge = ({ status }: { status: OrderStatus }) => {
@@ -94,15 +100,28 @@ const OrderRow = ({
   order,
   onDispatch,
   onRefund,
+  onAnonymize,
   isProcessing,
 }: {
   order: OrderEvent;
   onDispatch: (orderId: string) => void;
   onRefund: (orderId: string) => void;
+  onAnonymize: (orderId: string, customerRequest: boolean) => void;
   isProcessing: boolean;
 }) => {
   const canDispatch = order.status === "Paid";
   const canRefund = order.status === "Paid";
+  const completed = order.status === "Shipped" || order.status === "Refunded";
+  const hasCustomerData = Boolean(
+    order.commerce?.customer?.firstName ||
+      order.commerce?.customer?.lastName ||
+      order.commerce?.customer?.email ||
+      order.commerce?.customer?.address ||
+      order.commerce?.userId ||
+      order.commerce?.buyerWallet
+  );
+  const canApplyRetention =
+    completed && hasCustomerData && isOrderRetentionDue(order.commerce);
 
   return (
     <tr className="border-b hover:bg-gray-50">
@@ -110,12 +129,18 @@ const OrderRow = ({
         <div className="font-mono text-xs text-gray-600">
           {truncateAddress(order.orderId)}
         </div>
-        {order.commerce?.customer && (
-          <div className="mt-1 text-xs text-gray-500">
-            {order.commerce.customer.firstName} {order.commerce.customer.lastName}
-            {order.commerce.customer.email && <div>{order.commerce.customer.email}</div>}
-          </div>
-        )}
+        {order.commerce?.customer &&
+          (order.commerce.customer.firstName ||
+            order.commerce.customer.lastName ||
+            order.commerce.customer.email) && (
+            <div className="mt-1 text-xs text-gray-500">
+              {order.commerce.customer.firstName} {order.commerce.customer.lastName}
+              {order.commerce.customer.email && <div>{order.commerce.customer.email}</div>}
+              {order.commerce.customer.address && (
+                <div>{formatShippingAddress(order.commerce.customer.address)}</div>
+              )}
+            </div>
+          )}
       </td>
       <td className="py-4 px-4">
         <div className="font-mono text-xs text-gray-600">
@@ -135,7 +160,7 @@ const OrderRow = ({
       </td>
       <td className="py-4 px-4 text-sm">
         <a
-          href={`https://stellar.expert/explorer/${NETWORK}/tx/${order.txHash}`}
+          href={transactionExplorerUrl(order.txHash) || undefined}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 hover:underline font-mono text-xs"
@@ -173,6 +198,24 @@ const OrderRow = ({
               Refund
             </button>
           )}
+          {canApplyRetention && (
+            <button
+              onClick={() => onAnonymize(order.orderId, false)}
+              disabled={isProcessing}
+              className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50"
+            >
+              Anonymize after retention
+            </button>
+          )}
+          {completed && hasCustomerData && (
+            <button
+              onClick={() => onAnonymize(order.orderId, true)}
+              disabled={isProcessing}
+              className="px-3 py-1 text-sm border border-gray-500 rounded hover:bg-gray-100 disabled:opacity-50"
+            >
+              Honor verified request
+            </button>
+          )}
           {!canDispatch && !canRefund && (
             <span className="text-gray-400 text-sm">-</span>
           )}
@@ -205,6 +248,11 @@ const OrdersManagementContent = () => {
         customer: orderDoc.data().customer,
         items: orderDoc.data().items,
         userId: orderDoc.data().userId,
+        buyerWallet: orderDoc.data().buyerWallet,
+        status: orderDoc.data().status,
+        completedAt: orderDoc.data().completedAt,
+        updatedAt: orderDoc.data().updatedAt,
+        personalDataAnonymizedAt: orderDoc.data().personalDataAnonymizedAt,
       }])
     );
 
@@ -309,6 +357,50 @@ const OrdersManagementContent = () => {
       setProcessingOrderId(null);
     }
   }, [orders]);
+
+  const handleAnonymize = useCallback(
+    async (orderId: string, customerRequest: boolean) => {
+      const confirmation = customerRequest
+        ? "Confirm that the customer’s identity and deletion request have been verified. This removes direct customer details from the Firestore order record."
+        : "Anonymize direct customer details now? This action is available only after the one-year retention period.";
+      if (!window.confirm(confirmation)) return;
+
+      const commerce = orders.get(orderId)?.commerce;
+      if (!commerce) return;
+      setProcessingOrderId(orderId);
+      setError(null);
+      setSuccessMessage(null);
+
+      try {
+        await anonymizeStellarOrderPersonalData(commerce.documentId, { customerRequest });
+        setOrders((previous) => {
+          const updated = new Map(previous);
+          const current = updated.get(orderId);
+          if (current?.commerce) {
+            updated.set(orderId, {
+              ...current,
+              commerce: {
+                ...current.commerce,
+                userId: null,
+                buyerWallet: null,
+                customer: { firstName: "", lastName: "", email: "", address: "" },
+                personalDataAnonymizedAt: { toMillis: () => Date.now() },
+              },
+            });
+          }
+          return updated;
+        });
+        setSuccessMessage(
+          `Customer details for order ${truncateAddress(orderId)} were anonymized.`
+        );
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Could not anonymize customer details.");
+      } finally {
+        setProcessingOrderId(null);
+      }
+    },
+    [orders]
+  );
 
   // Handle refund order
   const handleRefund = useCallback(async (orderId: string) => {
@@ -515,6 +607,7 @@ const OrdersManagementContent = () => {
                     order={order}
                     onDispatch={handleDispatch}
                     onRefund={handleRefund}
+                    onAnonymize={handleAnonymize}
                     isProcessing={processingOrderId === order.orderId}
                   />
                 ))}

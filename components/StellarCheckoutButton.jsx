@@ -1,10 +1,15 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { orderIdHash, payWithStellar, usdToRawUnits } from "../lib/stellar/checkout";
+import { orderIdHash, payWithStellar } from "../lib/stellar/checkout";
 import { connectWallet, currentAddress } from "../lib/stellar/freighter";
 import { parseError } from "../lib/errors";
-import { CHECKOUT_CONTRACT_ID, NETWORK, defaultToken } from "../lib/stellar/config";
+import {
+  CHECKOUT_CONTRACT_ID,
+  formatTokenAmount,
+  tokenForContract,
+} from "../lib/stellar/config";
+import { transactionExplorerUrl } from "../lib/stellar/explorer";
 import { useNotification } from "./Notification";
 import { checkTransactionStatus } from "../lib/stellar/events";
 import {
@@ -14,9 +19,9 @@ import {
 } from "../lib/stellar/recovery";
 
 /**
- * Pay the current cart total with USDC on Stellar (via Freighter).
+ * Pay the current cart total with the selected Stellar asset (via Freighter).
  */
-const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disabled = false }) => {
+const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, paymentAsset = "USDC", onSuccess, validateBeforePay, disabled = false }) => {
   const { success, error: notifyError } = useNotification();
   const [publicKey, setPublicKey] = useState("");
   const [busy, setBusy] = useState(false);
@@ -27,9 +32,15 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
   const [result, setResult] = useState(null);
   const [recovery, setRecovery] = useState(null);
   const [recoveryLoaded, setRecoveryLoaded] = useState(false);
+  const submissionInFlight = useRef(false);
 
   const generatedOrderId = useMemo(() => `SS-${Date.now()}-${Math.floor(Math.random() * 1e6)}`, []);
   const effectiveOrderId = recovery?.orderId || orderId || generatedOrderId;
+  const confirmedAmount = result?.receipt?.amount
+    ? `${formatTokenAmount(result.receipt.amount, result.receipt.token)} ${tokenForContract(result.receipt.token)?.symbol || "token"}`
+    : result
+      ? `${Number(result.amountUsd).toFixed(2)} USD`
+      : "";
 
   useEffect(() => {
     let cancelled = false;
@@ -52,6 +63,11 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
   }, []);
 
   const handlePay = async () => {
+    // State updates disable the button on the next render; the ref closes the
+    // same-render window where multiple clicks could start two payments.
+    if (submissionInFlight.current) return;
+    submissionInFlight.current = true;
+
     const e2eMode =
       process.env.NODE_ENV !== "production" &&
       window.localStorage.getItem("__shoesafari_e2e") === "1";
@@ -59,6 +75,13 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
     setFeeEstimate("");
     setTransactionHash("");
     setResult(null);
+    const validationMessage = validateBeforePay?.();
+    if (validationMessage) {
+      setError(validationMessage);
+      setBusy(false);
+      submissionInFlight.current = false;
+      return;
+    }
     setBusy(true);
     setMessage("Connecting wallet…");
 
@@ -69,6 +92,7 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
         setPublicKey(key);
         if (!e2eMode) success("Your Freighter wallet is connected.", "Wallet connected");
       } catch (e) {
+        submissionInFlight.current = false;
         setBusy(false);
         const message = parseError(e).userMessage;
         setError(message);
@@ -92,10 +116,14 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
       if (quote.expiresAt <= Date.now()) {
         throw new Error("This checkout quote has expired. Return to your cart and try again.");
       }
+      const token = tokenForContract(quote.payment?.tokenContractId);
+      if (!token || quote.payment.asset !== paymentAsset || !/^\d+$/.test(quote.payment.amountRaw)) {
+        throw new Error("The selected payment asset no longer matches the checkout quote. Request a fresh quote.");
+      }
+      const amountRaw = BigInt(quote.payment.amountRaw);
+      if (amountRaw <= 0n) throw new Error("The quoted payment amount is invalid. Request a fresh quote.");
 
       if (e2eMode) {
-        const amountRaw = BigInt(Math.round(Number(quote.totalUsd) * 10 ** 7));
-        const token = defaultToken();
         const mockResult = {
           hash: "a".repeat(64),
           status: "SUCCESS",
@@ -129,29 +157,31 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
         orderId: quote.orderId,
         quoteToken,
         publicKey: key,
+        token,
+        amountRaw,
         onStatus: (msg) => setMessage(msg),
         onFeeEstimate: (estimate) => setFeeEstimate(estimate),
         onSubmitted: (hash) => {
-          const token = defaultToken();
           const pending = {
             hash,
             orderId: quote.orderId,
             buyerWallet: key,
             tokenContract: token.contractId,
             checkoutContractId: CHECKOUT_CONTRACT_ID,
-            amountRaw: usdToRawUnits(Number(quote.totalUsd)).toString(),
+            amountRaw: amountRaw.toString(),
+            amountUsd: Number(quote.totalUsd),
+            tokenContractId: token.contractId,
           };
           savePendingPayment(pending);
           setRecovery(pending);
           setTransactionHash(hash);
         },
       });
-      const token = defaultToken();
       res.expectedPayment = {
         buyerWallet: key,
         tokenContract: token.contractId,
         checkoutContractId: CHECKOUT_CONTRACT_ID,
-        amountRaw: usdToRawUnits(Number(quote.totalUsd)).toString(),
+        amountRaw: amountRaw.toString(),
       };
       clearPendingPayment();
       setRecovery(null);
@@ -165,6 +195,7 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
       notifyError(appError.userMessage, "Payment failed");
       setTransactionHash(appError.transactionHash || "");
     } finally {
+      submissionInFlight.current = false;
       setBusy(false);
     }
   };
@@ -189,7 +220,7 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
           status: checked.status,
           receipt,
           amountRaw,
-          amountUsd: Number(amountRaw) / 10 ** 7,
+          amountUsd: recovery.amountUsd ?? Number(amountRaw) / 10 ** 7,
           expectedPayment: {
             buyerWallet: recovery.buyerWallet,
             tokenContract: recovery.tokenContract,
@@ -247,13 +278,13 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
           <>
             <span className="font-semibold">Payment confirmed ✓</span>
             <span className="text-xs text-white/80">
-              ${Number(result.amountUsd).toFixed(2)} USDC · order {effectiveOrderId}
+              {confirmedAmount} · order {effectiveOrderId}
             </span>
           </>
         ) : (
           <>
             <span className="font-semibold">
-              Pay with USDC{amountUsd ? ` · $${Number(amountUsd).toFixed(2)}` : ""}
+              Pay with {paymentAsset}{amountUsd ? ` · $${Number(amountUsd).toFixed(2)}` : ""}
             </span>
             <span className="text-xs text-white/80">From your Stellar wallet (Freighter)</span>
           </>
@@ -290,7 +321,7 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
           {transactionHash && (
             <a
               className="mt-1 inline-flex min-h-11 items-center justify-center px-2 underline"
-              href={`https://stellar.expert/explorer/${NETWORK === "mainnet" ? "public" : "testnet"}/tx/${transactionHash}`}
+              href={transactionExplorerUrl(transactionHash) || undefined}
               target="_blank"
               rel="noreferrer"
             >
@@ -309,7 +340,7 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
         >
           Paid on ledger {result.receipt ? result.receipt.ledger : "—"} · tx{" "}
           <a
-            href={`https://stellar.expert/explorer/${NETWORK === "mainnet" ? "public" : "testnet"}/tx/${result.hash}`}
+            href={transactionExplorerUrl(result.hash) || undefined}
             target="_blank"
             rel="noreferrer"
             className="underline"

@@ -1,6 +1,17 @@
 import { NextResponse } from "next/server";
 import { createCheckoutQuote, signCheckoutQuote } from "../../../../lib/checkoutQuote";
 import { getFirebaseAdminDb } from "../../../../lib/firebaseAdmin";
+import {
+  NATIVE_ASSET_CONTRACT_ID,
+  tokenForContract,
+  USDC_CONTRACT_ID,
+} from "../../../../lib/stellar/config";
+import {
+  fetchXlmSpotPrice,
+  usdToXlmRawUnits,
+  XLM_PRICE_MAX_AGE_MS,
+  XLM_QUOTE_TTL_MS,
+} from "../../../../lib/xlmPrice";
 
 export const runtime = "nodejs";
 
@@ -34,6 +45,38 @@ export async function POST(request: Request) {
       )
     );
     const quote = createCheckoutQuote(requestedItems, products, body?.orderId);
+    const asset = body?.paymentAsset ?? "USDC";
+    if (asset !== "USDC" && asset !== "XLM") {
+      return NextResponse.json({ error: "Choose USDC or XLM to pay." }, { status: 400 });
+    }
+    if (asset === "XLM") {
+      const spot = await fetchXlmSpotPrice();
+      quote.payment = {
+        asset,
+        tokenContractId: NATIVE_ASSET_CONTRACT_ID,
+        amountRaw: usdToXlmRawUnits(
+          quote.totalUsd,
+          spot.usd,
+          tokenForContract(NATIVE_ASSET_CONTRACT_ID)?.decimals ?? 7
+        ),
+        xlmUsdPrice: spot.usd,
+        priceUpdatedAt: spot.updatedAt,
+      };
+      quote.expiresAt = Math.min(
+        quote.expiresAt,
+        spot.updatedAt + XLM_PRICE_MAX_AGE_MS,
+        Date.now() + XLM_QUOTE_TTL_MS
+      );
+      if (quote.expiresAt <= Date.now()) {
+        throw new Error("The XLM/USD quote is stale. Try again or choose USDC.");
+      }
+    } else {
+      quote.payment = {
+        asset,
+        tokenContractId: USDC_CONTRACT_ID,
+        amountRaw: String(Math.round(quote.totalUsd * 10 ** 7)),
+      };
+    }
 
     return NextResponse.json(
       { quote, quoteToken: signCheckoutQuote(quote, secret) },

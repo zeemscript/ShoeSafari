@@ -9,9 +9,9 @@ import { OrderCardSkeleton, PageHeaderSkeleton } from "../../components/Skeleton
 import EmptyState from "../../components/EmptyState";
 import { readOrder } from "../../lib/stellar/orders";
 import { applyVerifiedOrderRead } from "../../lib/stellar/orderStatus";
+import { transactionExplorerUrl } from "../../lib/stellar/explorer";
 import {
   formatTokenAmount,
-  NETWORK,
   tokenSymbolForContract,
   USDC_CONTRACT_ID,
 } from "../../lib/stellar/config";
@@ -93,11 +93,15 @@ export default function OrdersPage() {
             continue;
           }
           try {
-            const contractOrder = await readOrder(record.orderId);
-            if (!contractOrder) {
+            const readResult = await readOrder(record.orderId);
+            if (readResult.kind !== "found") {
+              // Both a missing on-chain record and an RPC/simulation failure
+              // leave this order unverified; the status distinction is
+              // available on readResult for callers that need it.
               unverifiedCount += 1;
               continue;
             }
+            const contractOrder = readResult.order;
             const checkedAt = Date.now();
             setOrders((current) =>
               current.map((order) =>
@@ -234,7 +238,7 @@ export default function OrdersPage() {
             )}
             {order.transactionHash && (
               <a
-                href={`https://stellar.expert/explorer/${NETWORK}/tx/${order.transactionHash}`}
+                href={transactionExplorerUrl(order.transactionHash) || undefined}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-block mt-4 text-sm text-blue-700 underline font-mono"

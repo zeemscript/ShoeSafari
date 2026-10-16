@@ -7,6 +7,8 @@ export interface PendingPayment {
   tokenContract?: string;
   checkoutContractId?: string;
   amountRaw?: string;
+  amountUsd?: number;
+  tokenContractId?: string;
 }
 
 /** Store only the public transaction hash and its non-sensitive order reference. */
@@ -36,6 +38,10 @@ export function loadPendingPayment(): PendingPayment | null {
           checkoutContractId: payment.checkoutContractId,
         }),
         ...(typeof payment.amountRaw === "string" && { amountRaw: payment.amountRaw }),
+        ...(Number.isFinite(payment.amountUsd) && payment.amountUsd > 0
+          ? { amountUsd: payment.amountUsd }
+          : {}),
+        ...(typeof payment.tokenContractId === "string" && { tokenContractId: payment.tokenContractId }),
       };
     }
   } catch {

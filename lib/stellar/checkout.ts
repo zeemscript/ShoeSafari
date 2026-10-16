@@ -28,6 +28,8 @@ export interface PayOptions {
   publicKey: string;
   /** Token to pay with (defaults to the first supported token, USDC). */
   token?: TokenConfig;
+  /** Exact smallest-unit amount from the signed checkout quote. */
+  amountRaw?: bigint;
   /** Called with human-readable progress updates. */
   onStatus?: (status: string) => void;
   /** Called when the pre-signing network-fee estimate changes. */
@@ -95,7 +97,10 @@ export async function payWithStellar(options: PayOptions): Promise<PayResult> {
     );
   }
 
-  const amountRaw = usdToRawUnits(amountUsd);
+  const amountRaw = options.amountRaw ?? usdToRawUnits(amountUsd);
+  if (amountRaw <= 0n) {
+    throw new WalletError("Invalid amount to pay.", "INVALID_AMOUNT");
+  }
   const orderBytes = await hashOrderId(orderId);
 
   // 1. Network guard.
@@ -159,6 +164,17 @@ export async function payWithStellar(options: PayOptions): Promise<PayResult> {
   ) {
     throw new WalletError(
       quoteBody.error || "The checkout quote expired or no longer matches this order.",
+      "QUOTE_INVALID"
+    );
+  }
+  if (
+    (quoteBody.quote.payment &&
+      (quoteBody.quote.payment.tokenContractId !== token.contractId ||
+        BigInt(quoteBody.quote.payment.amountRaw) !== amountRaw)) ||
+    (!quoteBody.quote.payment && token.contractId !== defaultToken().contractId)
+  ) {
+    throw new WalletError(
+      "The selected payment asset no longer matches this quote.",
       "QUOTE_INVALID"
     );
   }
