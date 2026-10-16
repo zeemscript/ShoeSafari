@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../../../context/CartContext";
 import Modal from "../../../components/Modal";
@@ -9,6 +8,7 @@ import Cart from "../../../components/Cart";
 import { db } from "../../../lib/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { ProductImage } from "../../../components/OptimizedImage";
 
 const ProductPage = ({ params }) => {
   const {
@@ -79,11 +79,11 @@ const ProductPage = ({ params }) => {
         {!loading && !error && product && (
           <>
             <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-            <Image
+            <ProductImage
               src={product.img}
               alt={product.name}
-              width={400}
-              height={400}
+              size="large"
+              containerClassName="max-w-[400px]"
             />
             <div className="flex space-x-4 items-center my-4">
               <h2 className="text-4xl">${product.price}</h2>

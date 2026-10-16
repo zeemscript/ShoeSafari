@@ -12,6 +12,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { searchProducts } from "../../lib/productSearch";
 import { ProductGridSkeleton } from "../../components/Skeleton";
 import EmptyState from "../../components/EmptyState";
+import { ProductImage } from "../../components/OptimizedImage";
 
 export default function Products() {
   const {
@@ -155,11 +156,10 @@ export default function Products() {
               {filteredProducts.map((prod) => (
                 <div key={prod.id} className="p-4 border rounded-lg shadow">
                   <Link href={`/shop/${prod.id}`}>
-                    <Image
+                    <ProductImage
                       src={prod.img}
                       alt={prod.name}
-                      width={200}
-                      height={200}
+                      size="small"
                       className="mb-2"
                     />
                     <h1 className="text-xl font-bold">{prod.name}</h1>

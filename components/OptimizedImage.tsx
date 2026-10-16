@@ -1,10 +1,11 @@
 "use client";
 import Image, { ImageProps } from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface OptimizedImageProps extends Omit<ImageProps, "onError"> {
   fallbackSrc?: string;
   showSkeleton?: boolean;
+  containerClassName?: string;
 }
 
 /**
@@ -30,18 +31,24 @@ interface OptimizedImageProps extends Omit<ImageProps, "onError"> {
 export default function OptimizedImage({
   src,
   alt,
-  fallbackSrc = "/images/placeholder.png",
+  fallbackSrc = "/images/notfoundimage.png",
   showSkeleton = true,
   className = "",
+  containerClassName = "",
   ...props
 }: OptimizedImageProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [imageSrc, setImageSrc] = useState(src || fallbackSrc);
+  const [hasErrored, setHasErrored] = useState(false);
 
-  const imageSrc = error ? fallbackSrc : src;
+  useEffect(() => {
+    setImageSrc(src || fallbackSrc);
+    setHasErrored(false);
+    setIsLoading(true);
+  }, [src, fallbackSrc]);
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div className={`relative overflow-hidden ${containerClassName || className}`}>
       {/* Loading skeleton */}
       {showSkeleton && isLoading && (
         <div
@@ -60,8 +67,11 @@ export default function OptimizedImage({
         `}
         onLoad={() => setIsLoading(false)}
         onError={() => {
-          setError(true);
           setIsLoading(false);
+          if (!hasErrored && imageSrc !== fallbackSrc) {
+            setHasErrored(true);
+            setImageSrc(fallbackSrc);
+          }
         }}
         loading="lazy"
         {...props}
@@ -80,11 +90,13 @@ export function ProductImage({
   alt,
   size = "medium",
   className = "",
+  containerClassName = "",
 }: {
   src: string;
   alt: string;
   size?: "small" | "medium" | "large";
   className?: string;
+  containerClassName?: string;
 }) {
   const sizes = {
     small: { width: 150, height: 150 },
@@ -100,7 +112,8 @@ export function ProductImage({
       alt={alt}
       width={width}
       height={height}
-      className={`object-cover rounded-lg ${className}`}
+      containerClassName={`aspect-square w-full overflow-hidden rounded-lg ${containerClassName}`}
+      className={`h-full w-full object-cover ${className}`}
       sizes={`(max-width: 768px) 100vw, ${width}px`}
     />
   );
