@@ -16,7 +16,7 @@ import {
 /**
  * Pay the current cart total with USDC on Stellar (via Freighter).
  */
-const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disabled = false }) => {
+const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, validateBeforePay, disabled = false }) => {
   const { success, error: notifyError } = useNotification();
   const [publicKey, setPublicKey] = useState("");
   const [busy, setBusy] = useState(false);
@@ -59,6 +59,12 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, disa
     setFeeEstimate("");
     setTransactionHash("");
     setResult(null);
+    const validationMessage = validateBeforePay?.();
+    if (validationMessage) {
+      setError(validationMessage);
+      setBusy(false);
+      return;
+    }
     setBusy(true);
     setMessage("Connecting wallet…");
 

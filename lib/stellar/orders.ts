@@ -393,7 +393,19 @@ export interface OrderEvent {
   txHash: string;
   commerce?: {
     documentId: string;
-    customer?: { firstName?: string; lastName?: string; email?: string; address?: string };
+    customer?: {
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+      address?: string | {
+        addressLine1?: string;
+        addressLine2?: string;
+        city?: string;
+        region?: string;
+        postalCode?: string;
+        country?: string;
+      };
+    };
     items?: Array<{ name?: string; price?: number }>;
     userId?: string | null;
   };

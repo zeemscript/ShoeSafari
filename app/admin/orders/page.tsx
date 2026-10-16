@@ -26,6 +26,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../lib/firebaseConfig";
 import { updateStellarOrderStatus } from "../../../lib/orderStore";
 import { logClientError } from "../../../lib/safeLogging";
+import { formatShippingAddress } from "../../../lib/shippingAddress";
 
 // Status badge component
 const StatusBadge = ({ status }: { status: OrderStatus }) => {
@@ -114,6 +115,9 @@ const OrderRow = ({
           <div className="mt-1 text-xs text-gray-500">
             {order.commerce.customer.firstName} {order.commerce.customer.lastName}
             {order.commerce.customer.email && <div>{order.commerce.customer.email}</div>}
+            {order.commerce.customer.address && (
+              <div>{formatShippingAddress(order.commerce.customer.address)}</div>
+            )}
           </div>
         )}
       </td>
