@@ -24,7 +24,6 @@ const AuthPage = () => {
 
   const showToast = (message) => {
     setToast({ show: true, message });
-    setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
   const router = useRouter();

@@ -19,7 +19,6 @@ const AddProductForm = ({ onProductAdded }) => {
   const [toast, setToast] = useState({ show: false, message: "" });
   const showToast = (message) => {
     setToast({ show: true, message });
-    setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
   const handleSubmit = async (e) => {

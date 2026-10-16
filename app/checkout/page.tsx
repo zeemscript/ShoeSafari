@@ -36,7 +36,6 @@ const Checkout = () => {
 
   const showToast = (message: string) => {
     setToast({ show: true, message });
-    setTimeout(() => setToast({ show: false, message: "" }), 5000);
   };
 
   const [orderId] = useState(() => `SS-${Date.now()}-${Math.floor(Math.random() * 1e6)}`);
