@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { orderIdHash, payWithStellar, usdToRawUnits } from "../lib/stellar/checkout";
 import { connectWallet, currentAddress } from "../lib/stellar/freighter";
@@ -27,6 +27,7 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, vali
   const [result, setResult] = useState(null);
   const [recovery, setRecovery] = useState(null);
   const [recoveryLoaded, setRecoveryLoaded] = useState(false);
+  const submissionInFlight = useRef(false);
 
   const generatedOrderId = useMemo(() => `SS-${Date.now()}-${Math.floor(Math.random() * 1e6)}`, []);
   const effectiveOrderId = recovery?.orderId || orderId || generatedOrderId;
@@ -52,6 +53,11 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, vali
   }, []);
 
   const handlePay = async () => {
+    // State updates disable the button on the next render; the ref closes the
+    // same-render window where multiple clicks could start two payments.
+    if (submissionInFlight.current) return;
+    submissionInFlight.current = true;
+
     const e2eMode =
       process.env.NODE_ENV !== "production" &&
       window.localStorage.getItem("__shoesafari_e2e") === "1";
@@ -75,6 +81,7 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, vali
         setPublicKey(key);
         if (!e2eMode) success("Your Freighter wallet is connected.", "Wallet connected");
       } catch (e) {
+        submissionInFlight.current = false;
         setBusy(false);
         const message = parseError(e).userMessage;
         setError(message);
@@ -171,6 +178,7 @@ const StellarCheckoutButton = ({ amountUsd, orderId, quoteToken, onSuccess, vali
       notifyError(appError.userMessage, "Payment failed");
       setTransactionHash(appError.transactionHash || "");
     } finally {
+      submissionInFlight.current = false;
       setBusy(false);
     }
   };
