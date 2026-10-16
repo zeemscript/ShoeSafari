@@ -95,7 +95,8 @@ changing the frontend decoder or the contract interface.
 | Export | Purpose |
 | --- | --- |
 | `OrderStatus`, `OrderDetails`, `OrderActionResult`, `OrderEvent` | Order state, contract-read, action, and decoded event shapes. |
-| `readOrder(orderId)` | Simulate a contract read and return order details, or `null` when no order exists. |
+| `ReadOrderResult`, `OrderReadError` | Discriminated read outcome (`found`, `not-found`, or typed `error`) and failure details. |
+| `readOrder(orderId)` | Simulate a read-only contract query without wallet or funding lookup; returns a typed found, missing, or error result. |
 | `dispatchOrder(orderId)` | Ask the connected wallet to dispatch a paid order. |
 | `refundOrder(orderId)` | Ask the connected wallet to refund an eligible order. |
 | `eventToOrder(event)` | Convert a decoded contract event into an order event record. |
