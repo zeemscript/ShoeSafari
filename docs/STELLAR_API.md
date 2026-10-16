@@ -69,7 +69,7 @@ The browser and server helpers for the ShoeSafari Stellar checkout live in `lib/
 | --- | --- |
 | `PaymentReceipt` | Decoded checkout payment fields, transaction hash, and ledger. |
 | `waitForTransaction(hash)` | Poll RPC until the transaction succeeds or fails/times out. |
-| `checkTransactionStatus(hash)` | Check a transaction once and decode its payment receipt on success. |
+| `checkTransactionStatus(hash)` | Poll a saved transaction hash with bounded backoff; decode its receipt on success, report a final failure, or leave it pending on timeout. It never resubmits the transaction. |
 | `decodePaymentEvent(transaction)` | Find and decode the checkout payment event from a successful transaction. |
 | `bytesToHex(bytes)` | Re-export of the byte conversion helper in `scval.ts`. |
 
