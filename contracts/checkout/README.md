@@ -125,14 +125,18 @@ data:   { amount }   (i128, raw units)
 
 ### Events
 
-| Event            | Topics                                    | Data                      |
-| ---------------- | ----------------------------------------- | ------------------------- |
-| `PaymentReceived`| `pay`, token, buyer, merchant, order_id   | `{ amount }`              |
-| `OrderCreated`   | `create_order`, token, buyer, order_id    | `{ amount, timestamp }`   |
-| `OrderShipped`   | `dispatch`, order_id, merchant            | `{ amount }`              |
-| `OrderRefunded`  | `refund`, order_id, buyer                 | `{ amount }`              |
-| `MerchantChangedV1` | `merchant_changed_v1`, previous merchant, new merchant | — |
-| `TokenAllowlistChangedV1` | `token_allowlist_changed_v1`, token | `{ allowed }` |
+Each row lists topics in emitted order, including the event name as topic 0.
+Address topics are Soroban `Address` values and order IDs are `BytesN<32>`.
+Fields in the data column are the event data payload and their Soroban types.
+
+| Event | Topics, in order | Data payload |
+| --- | --- | --- |
+| `PaymentReceived` | `pay`, `token: Address`, `buyer: Address`, `merchant: Address`, `order_id: BytesN<32>` | `amount: i128` (raw token units) |
+| `OrderCreated` | `create_order`, `token: Address`, `buyer: Address`, `order_id: BytesN<32>` | `amount: i128` (raw token units), `timestamp: u64` (ledger timestamp) |
+| `OrderShipped` | `dispatch`, `order_id: BytesN<32>`, `merchant: Address` | `amount: i128` (raw token units) |
+| `OrderRefunded` | `refund`, `order_id: BytesN<32>`, `buyer: Address` | `amount: i128` (raw token units) |
+| `MerchantChangedV1` | `merchant_changed_v1`, `previous_merchant: Address`, `new_merchant: Address` | Empty `()` payload |
+| `TokenAllowlistChangedV1` | `token_allowlist_changed_v1`, `token: Address` | `allowed: bool` |
 
 Configuration events are published only after merchant authorization succeeds.
 Repeated allowlist calls that do not change state do not emit duplicate events.
