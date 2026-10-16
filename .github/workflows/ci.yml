@@ -13,8 +13,8 @@ jobs:
     name: Frontend checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 18
           cache: npm
@@ -64,12 +64,12 @@ jobs:
       run:
         working-directory: contracts/checkout
     steps:
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # v1
         with:
           toolchain: stable
           targets: wasm32v1-none
           components: rustfmt, clippy
-      - uses: actions/checkout@v4
       - run: cargo fmt -- --check
       - run: cargo test
       - run: cargo clippy --all-targets -- -D warnings
