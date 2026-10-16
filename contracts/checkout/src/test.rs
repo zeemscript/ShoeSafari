@@ -548,6 +548,50 @@ fn test_duplicate_order_rejected() {
 }
 
 #[test]
+fn test_duplicate_payment_attempt_has_no_second_transfer_or_event() {
+    let env = Env::default();
+    env.mock_all_auths();
+
+    let (client, token, _, buyer) = setup_usdc(&env);
+    let checkout = client.address.clone();
+    let id = order_id(&env, 46);
+    let amount = 50_000;
+
+    client.pay(&token, &buyer, &id, &amount);
+    let balances_after_first_payment = (
+        usdc_balance(&env, &token, &buyer),
+        usdc_balance(&env, &token, &checkout),
+    );
+    let event_count_after_first_payment = env
+        .events()
+        .all()
+        .filter_by_contract(&checkout)
+        .events()
+        .len();
+
+    assert_eq!(
+        client.try_pay(&token, &buyer, &id, &amount),
+        Err(Ok(Error::OrderAlreadyPaid))
+    );
+    assert_eq!(
+        (
+            usdc_balance(&env, &token, &buyer),
+            usdc_balance(&env, &token, &checkout),
+        ),
+        balances_after_first_payment
+    );
+    assert_eq!(
+        env.events()
+            .all()
+            .filter_by_contract(&checkout)
+            .events()
+            .len(),
+        event_count_after_first_payment
+    );
+    assert_eq!(client.order(&id).unwrap().amount, amount);
+}
+
+#[test]
 fn test_duplicate_pay_after_dispatch_rejected() {
     let env = Env::default();
     env.mock_all_auths();
