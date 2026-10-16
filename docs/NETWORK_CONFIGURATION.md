@@ -16,6 +16,23 @@ mainnet RPC and token fallbacks.
 | USDC trustline issuer | Uses the testnet issuer `GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5` | The frontend currently still uses the testnet issuer. Mainnet USDC readiness is therefore not supported by changing only the token contract ID; the issuer selection must also be made network-aware and verified first |
 | Friendbot | Enabled only for `testnet` with the official testnet passphrase | Disabled |
 
+## Checkout payment assets
+
+Checkout defaults to USDC. Buyers can select native XLM, whose amount is
+calculated from the server-confirmed USD cart total and CoinGecko's public
+`/api/v3/simple/price` response for `stellar` in `usd`, including its
+`last_updated_at` timestamp. The server rejects missing, invalid, or more than
+60-second-old prices, rounds the XLM amount up to the token's seven decimal
+places, and signs the result into the checkout quote. The quote is checked
+again immediately before Freighter signing; an expired or stale quote requires
+the buyer to request a fresh one. If CoinGecko cannot provide a fresh price,
+the buyer can choose USDC instead.
+
+The checkout contract must whitelist the configured native XLM Stellar Asset
+Contract using its admin `add_token` operation before XLM payments can succeed.
+The frontend does not add assets to the merchant's contract. An unwhitelisted
+asset fails contract simulation before the wallet asks the buyer to sign.
+
 ## Safe configuration
 
 - Testnet defaults are intended for development with test funds. The checkout

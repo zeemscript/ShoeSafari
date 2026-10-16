@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import Checkout from "../../app/checkout/page";
+import { TESTNET_NATIVE_ASSET_CONTRACT_ID, USDC_CONTRACT_ID } from "../../lib/stellar/config";
 
 const mocks = vi.hoisted(() => ({
   saveStellarOrder: vi.fn(),
@@ -36,7 +37,7 @@ vi.mock("../../components/StellarOrderWatch", () => ({
 }));
 
 vi.mock("../../components/StellarCheckoutButton", () => ({
-  default: ({ disabled, onSuccess }) => (
+  default: ({ disabled, onSuccess, paymentAsset = "USDC" }) => (
     <button
       type="button"
       disabled={disabled}
@@ -51,7 +52,7 @@ vi.mock("../../components/StellarCheckoutButton", () => ({
         })
       }
     >
-      Pay with Stellar (USDC)
+      Pay with Stellar ({paymentAsset})
     </button>
   ),
 }));
@@ -63,12 +64,28 @@ describe("Checkout Stellar payment", () => {
     mocks.saveStellarOrder.mockReset().mockResolvedValue(undefined);
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => ({
-          quote: { totalUsd: 79.99, expiresAt: Date.now() + 60_000 },
-          quoteToken: "signed-checkout-quote",
-        }),
+      vi.fn().mockImplementation(async (_url, options) => {
+        const { paymentAsset = "USDC" } = JSON.parse(options.body);
+        const tokenContractId =
+          paymentAsset === "XLM" ? TESTNET_NATIVE_ASSET_CONTRACT_ID : USDC_CONTRACT_ID;
+        return {
+          ok: true,
+          json: async () => ({
+            quote: {
+              totalUsd: 79.99,
+              expiresAt: Date.now() + 60_000,
+              payment: {
+                asset: paymentAsset,
+                tokenContractId,
+                amountRaw: paymentAsset === "XLM" ? "10000000" : "799900000",
+                ...(paymentAsset === "XLM"
+                  ? { xlmUsdPrice: 79.99, priceUpdatedAt: Date.now() }
+                  : {}),
+              },
+            },
+            quoteToken: "signed-checkout-quote",
+          }),
+        };
       }),
     );
   });
@@ -86,6 +103,19 @@ describe("Checkout Stellar payment", () => {
     expect(screen.queryByLabelText(/card number|expiry date|security code|otp/i)).toBeNull();
     expect(screen.queryByText(/confirm otp|otp was sent/i)).toBeNull();
     expect(screen.queryByText(/visa|mastercard|paypal|apple pay|klarna/i)).toBeNull();
+  });
+
+  it("keeps USDC selected by default and requests an XLM quote when selected", async () => {
+    render(<Checkout />);
+    expect(screen.getByRole("radio", { name: "USDC (default)" })).toBeChecked();
+
+    fireEvent.click(screen.getByRole("radio", { name: "Native XLM" }));
+
+    expect(await screen.findByRole("button", { name: "Pay with Stellar (XLM)" })).toBeDisabled();
+    expect(fetch).toHaveBeenLastCalledWith(
+      "/api/checkout/quote",
+      expect.objectContaining({ body: expect.stringContaining('"paymentAsset":"XLM"') }),
+    );
   });
 
   it("pays directly with Stellar after delivery details are entered", async () => {

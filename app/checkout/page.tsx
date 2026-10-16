@@ -10,6 +10,7 @@ import { saveStellarOrder, validateStellarOrderReceipt } from "../../lib/orderSt
 import { useAuth } from "../../lib/AuthContext";
 import {
   formatTokenAmount,
+  tokenForContract,
   tokenSymbolForContract,
   USDC_CONTRACT_ID,
 } from "../../lib/stellar/config";
@@ -24,6 +25,15 @@ const Checkout = () => {
   const [quoteExpiresAt, setQuoteExpiresAt] = useState<number | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);
   const [quoteError, setQuoteError] = useState("");
+  const [paymentAsset, setPaymentAsset] = useState<"USDC" | "XLM">("USDC");
+  const [paymentQuote, setPaymentQuote] = useState<{
+    amountRaw: string;
+    tokenContractId: string;
+    xlmUsdPrice?: number;
+    priceUpdatedAt?: number;
+  } | null>(null);
+  const [quoteRefreshCount, setQuoteRefreshCount] = useState(0);
+  const [clockNow, setClockNow] = useState(() => Date.now());
   const [paymentHash, setPaymentHash] = useState("");
   const [orderSaveFailed, setOrderSaveFailed] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "" });
@@ -150,6 +160,8 @@ const Checkout = () => {
       setQuoteLoading(true);
       setQuoteError("");
       setQuoteToken("");
+      setQuoteExpiresAt(null);
+      setPaymentQuote(null);
       try {
         const storedItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
         if (!Array.isArray(storedItems)) throw new Error("Your cart is invalid.");
@@ -167,6 +179,7 @@ const Checkout = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             orderId,
+            paymentAsset,
             items: [...quantities].map(([productId, quantity]) => ({
               productId,
               quantity,
@@ -181,6 +194,7 @@ const Checkout = () => {
         setTotalPrice(body.quote.totalUsd);
         setQuoteExpiresAt(body.quote.expiresAt);
         setQuoteToken(body.quoteToken);
+        setPaymentQuote(body.quote.payment);
       } catch (error) {
         if (active) {
           setQuoteError(
@@ -197,7 +211,12 @@ const Checkout = () => {
     return () => {
       active = false;
     };
-  }, [orderId]);
+  }, [orderId, paymentAsset, quoteRefreshCount]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setClockNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (stage === 2) {
@@ -252,7 +271,7 @@ const Checkout = () => {
             <SiStellar className="h-12 w-12 text-red-700" aria-hidden="true" />
             <h2 className="text-lg font-semibold">Pay with Stellar</h2>
             <p className="max-w-sm text-sm text-gray-800">
-              Connect Freighter and pay in USDC. Card payments are not currently supported.
+              Connect Freighter and pay in USDC or XLM. Card payments are not currently supported.
             </p>
           </div>
           <div className="order-1 w-full rounded-md p-1 sm:p-4 md:order-2 md:w-1/2">
@@ -401,11 +420,42 @@ const Checkout = () => {
             )}
             {stage === 1 && (
               <div className="mt-4 bg-white p-4 rounded shadow-md flex flex-col gap-3">
+                <fieldset className="flex flex-col gap-2" aria-describedby="payment-asset-help">
+                  <legend className="font-semibold">Choose a payment asset</legend>
+                  {(["USDC", "XLM"] as const).map((asset) => (
+                    <label key={asset} className="flex min-h-11 items-center gap-2">
+                      <input
+                        type="radio"
+                        name="paymentAsset"
+                        value={asset}
+                        checked={paymentAsset === asset}
+                        onChange={() => setPaymentAsset(asset)}
+                      />
+                      <span>{asset === "USDC" ? "USDC (default)" : "Native XLM"}</span>
+                    </label>
+                  ))}
+                  <p id="payment-asset-help" className="text-xs text-gray-600">
+                    {paymentAsset === "XLM"
+                      ? "XLM amount uses a time-limited USD quote from CoinGecko. The merchant must whitelist the native XLM Stellar Asset Contract; payment stays disabled if a fresh quote is unavailable."
+                      : "USDC is priced at one US dollar per token."}
+                  </p>
+                </fieldset>
                 {quoteLoading && <p role="status">Confirming current catalog prices…</p>}
                 {quoteError && (
-                  <p className="text-red-700" role="alert">
-                    {quoteError}
-                  </p>
+                  <div className="text-red-700" role="alert">
+                    <p>{quoteError}</p>
+                    <button type="button" className="min-h-11 underline" onClick={() => setQuoteRefreshCount((count) => count + 1)}>
+                      Request a fresh quote
+                    </button>
+                  </div>
+                )}
+                {quoteExpiresAt !== null && quoteExpiresAt <= clockNow && (
+                  <div className="text-red-700" role="alert">
+                    <p>This payment quote expired. Request a fresh quote before signing.</p>
+                    <button type="button" className="min-h-11 underline" onClick={() => setQuoteRefreshCount((count) => count + 1)}>
+                      Refresh payment quote
+                    </button>
+                  </div>
                 )}
                 {quoteToken && quoteExpiresAt && (
                   <p
@@ -414,15 +464,20 @@ const Checkout = () => {
                     aria-live="polite"
                     aria-atomic="true"
                   >
-                    Server-confirmed checkout total: ${totalPrice.toFixed(2)} USDC. Quote expires at{" "}
-                    {new Date(quoteExpiresAt).toLocaleTimeString()}.
+                    Server-confirmed checkout total: ${totalPrice.toFixed(2)} USD ·{" "}
+                    {paymentQuote && tokenForContract(paymentQuote.tokenContractId)?.symbol}{" "}
+                    {paymentQuote && formatTokenAmount(paymentQuote.amountRaw, paymentQuote.tokenContractId)}.
+                    Quote expires at {new Date(quoteExpiresAt).toLocaleTimeString()}.
+                    {paymentQuote?.priceUpdatedAt && (
+                      <> XLM/USD source updated at {new Date(paymentQuote.priceUpdatedAt).toLocaleTimeString()} (USD {paymentQuote.xlmUsdPrice?.toFixed(5)} per XLM).</>
+                    )}
                   </p>
                 )}
                 <div className="flex items-center gap-3">
                   <span className="h-px flex-1 bg-gray-300" />
                   <span className="text-xs uppercase tracking-wider text-gray-500 flex items-center gap-2">
                     <SiStellar size={16} className="text-red-600" />
-                    Pay with Stellar (USDC)
+                    Pay with Stellar ({paymentAsset})
                   </span>
                   <span className="h-px flex-1 bg-gray-300" />
                 </div>
@@ -431,7 +486,14 @@ const Checkout = () => {
                   amountUsd={totalPrice}
                   orderId={orderId}
                   quoteToken={quoteToken}
-                  disabled={!customerDetailsComplete || totalPrice <= 0 || quoteLoading || !quoteToken}
+                  paymentAsset={paymentAsset}
+                  disabled={
+                    !customerDetailsComplete ||
+                    totalPrice <= 0 ||
+                    quoteLoading ||
+                    !quoteToken ||
+                    Boolean(quoteExpiresAt && quoteExpiresAt <= clockNow)
+                  }
                   onSuccess={handleStellarSuccess}
                   validateBeforePay={() =>
                     customerDetailsComplete
@@ -441,8 +503,9 @@ const Checkout = () => {
                 />
                 <StellarOrderWatch orderId={orderId} enabled={stage === 1} />
                 <p className="text-[11px] text-gray-700 text-center">
-                  Order #{orderId} · USDC (testnet) is escrowed by a Soroban smart contract until we
-                  ship, then released to our merchant wallet. Refunds go straight back on-chain. Payment is completed through Freighter.
+                  Order #{orderId} · {paymentAsset} (testnet) is escrowed by a Soroban smart contract
+                  until we ship, then released to our merchant wallet. Refunds go straight back
+                  on-chain. Payment is completed through Freighter.
                 </p>
               </div>
             )}
